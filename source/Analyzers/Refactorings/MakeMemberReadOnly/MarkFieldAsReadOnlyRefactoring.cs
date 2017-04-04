@@ -63,7 +63,7 @@ namespace Roslynator.CSharp.Refactorings.MakeMemberReadOnly
         public override void ReportFixableSymbols(SymbolAnalysisContext context, INamedTypeSymbol containingType, HashSet<ISymbol> symbols)
         {
             foreach (IGrouping<VariableDeclarationSyntax, SyntaxNode> grouping in symbols
-                .Select(f => f.GetFirstSyntax(context.CancellationToken))
+                .Select(f => f.GetSyntax(context.CancellationToken))
                 .GroupBy(f => (VariableDeclarationSyntax)f.Parent))
             {
                 int count = grouping.Count();

@@ -143,9 +143,7 @@
     <Compile Include="CSharp\Refactorings\UseExpressionBodiedMemberRefactoring.cs" />
     <Compile Include="CSharp\Documentation\AddNewDocumentationCommentRewriter.cs" />
     <Compile Include="DefaultNames.cs" />
-    <Compile Include="Diagnostics\SyntaxNodeAnalysisContextExtensions.cs" />
     <Compile Include="CSharp\Syntax\MemberInvocationExpression.cs" />
-    <Compile Include="Diagnostics\SyntaxTreeAnalysisContextExtensions.cs" />
     <Compile Include="ExtensionMethodInfo.cs" />
     <Compile Include="ExtensionMethodKind.cs" />
     <Compile Include="Extensions\DiagnosticExtensions.cs" />
@@ -164,7 +162,7 @@
     <Compile Include="CSharp\Remover.cs" />
     <Compile Include="CSharp\Comparers\MemberDeclarationComparer.cs" />
     <Compile Include="UniqueNameGenerator.cs" />
-    <Compile Include="Diagnostics\SymbolAnalysisContextExtensions.cs" />
+    <Compile Include="Diagnostics\AnalysisContextExtensions.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\FileLinePositionSpanExtensions.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />

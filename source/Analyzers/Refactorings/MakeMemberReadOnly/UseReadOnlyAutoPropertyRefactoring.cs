@@ -44,7 +44,7 @@ namespace Roslynator.CSharp.Refactorings.MakeMemberReadOnly
 
                         if (setMethod?.IsPrivate() == true)
                         {
-                            var accessor = setMethod.GetFirstSyntaxOrDefault(context.CancellationToken) as AccessorDeclarationSyntax;
+                            var accessor = setMethod.GetSyntaxOrDefault(context.CancellationToken) as AccessorDeclarationSyntax;
 
                             if (accessor != null
                                 && accessor.BodyOrExpressionBody() == null)
@@ -66,7 +66,7 @@ namespace Roslynator.CSharp.Refactorings.MakeMemberReadOnly
 
         public override void ReportFixableSymbols(SymbolAnalysisContext context, INamedTypeSymbol containingType, HashSet<ISymbol> symbols)
         {
-            foreach (PropertyDeclarationSyntax node in symbols.Select(f => f.GetFirstSyntax(context.CancellationToken)))
+            foreach (PropertyDeclarationSyntax node in symbols.Select(f => f.GetSyntax(context.CancellationToken)))
             {
                 AccessorDeclarationSyntax setter = node.Setter();
 

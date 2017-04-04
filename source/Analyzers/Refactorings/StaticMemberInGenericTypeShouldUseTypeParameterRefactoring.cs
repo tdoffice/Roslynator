@@ -148,7 +148,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static void ReportDiagnostic(SymbolAnalysisContext context, ISymbol member)
         {
-            SyntaxNode node = member.GetFirstSyntaxOrDefault(context.CancellationToken);
+            SyntaxNode node = member.GetSyntaxOrDefault(context.CancellationToken);
 
             Debug.Assert(node != null, member.ToString());
 

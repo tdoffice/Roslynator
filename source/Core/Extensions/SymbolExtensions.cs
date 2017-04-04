@@ -281,14 +281,14 @@ namespace Roslynator.Extensions
                 && symbol.ContainingType.IsAnonymousType;
         }
 
-        internal static SyntaxNode GetFirstSyntax(this ISymbol symbol, CancellationToken cancellationToken = default(CancellationToken))
+        internal static SyntaxNode GetSyntax(this ISymbol symbol, CancellationToken cancellationToken = default(CancellationToken))
         {
             return symbol
                 .DeclaringSyntaxReferences[0]
                 .GetSyntax(cancellationToken);
         }
 
-        internal static SyntaxNode GetFirstSyntaxOrDefault(this ISymbol symbol, CancellationToken cancellationToken = default(CancellationToken))
+        internal static SyntaxNode GetSyntaxOrDefault(this ISymbol symbol, CancellationToken cancellationToken = default(CancellationToken))
         {
             return symbol
                 .DeclaringSyntaxReferences
@@ -1095,7 +1095,7 @@ namespace Roslynator.Extensions
             }
         }
 
-        public static bool IsException(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
+        internal static bool InheritsFromException(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             if (typeSymbol == null)
                 throw new ArgumentNullException(nameof(typeSymbol));
@@ -1104,7 +1104,8 @@ namespace Roslynator.Extensions
                 throw new ArgumentNullException(nameof(semanticModel));
 
             return typeSymbol.IsClass()
-                && typeSymbol.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Exception));
+                && typeSymbol.BaseType?.IsObject() == false
+                && typeSymbol.InheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Exception));
         }
 
         internal static bool IsEventHandlerOrConstructedFromEventHandlerOfT(
