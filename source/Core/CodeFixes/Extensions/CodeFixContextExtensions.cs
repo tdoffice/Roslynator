@@ -17,5 +17,15 @@ namespace Roslynator.CodeFixes.Extensions
         {
             return context.Document.GetSemanticModelAsync(context.CancellationToken);
         }
+
+        public static Project Project(this CodeFixContext context)
+        {
+            return context.Document.Project;
+        }
+
+        public static Solution Solution(this CodeFixContext context)
+        {
+            return context.Document.Project.Solution;
+        }
     }
 }

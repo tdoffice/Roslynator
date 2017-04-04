@@ -86,7 +86,6 @@ namespace Roslynator.CSharp.Extensions
         #endregion
 
         #region BlockSyntax
-        //TODO: SingleStatementOrDefault
         public static StatementSyntax SingleStatementOrDefault(this BlockSyntax body)
         {
             if (body == null)
@@ -97,6 +96,14 @@ namespace Roslynator.CSharp.Extensions
             return (statements.Count == 1)
                 ? statements[0]
                 : null;
+        }
+
+        public static TextSpan BracesSpan(this BlockSyntax block)
+        {
+            if (block == null)
+                throw new ArgumentNullException(nameof(block));
+
+            return TextSpan.FromBounds(block.OpenBraceToken.SpanStart, block.CloseBraceToken.Span.End);
         }
         #endregion
 
