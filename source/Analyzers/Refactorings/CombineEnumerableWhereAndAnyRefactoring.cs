@@ -34,8 +34,8 @@ namespace Roslynator.CSharp.Refactorings
                         SemanticModel semanticModel = context.SemanticModel;
                         CancellationToken cancellationToken = context.CancellationToken;
 
-                        if (semanticModel.GetExtensionMethodInfo(invocationExpression, cancellationToken).IsLinqExtensionOfIEnumerableOfTWithPredicate("Any")
-                            && semanticModel.GetExtensionMethodInfo(invocation2.InvocationExpression, cancellationToken).IsLinqWhere(allowImmutableArrayExtension: true))
+                        if (semanticModel.GetExtensionMethodInfo(invocationExpression, cancellationToken).MethodInfo.IsLinqExtensionOfIEnumerableOfTWithPredicate("Any")
+                            && semanticModel.GetExtensionMethodInfo(invocation2.InvocationExpression, cancellationToken).MethodInfo.IsLinqWhere(allowImmutableArrayExtension: true))
                         {
                             LambdaWithSingleParameter lambda;
                             if (LambdaWithSingleParameter.TryCreate(invocation.Argument.Expression, out lambda)
