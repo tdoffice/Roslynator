@@ -26,8 +26,9 @@ namespace Roslynator.CSharp.Refactorings
 
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-            string identifier = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForEachVariable, semanticModel, statement.SpanStart, cancellationToken);
-            IdentifierNameSyntax identifierName = IdentifierName(identifier);
+            string name = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForEachVariable, semanticModel, statement.SpanStart, cancellationToken);
+
+            IdentifierNameSyntax identifierName = IdentifierName(name);
 
             var condition = (BinaryExpressionSyntax)forStatement.Condition;
             var memberAccessExpression = (MemberAccessExpressionSyntax)condition.Right;
@@ -42,7 +43,7 @@ namespace Roslynator.CSharp.Refactorings
 
             ForEachStatementSyntax forEachStatement = ForEachStatement(
                 VarType(),
-                identifier,
+                name,
                 expression,
                 newStatement);
 

@@ -54,16 +54,13 @@ namespace Roslynator.CSharp.Refactorings
             else if (context.IsRefactoringEnabled(RefactoringIdentifiers.RenameParameterAccordingToTypeName)
                 && parameter.Identifier.Span.Contains(context.Span))
             {
-                string name = parameter.Identifier.ValueText;
-                string newName = NameGenerator.CreateName(parameterSymbol.Type, firstCharToLower: true);
+                string oldName = parameter.Identifier.ValueText;
+                string newName = NameGenerator.CreateUniqueParameterName(oldName, parameterSymbol, semanticModel, context.CancellationToken);
 
-                if (!string.IsNullOrEmpty(newName)
-                    && !string.Equals(name, newName, StringComparison.Ordinal))
+                if (newName != null)
                 {
-                    newName = NameGenerator.EnsureUniqueLocalName(newName, parameter.SpanStart, semanticModel, context.CancellationToken);
-
                     context.RegisterRefactoring(
-                        $"Rename '{name}' to '{newName}'",
+                        $"Rename '{oldName}' to '{newName}'",
                         cancellationToken => Renamer.RenameSymbolAsync(context.Document, parameterSymbol, newName, cancellationToken));
                 }
             }

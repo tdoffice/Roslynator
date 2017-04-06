@@ -259,7 +259,7 @@ namespace Roslynator.CSharp.Refactorings
 
             IMethodSymbol methodSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration, cancellationToken);
 
-            string name = GetMethodTypeParameterName(methodDeclaration.BodyOrExpressionBody().SpanStart, semanticModel, cancellationToken);
+            string name = GetMethodTypeParameterName(semanticModel, methodDeclaration.BodyOrExpressionBody().SpanStart, cancellationToken);
 
             MethodDeclarationSyntax newNode = methodDeclaration.AddTypeParameterListParameters(TypeParameter(Identifier(name).WithRenameAnnotation()));
 
@@ -363,7 +363,7 @@ namespace Roslynator.CSharp.Refactorings
 
             ISymbol symbol = semanticModel.GetDeclaredSymbol(localFunctionStatement, cancellationToken);
 
-            string name = GetMethodTypeParameterName(localFunctionStatement.BodyOrExpressionBody().SpanStart, semanticModel, cancellationToken);
+            string name = GetMethodTypeParameterName(semanticModel, localFunctionStatement.BodyOrExpressionBody().SpanStart, cancellationToken);
 
             LocalFunctionStatementSyntax newNode = localFunctionStatement.AddTypeParameterListParameters(TypeParameter(Identifier(name).WithRenameAnnotation()));
 
@@ -380,7 +380,7 @@ namespace Roslynator.CSharp.Refactorings
                 semanticModel.LookupSymbols(position));
         }
 
-        private static string GetMethodTypeParameterName(int position, SemanticModel semanticModel, CancellationToken cancellationToken)
+        private static string GetMethodTypeParameterName(SemanticModel semanticModel, int position, CancellationToken cancellationToken)
         {
             return NameGenerator.EnsureUniqueLocalName(
                 DefaultNames.TypeParameter,

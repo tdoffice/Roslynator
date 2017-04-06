@@ -76,9 +76,9 @@ namespace Roslynator.CSharp.Refactorings
             if (addAwait)
                 typeSymbol = ((INamedTypeSymbol)typeSymbol).TypeArguments[0];
 
-            string identifier = NameGenerator.CreateName(typeSymbol, firstCharToLower: true) ?? DefaultNames.Variable;
+            string name = NameGenerator.CreateName(typeSymbol, firstCharToLower: true) ?? DefaultNames.Variable;
 
-            identifier = NameGenerator.EnsureUniqueLocalName(identifier, semanticModel, expressionStatement.SpanStart, cancellationToken);
+            name = NameGenerator.EnsureUniqueLocalName(name, semanticModel, expressionStatement.SpanStart, cancellationToken);
 
             ExpressionSyntax value = expressionStatement.Expression;
 
@@ -87,7 +87,7 @@ namespace Roslynator.CSharp.Refactorings
 
             LocalDeclarationStatementSyntax newNode = LocalDeclarationStatement(
                 VarType(),
-                Identifier(identifier).WithRenameAnnotation(),
+                Identifier(name).WithRenameAnnotation(),
                 value);
 
             newNode = newNode

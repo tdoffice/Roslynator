@@ -65,6 +65,27 @@ namespace Roslynator
             return EnsureUniqueName(baseName, symbols);
         }
 
+        internal static string EnsureUniqueParameterName(
+            string baseName,
+            ISymbol containingSymbol,
+            SemanticModel semanticModel,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (containingSymbol == null)
+                throw new ArgumentNullException(nameof(containingSymbol));
+
+            if (semanticModel == null)
+                throw new ArgumentNullException(nameof(semanticModel));
+
+            SyntaxNode containingNode = containingSymbol.GetSyntax(cancellationToken);
+
+            ImmutableArray<ISymbol> symbols = semanticModel
+                .GetDeclaredSymbols(containingNode, excludeAnonymousTypeProperty: true, cancellationToken: cancellationToken)
+                .AddRange(semanticModel.LookupSymbols(containingNode.SpanStart));
+
+            return EnsureUniqueName(baseName, symbols);
+        }
+
         internal static async Task<string> EnsureUniqueAsyncMethodNameAsync(
             string baseName,
             IMethodSymbol methodSymbol,
@@ -255,7 +276,95 @@ namespace Roslynator
 
         public static string CreateName(ITypeSymbol typeSymbol, bool firstCharToLower = false)
         {
-            return CreateNameFromTypeSymbolHelper.CreateName(typeSymbol, firstCharToLower);
+            string name = CreateNameFromTypeSymbolHelper.CreateName(typeSymbol);
+
+            if (name != null
+                && firstCharToLower)
+            {
+                name = StringUtility.FirstCharToLower(name);
+            }
+
+            return name;
+        }
+
+        internal static string CreateUniqueLocalName(
+            ITypeSymbol typeSymbol,
+            SemanticModel semanticModel,
+            int position,
+            CancellationToken cancellationToken)
+        {
+            if (typeSymbol != null)
+            {
+                string name = CreateName(typeSymbol, firstCharToLower: true);
+
+                if (name != null)
+                    return EnsureUniqueLocalName(name, semanticModel, position, cancellationToken);
+            }
+
+            return null;
+        }
+
+        internal static string CreateUniqueLocalName(
+            ITypeSymbol typeSymbol,
+            string oldName,
+            SemanticModel semanticModel,
+            int position,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string newName = CreateName(typeSymbol, firstCharToLower: true);
+
+            if (newName != null
+                && !string.Equals(oldName, newName, StringComparison.Ordinal))
+            {
+                string uniqueName = EnsureUniqueLocalName(newName, semanticModel, position, cancellationToken);
+
+                if (!IsChangeOnlyInSuffix(oldName, newName, uniqueName))
+                    return uniqueName;
+            }
+
+            return null;
+        }
+
+        internal static string CreateUniqueParameterName(
+            string oldName,
+            IParameterSymbol parameterSymbol,
+            SemanticModel semanticModel,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string newName = CreateName(parameterSymbol.Type, firstCharToLower: true);
+
+            if (newName != null
+                && !string.Equals(oldName, newName, StringComparison.Ordinal))
+            {
+                string uniqueName = EnsureUniqueParameterName(newName, parameterSymbol.ContainingSymbol, semanticModel, cancellationToken);
+
+                if (!IsChangeOnlyInSuffix(oldName, newName, uniqueName))
+                    return uniqueName;
+            }
+
+            return null;
+        }
+
+        private static bool IsChangeOnlyInSuffix(string oldName, string newName, string uniqueName)
+        {
+            return oldName.Length > newName.Length
+                && string.CompareOrdinal(oldName, 0, newName, 0, newName.Length) == 0
+                && AreDigits(oldName, newName.Length, oldName.Length - newName.Length)
+                && uniqueName.Length > newName.Length
+                && AreDigits(uniqueName, newName.Length, uniqueName.Length - newName.Length);
+        }
+
+        private static bool AreDigits(string value, int start, int count)
+        {
+            int max = start + count;
+
+            for (int i = start; i < max; i++)
+            {
+                if (!char.IsDigit(value, i))
+                    return false;
+            }
+
+            return true;
         }
 
         private static StringComparison GetStringComparison(bool isCaseSensitive)

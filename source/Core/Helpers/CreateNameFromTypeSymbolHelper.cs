@@ -11,7 +11,7 @@ namespace Roslynator.Helpers
 {
     internal static class CreateNameFromTypeSymbolHelper
     {
-        public static string CreateName(ITypeSymbol typeSymbol, bool firstCharToLower = false)
+        public static string CreateName(ITypeSymbol typeSymbol)
         {
             if (typeSymbol == null)
                 throw new ArgumentNullException(nameof(typeSymbol));
@@ -53,9 +53,6 @@ namespace Roslynator.Helpers
                     name += "s";
                 }
             }
-
-            if (firstCharToLower)
-                name = StringUtility.FirstCharToLower(name);
 
             return name;
         }

@@ -44,17 +44,12 @@ namespace Roslynator.CSharp.Refactorings
 
                             ITypeSymbol typeSymbol = semanticModel.GetTypeSymbol(type, context.CancellationToken);
 
-                            if (typeSymbol?.IsErrorType() == false)
+                            string name = NameGenerator.CreateUniqueLocalName(typeSymbol, semanticModel, declarator.SpanStart, context.CancellationToken);
+                            if (name != null)
                             {
-                                string name = NameGenerator.CreateName(typeSymbol, firstCharToLower: true);
-                                name = NameGenerator.EnsureUniqueLocalName(name, semanticModel, declarator.SpanStart, context.CancellationToken);
-
-                                if (!string.IsNullOrEmpty(name))
-                                {
-                                    context.RegisterRefactoring(
-                                        $"Add identifier '{name}'",
-                                        c => RefactorAsync(context.Document, type, name, c));
-                                }
+                                context.RegisterRefactoring(
+                                    $"Add identifier '{name}'",
+                                    c => RefactorAsync(context.Document, type, name, c));
                             }
                         }
                     }
@@ -72,17 +67,12 @@ namespace Roslynator.CSharp.Refactorings
 
                 ITypeSymbol typeSymbol = semanticModel.GetTypeSymbol(expression, context.CancellationToken);
 
-                if (typeSymbol?.IsErrorType() == false)
+                string name = NameGenerator.CreateUniqueLocalName(typeSymbol, semanticModel, expression.SpanStart, context.CancellationToken);
+                if (name != null)
                 {
-                    string name = NameGenerator.CreateName(typeSymbol, firstCharToLower: true);
-                    name = NameGenerator.EnsureUniqueLocalName(name, semanticModel, expression.SpanStart, context.CancellationToken);
-
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        context.RegisterRefactoring(
-                            $"Add identifier '{name}'",
-                            c => RefactorAsync(context.Document, expressionStatement, name, c));
-                    }
+                    context.RegisterRefactoring(
+                        $"Add identifier '{name}'",
+                        c => RefactorAsync(context.Document, expressionStatement, name, c));
                 }
             }
         }

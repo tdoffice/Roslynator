@@ -45,22 +45,14 @@ namespace Roslynator.CSharp.Refactorings
 
                         if (localSymbol?.IsErrorType() == false)
                         {
-                            ITypeSymbol typeSymbol = localSymbol.Type;
+                            string oldName = identifier.ValueText;
+                            string newName = NameGenerator.CreateUniqueLocalName(localSymbol.Type, oldName, semanticModel, singleVariableDesignation.SpanStart, context.CancellationToken);
 
-                            if (typeSymbol != null)
+                            if (newName != null)
                             {
-                                string oldName = identifier.ValueText;
-                                string newName = NameGenerator.CreateName(typeSymbol, firstCharToLower: true);
-
-                                if (!string.IsNullOrEmpty(newName)
-                                    && !string.Equals(oldName, newName, StringComparison.Ordinal))
-                                {
-                                    newName = NameGenerator.EnsureUniqueLocalName(newName, semanticModel, singleVariableDesignation.SpanStart, context.CancellationToken);
-
-                                    context.RegisterRefactoring(
-                                        $"Rename '{oldName}' to '{newName}'",
-                                        cancellationToken => Renamer.RenameSymbolAsync(context.Document, localSymbol, newName, cancellationToken));
-                                }
+                                context.RegisterRefactoring(
+                                    $"Rename '{oldName}' to '{newName}'",
+                                    cancellationToken => Renamer.RenameSymbolAsync(context.Document, localSymbol, newName, cancellationToken));
                             }
                         }
                     }

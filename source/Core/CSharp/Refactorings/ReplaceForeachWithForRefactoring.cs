@@ -85,22 +85,22 @@ namespace Roslynator.CSharp.Refactorings
                 document.Project.Solution,
                 cancellationToken).ConfigureAwait(false);
 
-            string identifier = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForVariable, semanticModel, forEachStatement.Statement.SpanStart, cancellationToken);
+            string name = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForVariable, semanticModel, forEachStatement.Statement.SpanStart, cancellationToken);
 
             ForStatementSyntax forStatement = ForStatement(
                 declaration: VariableDeclaration(
                     IntType(),
-                    identifier,
+                    name,
                     EqualsValueClause(NumericLiteralExpression(0))),
                 initializers: default(SeparatedSyntaxList<ExpressionSyntax>),
                 condition: LessThanExpression(
-                    IdentifierName(identifier),
+                    IdentifierName(name),
                     SimpleMemberAccessExpression(
                         IdentifierName(forEachStatement.Expression.ToString()),
                         IdentifierName(GetCountOrLengthPropertyName(forEachStatement.Expression, semanticModel, cancellationToken)))),
                 incrementors: SingletonSeparatedList<ExpressionSyntax>(
                     PostIncrementExpression(
-                        IdentifierName(identifier))),
+                        IdentifierName(name))),
                 statement: forEachStatement.Statement.ReplaceNodes(
                     GetIdentifiers(root, referencedSymbols),
                     (f, g) =>
@@ -108,7 +108,7 @@ namespace Roslynator.CSharp.Refactorings
                         return ElementAccessExpression(
                             IdentifierName(forEachStatement.Expression.ToString()),
                             BracketedArgumentList(
-                                SingletonSeparatedList(Argument(IdentifierName(identifier))))
+                                SingletonSeparatedList(Argument(IdentifierName(name))))
                         ).WithTriviaFrom(f);
                     }));
 

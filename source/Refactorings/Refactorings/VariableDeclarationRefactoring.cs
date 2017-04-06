@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -57,56 +56,23 @@ namespace Roslynator.CSharp.Refactorings
 
                         ISymbol symbol = semanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
 
-                        if (symbol != null)
+                        if (symbol?.IsLocal() == true)
                         {
-                            ITypeSymbol typeSymbol = semanticModel.GetTypeSymbol(type, context.CancellationToken);
+                            var localSymbol = (ILocalSymbol)symbol;
 
-                            if (typeSymbol?.IsErrorType() == false)
+                            string oldName = identifier.ValueText;
+                            string newName = NameGenerator.CreateUniqueLocalName(localSymbol.Type, oldName, semanticModel, variable.SpanStart, context.CancellationToken);
+
+                            if (newName != null)
                             {
-                                string newName = NameGenerator.CreateName(
-                                    typeSymbol,
-                                    FirstCharToLower(symbol));
-
-                                if (!string.IsNullOrEmpty(newName))
-                                {
-                                    if (context.Settings.PrefixFieldIdentifierWithUnderscore
-                                        && symbol.IsPrivate()
-                                        && symbol.IsField()
-                                        && !((IFieldSymbol)symbol).IsConst)
-                                    {
-                                        newName = StringUtility.ToCamelCase(newName, prefixWithUnderscore: true);
-                                    }
-
-                                    string oldName = identifier.ValueText;
-
-                                    if (!string.Equals(oldName, newName, StringComparison.Ordinal))
-                                    {
-                                        newName = NameGenerator.EnsureUniqueLocalName(newName, semanticModel, variable.SpanStart, context.CancellationToken);
-
-                                        context.RegisterRefactoring(
-                                            $"Rename '{oldName}' to '{newName}'",
-                                            cancellationToken => Renamer.RenameSymbolAsync(context.Document, symbol, newName, cancellationToken));
-                                    }
-                                }
+                                context.RegisterRefactoring(
+                                    $"Rename '{oldName}' to '{newName}'",
+                                    cancellationToken => Renamer.RenameSymbolAsync(context.Document, symbol, newName, cancellationToken));
                             }
                         }
                     }
                 }
             }
-        }
-
-        private static bool FirstCharToLower(ISymbol symbol)
-        {
-            if (symbol.IsField())
-            {
-                if (((IFieldSymbol)symbol).IsConst)
-                    return false;
-
-                if (!symbol.IsPrivate())
-                    return false;
-            }
-
-            return true;
         }
 
         private static async Task AddCastExpressionAsync(

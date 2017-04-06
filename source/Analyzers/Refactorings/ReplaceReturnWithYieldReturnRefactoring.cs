@@ -138,18 +138,18 @@ namespace Roslynator.CSharp.Refactorings
                     }
                 case SyntaxKind.ForEachStatement:
                     {
-                        string identifier = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForEachVariable, semanticModel, returnStatement.SpanStart, cancellationToken);
+                        string name = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForEachVariable, semanticModel, returnStatement.SpanStart, cancellationToken);
 
                         YieldStatementSyntax yieldReturnStatement = YieldStatement(
                             SyntaxKind.YieldReturnStatement,
                             Token(default(SyntaxTriviaList), SyntaxKind.YieldKeyword, TriviaList(Space)),
                             returnKeyword.WithoutLeadingTrivia(),
-                            IdentifierName(identifier),
+                            IdentifierName(name),
                             returnStatement.SemicolonToken.WithoutTrailingTrivia());
 
                         StatementSyntax newNode = ForEachStatement(
                             VarType(),
-                            identifier,
+                            name,
                             expression,
                             Block(yieldReturnStatement));
 
