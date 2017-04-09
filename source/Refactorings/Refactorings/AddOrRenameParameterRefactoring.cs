@@ -55,7 +55,12 @@ namespace Roslynator.CSharp.Refactorings
                 && parameter.Identifier.Span.Contains(context.Span))
             {
                 string oldName = parameter.Identifier.ValueText;
-                string newName = NameGenerator.CreateUniqueParameterName(oldName, parameterSymbol, semanticModel, context.CancellationToken);
+
+                string newName = NameGenerator.CreateUniqueParameterName(
+                    oldName,
+                    parameterSymbol,
+                    semanticModel,
+                    cancellationToken: context.CancellationToken);
 
                 if (newName != null)
                 {

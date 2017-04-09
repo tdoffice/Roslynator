@@ -8,7 +8,7 @@ namespace Roslynator.CSharp.Refactorings.Test
 {
     internal class RenameParameterAccordingToTypeNameRefactoring
     {
-        private class Foo
+        private partial class Foo
         {
             public Foo()
             {
@@ -81,6 +81,16 @@ namespace Roslynator.CSharp.Refactorings.Test
             {
                 Foo foo = null;
             }
+
+            partial void PartialMethod(Foo foo, Foo value)
+            {
+                Foo foo2 = null;
+            }
+        }
+
+        private partial class Foo
+        {
+            partial void PartialMethod(Foo foo, Foo value);
         }
     }
 }

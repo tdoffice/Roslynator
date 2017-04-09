@@ -78,7 +78,11 @@ namespace Roslynator.CSharp.Refactorings
 
             string name = NameGenerator.CreateName(typeSymbol, firstCharToLower: true) ?? DefaultNames.Variable;
 
-            name = NameGenerator.EnsureUniqueLocalName(name, semanticModel, expressionStatement.SpanStart, cancellationToken);
+            name = NameGenerator.EnsureUniqueLocalName(
+                name,
+                semanticModel,
+                expressionStatement.SpanStart,
+                cancellationToken: cancellationToken);
 
             ExpressionSyntax value = expressionStatement.Expression;
 

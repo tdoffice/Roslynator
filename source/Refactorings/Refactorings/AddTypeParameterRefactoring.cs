@@ -386,7 +386,7 @@ namespace Roslynator.CSharp.Refactorings
                 DefaultNames.TypeParameter,
                 semanticModel,
                 position,
-                cancellationToken);
+                cancellationToken: cancellationToken);
         }
 
         private static TypeParameterConstraintSyntax CreateConstraint(ConstraintKind constraintKind)

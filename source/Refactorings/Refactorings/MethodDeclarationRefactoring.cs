@@ -118,20 +118,16 @@ namespace Roslynator.CSharp.Refactorings
 
                             string oldName = identifier.ValueText;
 
-                            if (!string.Equals(oldName, newName, StringComparison.Ordinal))
-                            {
-                                bool isUnique = await NameGenerator.IsUniqueMemberNameAsync(
+                            if (!string.Equals(oldName, newName, StringComparison.Ordinal)
+                                && await NameGenerator.IsUniqueMemberNameAsync(
                                     newName,
                                     methodSymbol,
                                     context.Solution,
-                                    context.CancellationToken).ConfigureAwait(false);
-
-                                if (isUnique)
-                                {
-                                    context.RegisterRefactoring(
-                                       $"Rename '{oldName}' to '{newName}'",
-                                       cancellationToken => Renamer.RenameSymbolAsync(context.Document, methodSymbol, newName, cancellationToken));
-                                }
+                                    cancellationToken: context.CancellationToken).ConfigureAwait(false))
+                            {
+                                context.RegisterRefactoring(
+                                   $"Rename '{oldName}' to '{newName}'",
+                                   cancellationToken => Renamer.RenameSymbolAsync(context.Document, methodSymbol, newName, cancellationToken));
                             }
                         }
                     }

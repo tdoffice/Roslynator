@@ -46,7 +46,13 @@ namespace Roslynator.CSharp.Refactorings
                         if (localSymbol?.IsErrorType() == false)
                         {
                             string oldName = identifier.ValueText;
-                            string newName = NameGenerator.CreateUniqueLocalName(localSymbol.Type, oldName, semanticModel, singleVariableDesignation.SpanStart, context.CancellationToken);
+
+                            string newName = NameGenerator.CreateUniqueLocalName(
+                                localSymbol.Type,
+                                oldName,
+                                semanticModel,
+                                singleVariableDesignation.SpanStart,
+                                cancellationToken: context.CancellationToken);
 
                             if (newName != null)
                             {

@@ -85,12 +85,21 @@ namespace Roslynator.CSharp.Refactorings
                 document.Project.Solution,
                 cancellationToken).ConfigureAwait(false);
 
-            string name = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForVariable, semanticModel, forEachStatement.Statement.SpanStart, cancellationToken);
+            string name = NameGenerator.EnsureUniqueLocalName(
+                DefaultNames.ForVariable,
+                semanticModel,
+                forEachStatement.Statement.SpanStart,
+                cancellationToken: cancellationToken);
+
+            SyntaxToken identifier = Identifier(name);
+
+            if (name != DefaultNames.ForVariable)
+                identifier = identifier.WithRenameAnnotation();
 
             ForStatementSyntax forStatement = ForStatement(
                 declaration: VariableDeclaration(
                     IntType(),
-                    name,
+                    identifier,
                     EqualsValueClause(NumericLiteralExpression(0))),
                 initializers: default(SeparatedSyntaxList<ExpressionSyntax>),
                 condition: LessThanExpression(

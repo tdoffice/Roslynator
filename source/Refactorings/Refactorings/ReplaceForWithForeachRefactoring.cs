@@ -26,7 +26,11 @@ namespace Roslynator.CSharp.Refactorings
 
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-            string name = NameGenerator.EnsureUniqueLocalName(DefaultNames.ForEachVariable, semanticModel, statement.SpanStart, cancellationToken);
+            string name = NameGenerator.EnsureUniqueLocalName(
+                DefaultNames.ForEachVariable,
+                semanticModel,
+                statement.SpanStart,
+                cancellationToken: cancellationToken);
 
             IdentifierNameSyntax identifierName = IdentifierName(name);
 

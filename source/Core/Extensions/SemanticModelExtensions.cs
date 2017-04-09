@@ -153,9 +153,9 @@ namespace Roslynator.Extensions
             bool excludeAnonymousTypeProperty = false,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            SyntaxNode container = GetEnclosingSymbolSyntax(semanticModel, position, cancellationToken);
+            SyntaxNode node = GetEnclosingSymbolSyntax(semanticModel, position, cancellationToken);
 
-            return GetDeclaredSymbols(semanticModel, container, excludeAnonymousTypeProperty, cancellationToken);
+            return GetDeclaredSymbols(semanticModel, node, excludeAnonymousTypeProperty, cancellationToken);
         }
 
         private static SyntaxNode GetEnclosingSymbolSyntax(SemanticModel semanticModel, int position, CancellationToken cancellationToken)
@@ -172,10 +172,13 @@ namespace Roslynator.Extensions
             {
                 foreach (SyntaxReference syntaxReference in syntaxReferences)
                 {
-                    SyntaxNode syntax = syntaxReference.GetSyntax(cancellationToken);
+                    SyntaxNode node = syntaxReference.GetSyntax(cancellationToken);
 
-                    if (syntax.SyntaxTree == semanticModel.SyntaxTree)
-                        return syntax;
+                    if (node.SyntaxTree == semanticModel.SyntaxTree
+                        && node.FullSpan.Contains(position))
+                    {
+                        return node;
+                    }
                 }
             }
 

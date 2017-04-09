@@ -76,11 +76,9 @@ namespace Roslynator.CSharp.Refactorings
             {
                 SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-                IEnumerable<string> reservedNames = semanticModel
-                    .LookupNamespacesAndTypes(member.SpanStart)
-                    .Select(f => f.Name);
-
-                string name = NameGenerator.EnsureUniqueName(DefaultNames.Namespace, reservedNames);
+                string name = NameGenerator.EnsureUniqueName(
+                    DefaultNames.Namespace,
+                    semanticModel.LookupNamespacesAndTypes(member.SpanStart));
 
                 NamespaceDeclarationSyntax namespaceDeclaration = NamespaceDeclaration(
                     IdentifierName(Identifier(name).WithRenameAnnotation()),

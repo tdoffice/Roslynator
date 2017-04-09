@@ -128,13 +128,11 @@ namespace Roslynator.CSharp.Refactorings
                                 {
                                     ISymbol symbol = semanticModel.GetDeclaredSymbol(propertyDeclaration, context.CancellationToken);
 
-                                    bool isUnique = await NameGenerator.IsUniqueMemberNameAsync(
+                                    if (await NameGenerator.IsUniqueMemberNameAsync(
                                         newName,
                                         symbol,
                                         context.Solution,
-                                        context.CancellationToken).ConfigureAwait(false);
-
-                                    if (isUnique)
+                                        cancellationToken: context.CancellationToken).ConfigureAwait(false))
                                     {
                                         context.RegisterRefactoring(
                                             $"Rename '{oldName}' to '{newName}'",

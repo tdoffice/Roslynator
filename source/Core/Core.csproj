@@ -41,7 +41,6 @@
     <AssemblyOriginatorKeyFile>Roslynator.Core.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AsyncMethodNameGenerator.cs" />
     <Compile Include="CSharp\Analysis\BracesAnalysisResult.cs" />
     <Compile Include="CSharp\IMemberDeclarationComparer.cs" />
     <Compile Include="CSharp\IModifierComparer.cs" />
@@ -163,7 +162,10 @@
     <Compile Include="CSharp\Refactorings\ChangeTypeRefactoring.cs" />
     <Compile Include="CSharp\Remover.cs" />
     <Compile Include="CSharp\Comparers\MemberDeclarationComparer.cs" />
-    <Compile Include="UniqueNameGenerator.cs" />
+    <Compile Include="UniqueNameProviders\AsyncMethodUniqueNameProvider.cs" />
+    <Compile Include="UniqueNameProviders\NumberSuffixUniqueNameProvider.cs" />
+    <Compile Include="UniqueNameProviders\UnderscoreSuffixUniqueNameProvider.cs" />
+    <Compile Include="UniqueNameProviders\UniqueNameProvider.cs" />
     <Compile Include="Diagnostics\AnalysisContextExtensions.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\FileLinePositionSpanExtensions.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="CSharp\SyntaxRewriters\TriviaRemover.cs" />
     <Compile Include="SymbolDisplay.cs" />
     <Compile Include="StringUtility.cs" />
+    <Compile Include="UniqueNameProviders\UniqueNameProviders.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

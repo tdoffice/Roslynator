@@ -50,20 +50,16 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             string newName = StringUtility.ToCamelCase(propertySymbol.Name, context.Settings.PrefixFieldIdentifierWithUnderscore);
 
-                            if (!string.Equals(fieldSymbol.Name, newName, StringComparison.Ordinal))
-                            {
-                                bool isUnique = await NameGenerator.IsUniqueMemberNameAsync(
+                            if (!string.Equals(fieldSymbol.Name, newName, StringComparison.Ordinal)
+                                && await NameGenerator.IsUniqueMemberNameAsync(
                                     newName,
                                     fieldSymbol,
                                     context.Solution,
-                                    context.CancellationToken).ConfigureAwait(false);
-
-                                if (isUnique)
-                                {
-                                    context.RegisterRefactoring(
-                                        $"Rename '{fieldSymbol.Name}' to '{newName}'",
-                                        cancellationToken => Renamer.RenameSymbolAsync(context.Document, fieldSymbol, newName, cancellationToken));
-                                }
+                                    cancellationToken: context.CancellationToken).ConfigureAwait(false))
+                            {
+                                context.RegisterRefactoring(
+                                    $"Rename '{fieldSymbol.Name}' to '{newName}'",
+                                    cancellationToken => Renamer.RenameSymbolAsync(context.Document, fieldSymbol, newName, cancellationToken));
                             }
                         }
                     }

@@ -29,7 +29,11 @@ namespace Roslynator.CSharp.Refactorings
 
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-            fieldName = NameGenerator.EnsureUniqueMemberName(fieldName, semanticModel, propertyDeclaration.SpanStart, cancellationToken);
+            fieldName = NameGenerator.EnsureUniqueMemberName(
+                fieldName,
+                semanticModel,
+                propertyDeclaration.SpanStart,
+                cancellationToken: cancellationToken);
 
             FieldDeclarationSyntax fieldDeclaration = CreateBackingField(propertyDeclaration, fieldName)
                 .WithFormatterAnnotation();

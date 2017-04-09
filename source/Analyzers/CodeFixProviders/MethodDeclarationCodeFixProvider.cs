@@ -64,7 +64,7 @@ namespace Roslynator.CSharp.CodeFixProviders
                                     oldName,
                                     methodSymbol,
                                     context.Solution(),
-                                    context.CancellationToken).ConfigureAwait(false);
+                                    cancellationToken: context.CancellationToken).ConfigureAwait(false);
 
                                 CodeAction codeAction = CodeAction.Create(
                                     $"Rename '{oldName}' to '{newName}'",
@@ -93,7 +93,7 @@ namespace Roslynator.CSharp.CodeFixProviders
                                     newName,
                                     methodSymbol,
                                     context.Solution(),
-                                    context.CancellationToken).ConfigureAwait(false);
+                                    cancellationToken: context.CancellationToken).ConfigureAwait(false);
 
                                 CodeAction codeAction = CodeAction.Create(
                                     $"Rename '{name}' to '{newName}'",
