@@ -8,9 +8,9 @@ using Roslynator.CSharp.Extensions;
 
 namespace Roslynator.CSharp.Syntax
 {
-    internal struct LambdaWithSingleParameter : IEquatable<LambdaWithSingleParameter>
+    internal struct LambdaExpressionWithSingleParameter : IEquatable<LambdaExpressionWithSingleParameter>
     {
-        internal LambdaWithSingleParameter(ParameterSyntax parameter, CSharpSyntaxNode body)
+        internal LambdaExpressionWithSingleParameter(ParameterSyntax parameter, CSharpSyntaxNode body)
             : this()
         {
             Parameter = parameter;
@@ -58,7 +58,7 @@ namespace Roslynator.CSharp.Syntax
             get { return Parent?.IsKind(SyntaxKind.ParenthesizedLambdaExpression) == true; }
         }
 
-        public static LambdaWithSingleParameter Create(LambdaExpressionSyntax lambdaExpression)
+        public static LambdaExpressionWithSingleParameter Create(LambdaExpressionSyntax lambdaExpression)
         {
             if (lambdaExpression == null)
                 throw new ArgumentNullException(nameof(lambdaExpression));
@@ -69,7 +69,7 @@ namespace Roslynator.CSharp.Syntax
                     {
                         var simpleLambda = (SimpleLambdaExpressionSyntax)lambdaExpression;
 
-                        return new LambdaWithSingleParameter(simpleLambda.Parameter, simpleLambda.Body);
+                        return new LambdaExpressionWithSingleParameter(simpleLambda.Parameter, simpleLambda.Body);
                     }
                 case SyntaxKind.ParenthesizedLambdaExpression:
                     {
@@ -80,23 +80,23 @@ namespace Roslynator.CSharp.Syntax
                         if (parameter == null)
                             throw new ArgumentException("", nameof(lambdaExpression));
 
-                        return new LambdaWithSingleParameter(parameter, parenthesizedLambda.Body);
+                        return new LambdaExpressionWithSingleParameter(parameter, parenthesizedLambda.Body);
                     }
             }
 
             throw new ArgumentException("", nameof(lambdaExpression));
         }
 
-        public static bool TryCreate(SyntaxNode lambdaExpression, out LambdaWithSingleParameter lambda)
+        public static bool TryCreate(SyntaxNode lambdaExpression, out LambdaExpressionWithSingleParameter lambda)
         {
             if (lambdaExpression?.IsKind(SyntaxKind.SimpleLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression) == true)
                 return TryCreate((LambdaExpressionSyntax)lambdaExpression, out lambda);
 
-            lambda = default(LambdaWithSingleParameter);
+            lambda = default(LambdaExpressionWithSingleParameter);
             return false;
         }
 
-        public static bool TryCreate(LambdaExpressionSyntax lambdaExpression, out LambdaWithSingleParameter result)
+        public static bool TryCreate(LambdaExpressionSyntax lambdaExpression, out LambdaExpressionWithSingleParameter result)
         {
             switch (lambdaExpression?.Kind())
             {
@@ -104,7 +104,7 @@ namespace Roslynator.CSharp.Syntax
                     {
                         var simpleLambda = (SimpleLambdaExpressionSyntax)lambdaExpression;
 
-                        result = new LambdaWithSingleParameter(simpleLambda.Parameter, simpleLambda.Body);
+                        result = new LambdaExpressionWithSingleParameter(simpleLambda.Parameter, simpleLambda.Body);
                         return true;
                     }
                 case SyntaxKind.ParenthesizedLambdaExpression:
@@ -117,7 +117,7 @@ namespace Roslynator.CSharp.Syntax
                             SeparatedSyntaxList<ParameterSyntax> parameters = parameterList.Parameters;
                             if (parameters.Count == 1)
                             {
-                                result = new LambdaWithSingleParameter(parameters[0], parenthesizedLambda.Body);
+                                result = new LambdaExpressionWithSingleParameter(parameters[0], parenthesizedLambda.Body);
                                 return true;
                             }
                         }
@@ -126,19 +126,19 @@ namespace Roslynator.CSharp.Syntax
                     }
             }
 
-            result = default(LambdaWithSingleParameter);
+            result = default(LambdaExpressionWithSingleParameter);
             return false;
         }
 
-        public bool Equals(LambdaWithSingleParameter other)
+        public bool Equals(LambdaExpressionWithSingleParameter other)
         {
             return Parent == other.Parent;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is LambdaWithSingleParameter
-                && Equals((LambdaWithSingleParameter)obj);
+            return obj is LambdaExpressionWithSingleParameter
+                && Equals((LambdaExpressionWithSingleParameter)obj);
         }
 
         public override int GetHashCode()
@@ -146,12 +146,12 @@ namespace Roslynator.CSharp.Syntax
             return Parent?.GetHashCode() ?? 0;
         }
 
-        public static bool operator ==(LambdaWithSingleParameter left, LambdaWithSingleParameter right)
+        public static bool operator ==(LambdaExpressionWithSingleParameter left, LambdaExpressionWithSingleParameter right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(LambdaWithSingleParameter left, LambdaWithSingleParameter right)
+        public static bool operator !=(LambdaExpressionWithSingleParameter left, LambdaExpressionWithSingleParameter right)
         {
             return !left.Equals(right);
         }

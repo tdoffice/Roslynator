@@ -29,12 +29,15 @@ namespace Roslynator.CSharp.Refactorings
 
         private static void Analyze(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax binaryExpression)
         {
-            EqualsToNullExpression equalsToNull;
-            if (EqualsToNullExpression.TryCreate(binaryExpression, out equalsToNull)
-                && IsUnconstrainedTypeParameter(context.SemanticModel.GetTypeSymbol(equalsToNull.Left, context.CancellationToken))
-                && !binaryExpression.SpanContainsDirectives())
+            if (!binaryExpression.ContainsDiagnostics)
             {
-                context.ReportDiagnostic(DiagnosticDescriptors.UnconstrainedTypeParameterCheckedForNull, binaryExpression);
+                EqualsToNullExpression equalsToNull;
+                if (EqualsToNullExpression.TryCreate(binaryExpression, out equalsToNull)
+                    && IsUnconstrainedTypeParameter(context.SemanticModel.GetTypeSymbol(equalsToNull.Left, context.CancellationToken))
+                    && !binaryExpression.SpanContainsDirectives())
+                {
+                    context.ReportDiagnostic(DiagnosticDescriptors.UnconstrainedTypeParameterCheckedForNull, binaryExpression);
+                }
             }
         }
 

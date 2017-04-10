@@ -25,6 +25,7 @@ namespace Roslynator.CSharp.Refactorings
             var localDeclaration = (LocalDeclarationStatementSyntax)context.Node;
 
             if (!localDeclaration.IsConst
+                && !localDeclaration.ContainsDiagnostics
                 && !localDeclaration.SpanOrTrailingTriviaContainsDirectives())
             {
                 VariableDeclarationSyntax declaration = localDeclaration.Declaration;
@@ -37,10 +38,11 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         StatementSyntax nextStatement = localDeclaration.NextStatement();
 
-                        if (nextStatement?.SpanOrLeadingTriviaContainsDirectives() == false)
+                        if (!nextStatement.ContainsDiagnostics
+                            && nextStatement?.SpanOrLeadingTriviaContainsDirectives() == false)
                         {
-                            SimpleAssignmentExpression assignment;
-                            if (SimpleAssignmentExpression.TryCreate(nextStatement, out assignment)
+                            SimpleAssignmentStatement assignment;
+                            if (SimpleAssignmentStatement.TryCreate(nextStatement, out assignment)
                                 && assignment.Left.IsKind(SyntaxKind.IdentifierName))
                             {
                                 SemanticModel semanticModel = context.SemanticModel;
@@ -62,7 +64,7 @@ namespace Roslynator.CSharp.Refactorings
                                         if (value != null)
                                         {
                                             context.ReportNode(DiagnosticDescriptors.MergeLocalDeclarationWithAssignmentFadeOut, initializer);
-                                            context.ReportToken(DiagnosticDescriptors.MergeLocalDeclarationWithAssignmentFadeOut, assignment.Expression.OperatorToken);
+                                            context.ReportToken(DiagnosticDescriptors.MergeLocalDeclarationWithAssignmentFadeOut, assignment.AssignmentExpression.OperatorToken);
                                         }
 
                                         context.ReportToken(DiagnosticDescriptors.MergeLocalDeclarationWithAssignmentFadeOut, localDeclaration.SemicolonToken);

@@ -24,13 +24,14 @@ namespace Roslynator.CSharp.Refactorings
         {
             var ifStatement = (IfStatementSyntax)context.Node;
 
-            if (ifStatement.IsSimpleIf())
+            if (ifStatement.IsSimpleIf()
+                && !ifStatement.ContainsDiagnostics)
             {
                 NotEqualsToNullExpression notEqualsToNull;
                 if (NotEqualsToNullExpression.TryCreate(ifStatement.Condition, out notEqualsToNull))
                 {
-                    MemberInvocationExpression memberInvocation;
-                    if (MemberInvocationExpression.TryCreate(ifStatement.GetSingleStatementOrDefault(), out memberInvocation)
+                    MemberInvocationStatement memberInvocation;
+                    if (MemberInvocationStatement.TryCreate(ifStatement.GetSingleStatementOrDefault(), out memberInvocation)
                         && notEqualsToNull.Left.IsEquivalentTo(memberInvocation.Expression, topLevel: false)
                         && !ifStatement.SpanContainsDirectives())
                     {
@@ -256,10 +257,9 @@ namespace Roslynator.CSharp.Refactorings
             IfStatementSyntax ifStatement,
             CancellationToken cancellationToken)
         {
-            StatementSyntax statement = (ExpressionStatementSyntax)ifStatement.GetSingleStatementOrDefault();
+            var statement = (ExpressionStatementSyntax)ifStatement.GetSingleStatementOrDefault();
 
-            MemberInvocationExpression memberInvocation;
-            MemberInvocationExpression.TryCreate(statement, out memberInvocation);
+            MemberInvocationStatement memberInvocation = MemberInvocationStatement.Create(statement);
 
             int insertIndex = memberInvocation.Expression.Span.End - statement.FullSpan.Start;
             StatementSyntax newStatement = ParseStatement(statement.ToFullString().Insert(insertIndex, "?"));

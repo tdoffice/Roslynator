@@ -9,9 +9,9 @@ using Roslynator.Extensions;
 
 namespace Roslynator.CSharp.Syntax
 {
-    internal struct MemberInvocationWithSingleParameter : IEquatable<MemberInvocationWithSingleParameter>
+    internal struct MemberInvocationExpressionWithSingleParameter : IEquatable<MemberInvocationExpressionWithSingleParameter>
     {
-        public MemberInvocationWithSingleParameter(ExpressionSyntax expression, SimpleNameSyntax name, ArgumentSyntax argument)
+        public MemberInvocationExpressionWithSingleParameter(ExpressionSyntax expression, SimpleNameSyntax name, ArgumentSyntax argument)
         {
             Expression = expression;
             Name = name;
@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.Syntax
             get { return (ArgumentListSyntax)Argument?.Parent; }
         }
 
-        public static MemberInvocationWithSingleParameter Create(InvocationExpressionSyntax invocationExpression)
+        public static MemberInvocationExpressionWithSingleParameter Create(InvocationExpressionSyntax invocationExpression)
         {
             if (invocationExpression == null)
                 throw new ArgumentNullException(nameof(invocationExpression));
@@ -64,22 +64,22 @@ namespace Roslynator.CSharp.Syntax
             if (arguments.Count != 1)
                 throw new ArgumentException("", nameof(invocationExpression));
 
-            return new MemberInvocationWithSingleParameter(
+            return new MemberInvocationExpressionWithSingleParameter(
                 memberAccess.Expression,
                 memberAccess.Name,
                 arguments[0]);
         }
 
-        public static bool TryCreate(SyntaxNode invocationExpression, out MemberInvocationWithSingleParameter result)
+        public static bool TryCreate(SyntaxNode invocationExpression, out MemberInvocationExpressionWithSingleParameter result)
         {
             if (invocationExpression?.IsKind(SyntaxKind.InvocationExpression) == true)
                 return TryCreate((InvocationExpressionSyntax)invocationExpression, out result);
 
-            result = default(MemberInvocationWithSingleParameter);
+            result = default(MemberInvocationExpressionWithSingleParameter);
             return false;
         }
 
-        public static bool TryCreate(InvocationExpressionSyntax invocationExpression, out MemberInvocationWithSingleParameter result)
+        public static bool TryCreate(InvocationExpressionSyntax invocationExpression, out MemberInvocationExpressionWithSingleParameter result)
         {
             ArgumentListSyntax argumentList = invocationExpression?.ArgumentList;
 
@@ -95,25 +95,25 @@ namespace Roslynator.CSharp.Syntax
                     {
                         var memberAccessExpression = (MemberAccessExpressionSyntax)expression;
 
-                        result = new MemberInvocationWithSingleParameter(memberAccessExpression.Expression, memberAccessExpression.Name, arguments[0]);
+                        result = new MemberInvocationExpressionWithSingleParameter(memberAccessExpression.Expression, memberAccessExpression.Name, arguments[0]);
                         return true;
                     }
                 }
             }
 
-            result = default(MemberInvocationWithSingleParameter);
+            result = default(MemberInvocationExpressionWithSingleParameter);
             return false;
         }
 
-        public bool Equals(MemberInvocationWithSingleParameter other)
+        public bool Equals(MemberInvocationExpressionWithSingleParameter other)
         {
             return Node == other.Node;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is MemberInvocationWithSingleParameter
-                && Equals((MemberInvocationWithSingleParameter)obj);
+            return obj is MemberInvocationExpressionWithSingleParameter
+                && Equals((MemberInvocationExpressionWithSingleParameter)obj);
         }
 
         public override int GetHashCode()
@@ -121,12 +121,12 @@ namespace Roslynator.CSharp.Syntax
             return Node?.GetHashCode() ?? 0;
         }
 
-        public static bool operator ==(MemberInvocationWithSingleParameter left, MemberInvocationWithSingleParameter right)
+        public static bool operator ==(MemberInvocationExpressionWithSingleParameter left, MemberInvocationExpressionWithSingleParameter right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(MemberInvocationWithSingleParameter left, MemberInvocationWithSingleParameter right)
+        public static bool operator !=(MemberInvocationExpressionWithSingleParameter left, MemberInvocationExpressionWithSingleParameter right)
         {
             return !left.Equals(right);
         }

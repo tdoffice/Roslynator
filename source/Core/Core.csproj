@@ -96,8 +96,9 @@
     <Compile Include="CSharp\Refactorings\If\IfReturnToReturnWithConditionalExpression.cs" />
     <Compile Include="CSharp\Refactorings\If\ToAssignmentWithConditionalExpression`1.cs" />
     <Compile Include="CSharp\Refactorings\If\ToAssignmentWithConditionalExpression.cs" />
-    <Compile Include="CSharp\Syntax\MemberInvocationWithSingleParameter.cs" />
-    <Compile Include="CSharp\Syntax\LambdaWithSingleParameter.cs" />
+    <Compile Include="CSharp\Syntax\MemberInvocationStatement.cs" />
+    <Compile Include="CSharp\Syntax\MemberInvocationExpressionWithSingleParameter.cs" />
+    <Compile Include="CSharp\Syntax\LambdaExpressionWithSingleParameter.cs" />
     <Compile Include="CSharp\Syntax\NotEqualsToNullExpression.cs" />
     <Compile Include="CSharp\Syntax\SimpleAssignmentExpression.cs" />
     <Compile Include="CSharp\Refactorings\RefactoringKind.cs" />
@@ -121,7 +122,9 @@
     <Compile Include="CSharp\Refactorings\UseBitwiseOperationInsteadOfCallingHasFlagRefactoring.cs" />
     <Compile Include="CSharp\BinaryExpressionSlice.cs" />
     <Compile Include="CSharp\MemberDeclarationSlice.cs" />
-    <Compile Include="CSharp\Syntax\StringExpressionChain.cs" />
+    <Compile Include="CSharp\Syntax\SimpleAssignmentStatement.cs" />
+    <Compile Include="CSharp\Syntax\SimpleIfStatementWithSingleStatement.cs" />
+    <Compile Include="CSharp\StringExpressionChain.cs" />
     <Compile Include="CSharp\SwitchSectionStatementContainer.cs" />
     <Compile Include="CommentRemoveOptions.cs" />
     <Compile Include="CSharp\CSharpFactory.cs" />

@@ -26,13 +26,14 @@ namespace Roslynator.CSharp.Refactorings
             var ifStatement = (IfStatementSyntax)context.Node;
 
             if (ifStatement.IsSimpleIf()
+                && !ifStatement.ContainsDiagnostics
                 && !IsPartOfLazyInitialization(ifStatement))
             {
                 EqualsToNullExpression equalsToNull;
                 if (EqualsToNullExpression.TryCreate(ifStatement.Condition, out equalsToNull))
                 {
-                    SimpleAssignmentExpression assignment;
-                    if (SimpleAssignmentExpression.TryCreate(ifStatement.GetSingleStatementOrDefault(), out assignment)
+                    SimpleAssignmentStatement assignment;
+                    if (SimpleAssignmentStatement.TryCreate(ifStatement.GetSingleStatementOrDefault(), out assignment)
                         && assignment.Left.IsEquivalentTo(equalsToNull.Left, topLevel: false)
                         && assignment.Right.IsSingleLine()
                         && !ifStatement.SpanContainsDirectives())
@@ -48,8 +49,11 @@ namespace Roslynator.CSharp.Refactorings
                             {
                                 StatementSyntax previousStatement = statements[index - 1];
 
-                                if (CanRefactor(previousStatement, ifStatement, equalsToNull.Left, ifStatement.Parent))
+                                if (!previousStatement.ContainsDiagnostics
+                                    && CanRefactor(previousStatement, ifStatement, equalsToNull.Left, ifStatement.Parent))
+                                {
                                     fixableStatement = previousStatement;
+                                }
                             }
                         }
 
@@ -91,23 +95,16 @@ namespace Roslynator.CSharp.Refactorings
             ExpressionSyntax expression,
             SyntaxNode parent)
         {
-            VariableDeclarationSyntax declaration = localDeclarationStatement.Declaration;
+            VariableDeclaratorSyntax declarator = localDeclarationStatement.Declaration?.SingleVariableOrDefault();
 
-            if (declaration != null)
+            if (declarator != null)
             {
-                SeparatedSyntaxList<VariableDeclaratorSyntax> variables = declaration.Variables;
+                ExpressionSyntax value = declarator.Initializer?.Value;
 
-                if (variables.Count == 1)
-                {
-                    VariableDeclaratorSyntax declarator = variables[0];
-
-                    ExpressionSyntax value = declarator.Initializer?.Value;
-
-                    return value != null
-                        && expression.IsKind(SyntaxKind.IdentifierName)
-                        && string.Equals(declarator.Identifier.ValueText, ((IdentifierNameSyntax)expression).Identifier.ValueText, StringComparison.Ordinal)
-                        && !parent.ContainsDirectives(TextSpan.FromBounds(value.Span.End, ifStatement.Span.Start));
-                }
+                return value != null
+                    && expression.IsKind(SyntaxKind.IdentifierName)
+                    && string.Equals(declarator.Identifier.ValueText, ((IdentifierNameSyntax)expression).Identifier.ValueText, StringComparison.Ordinal)
+                    && !parent.ContainsDirectives(TextSpan.FromBounds(value.Span.End, ifStatement.Span.Start));
             }
 
             return false;

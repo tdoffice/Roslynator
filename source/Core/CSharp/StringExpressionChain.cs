@@ -15,7 +15,7 @@ using Roslynator.CSharp.Extensions;
 using Roslynator.Extensions;
 using static Roslynator.StringUtility;
 
-namespace Roslynator.CSharp.Syntax
+namespace Roslynator.CSharp
 {
     internal class StringExpressionChain
     {
