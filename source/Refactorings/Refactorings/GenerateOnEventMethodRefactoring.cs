@@ -54,7 +54,7 @@ namespace Roslynator.CSharp.Refactorings
                                             $"On{eventSymbol.Name}",
                                             methodSymbol => eventArgsSymbol.Equals(methodSymbol.SingleParameterOrDefault()?.Type)))
                                         {
-                                            methodName = NameGenerator.EnsureUniqueMemberName(methodName, containingType);
+                                            methodName = NameGenerator.Default.EnsureUniqueMemberName(methodName, containingType);
 
                                             context.RegisterRefactoring(
                                                 $"Generate '{methodName}' method",

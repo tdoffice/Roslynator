@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             string oldName = identifier.ValueText;
 
-                            string newName = NameGenerator.CreateUniqueLocalName(
+                            string newName = NameGenerator.Default.CreateUniqueLocalName(
                                 localSymbol.Type,
                                 oldName,
                                 semanticModel,

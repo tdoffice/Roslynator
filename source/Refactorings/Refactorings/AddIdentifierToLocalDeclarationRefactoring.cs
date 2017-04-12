@@ -44,7 +44,7 @@ namespace Roslynator.CSharp.Refactorings
 
                             ITypeSymbol typeSymbol = semanticModel.GetTypeSymbol(type, context.CancellationToken);
 
-                            string name = NameGenerator.CreateUniqueLocalName(
+                            string name = NameGenerator.Default.CreateUniqueLocalName(
                                 typeSymbol,
                                 semanticModel,
                                 declarator.SpanStart,
@@ -72,7 +72,7 @@ namespace Roslynator.CSharp.Refactorings
 
                 ITypeSymbol typeSymbol = semanticModel.GetTypeSymbol(expression, context.CancellationToken);
 
-                string name = NameGenerator.CreateUniqueLocalName(
+                string name = NameGenerator.Default.CreateUniqueLocalName(
                     typeSymbol,
                     semanticModel,
                     expression.SpanStart,

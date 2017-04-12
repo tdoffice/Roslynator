@@ -222,7 +222,7 @@ namespace Roslynator.CSharp.Formatting
             if (en.MoveNext())
             {
                 nodesAndTokens.Add(en.Current
-                    .TrimEnd()
+                    .TrimTrailingTrivia()
                     .WithLeadingTrivia(leadingTrivia));
 
                 while (en.MoveNext())
@@ -230,7 +230,7 @@ namespace Roslynator.CSharp.Formatting
                     nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLine()));
 
                     nodesAndTokens.Add(en.Current
-                        .TrimEnd()
+                        .TrimTrailingTrivia()
                         .WithLeadingTrivia(leadingTrivia));
                 }
             }
@@ -294,7 +294,7 @@ namespace Roslynator.CSharp.Formatting
             if (en.MoveNext())
             {
                 nodesAndTokens.Add(en.Current
-                    .TrimEnd()
+                    .TrimTrailingTrivia()
                     .WithLeadingTrivia(leadingTrivia));
 
                 while (en.MoveNext())
@@ -302,7 +302,7 @@ namespace Roslynator.CSharp.Formatting
                     nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLine()));
 
                     nodesAndTokens.Add(en.Current
-                        .TrimEnd()
+                        .TrimTrailingTrivia()
                         .WithLeadingTrivia(leadingTrivia));
                 }
             }

@@ -90,7 +90,7 @@ namespace Roslynator.CSharp.Refactorings
             if (value != null)
                 equalsValue = SyntaxFactory.EqualsValueClause(CSharpFactory.LiteralExpression(value));
 
-            name = NameGenerator.EnsureUniqueEnumMemberName(name, enumSymbol);
+            name = NameGenerator.Default.EnsureUniqueEnumMemberName(name, enumSymbol);
 
             SyntaxToken identifier = SyntaxFactory.Identifier(name).WithRenameAnnotation();
 

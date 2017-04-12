@@ -14,21 +14,23 @@ using Roslynator.Helpers;
 
 namespace Roslynator
 {
-    public static class NameGenerator
+    public abstract class NameGenerator
     {
         private static StringComparer OrdinalComparer { get; } = StringComparer.Ordinal;
         private static StringComparer OrdinalIgnoreCaseComparer { get; } = StringComparer.OrdinalIgnoreCase;
 
-        private static UniqueNameProvider DefaultUniqueNameGenerator
+        public abstract string EnsureUniqueName(string baseName, HashSet<string> reservedNames);
+        public abstract string EnsureUniqueName(string baseName, ImmutableArray<ISymbol> symbols, bool isCaseSensitive = true);
+
+        public static NameGenerator Default
         {
-            get { return UniqueNameProviders.NumberSuffix; }
+            get { return NameGenerators.NumberSuffix; }
         }
 
-        public static string EnsureUniqueMemberName(
+        public string EnsureUniqueMemberName(
             string baseName,
             SemanticModel semanticModel,
             int position,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -39,31 +41,29 @@ namespace Roslynator
 
             if (containingType != null)
             {
-                return EnsureUniqueMemberName(baseName, containingType, uniqueNameProvider, isCaseSensitive);
+                return EnsureUniqueMemberName(baseName, containingType, isCaseSensitive);
             }
             else
             {
-                return EnsureUniqueName(baseName, semanticModel.LookupSymbols(position), uniqueNameProvider, isCaseSensitive);
+                return EnsureUniqueName(baseName, semanticModel.LookupSymbols(position), isCaseSensitive);
             }
         }
 
-        public static string EnsureUniqueMemberName(
+        public string EnsureUniqueMemberName(
             string baseName,
             INamedTypeSymbol containingType,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true)
         {
             if (containingType == null)
                 throw new ArgumentNullException(nameof(containingType));
 
-            return EnsureUniqueName(baseName, containingType.GetMembers(), uniqueNameProvider, isCaseSensitive);
+            return EnsureUniqueName(baseName, containingType.GetMembers(), isCaseSensitive);
         }
 
-        public static string EnsureUniqueLocalName(
+        public string EnsureUniqueLocalName(
             string baseName,
             SemanticModel semanticModel,
             int position,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -74,14 +74,13 @@ namespace Roslynator
                 .GetSymbolsDeclaredInEnclosingSymbol(position, excludeAnonymousTypeProperty: true, cancellationToken: cancellationToken)
                 .AddRange(semanticModel.LookupSymbols(position));
 
-            return EnsureUniqueName(baseName, symbols, uniqueNameProvider, isCaseSensitive);
+            return EnsureUniqueName(baseName, symbols, isCaseSensitive);
         }
 
-        internal static string EnsureUniqueParameterName(
+        internal string EnsureUniqueParameterName(
             string baseName,
             ISymbol containingSymbol,
             SemanticModel semanticModel,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -104,32 +103,13 @@ namespace Roslynator
                 .GetDeclaredSymbols(containingNode, excludeAnonymousTypeProperty: true, cancellationToken: cancellationToken)
                 .AddRange(semanticModel.LookupSymbols(containingNode.SpanStart));
 
-            return EnsureUniqueName(baseName, symbols, uniqueNameProvider, isCaseSensitive);
+            return EnsureUniqueName(baseName, symbols, isCaseSensitive);
         }
 
-        internal static async Task<string> EnsureUniqueAsyncMethodNameAsync(
-            string baseName,
-            IMethodSymbol methodSymbol,
-            Solution solution,
-            bool isCaseSensitive = true,
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (methodSymbol == null)
-                throw new ArgumentNullException(nameof(methodSymbol));
-
-            if (solution == null)
-                throw new ArgumentNullException(nameof(solution));
-
-            HashSet<string> reservedNames = await GetReservedNamesAsync(methodSymbol, solution, isCaseSensitive, cancellationToken).ConfigureAwait(false);
-
-            return UniqueNameProviders.AsyncMethod.EnsureUniqueName(baseName, reservedNames);
-        }
-
-        internal static async Task<string> EnsureUniqueMemberNameAsync(
+        internal async Task<string> EnsureUniqueMemberNameAsync(
             string baseName,
             ISymbol memberSymbol,
             Solution solution,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -141,19 +121,18 @@ namespace Roslynator
 
             HashSet<string> reservedNames = await GetReservedNamesAsync(memberSymbol, solution, isCaseSensitive, cancellationToken).ConfigureAwait(false);
 
-            return EnsureUniqueName(baseName, reservedNames, uniqueNameProvider);
+            return EnsureUniqueName(baseName, reservedNames);
         }
 
-        public static string EnsureUniqueEnumMemberName(
+        public string EnsureUniqueEnumMemberName(
             string baseName,
             INamedTypeSymbol enumSymbol,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true)
         {
             if (enumSymbol == null)
                 throw new ArgumentNullException(nameof(enumSymbol));
 
-            return EnsureUniqueName(baseName, enumSymbol.GetMembers(), uniqueNameProvider, isCaseSensitive);
+            return EnsureUniqueName(baseName, enumSymbol.GetMembers(), isCaseSensitive);
         }
 
         public static bool IsUniqueMemberName(
@@ -200,7 +179,7 @@ namespace Roslynator
             return IsUniqueName(name, reservedNames);
         }
 
-        private static async Task<HashSet<string>> GetReservedNamesAsync(
+        internal static async Task<HashSet<string>> GetReservedNamesAsync(
             ISymbol memberSymbol,
             Solution solution,
             bool isCaseSensitive = true,
@@ -250,27 +229,6 @@ namespace Roslynator
             }
         }
 
-        internal static string EnsureUniqueName(
-            string baseName,
-            HashSet<string> reservedNames,
-            UniqueNameProvider uniqueNameProvider = null)
-        {
-            uniqueNameProvider = uniqueNameProvider ?? DefaultUniqueNameGenerator;
-
-            return uniqueNameProvider.EnsureUniqueName(baseName, reservedNames);
-        }
-
-        internal static string EnsureUniqueName(
-            string baseName,
-            ImmutableArray<ISymbol> symbols,
-            UniqueNameProvider uniqueNameProvider = null,
-            bool isCaseSensitive = true)
-        {
-            uniqueNameProvider = uniqueNameProvider ?? DefaultUniqueNameGenerator;
-
-            return uniqueNameProvider.EnsureUniqueName(baseName, symbols, isCaseSensitive);
-        }
-
         internal static bool IsUniqueName(string name, ImmutableArray<ISymbol> symbols, bool isCaseSensitive = true)
         {
             StringComparison comparison = GetStringComparison(isCaseSensitive);
@@ -289,6 +247,7 @@ namespace Roslynator
             return !reservedNames.Contains(name);
         }
 
+        //TODO: CreateName
         public static string CreateName(ITypeSymbol typeSymbol, bool firstCharToLower = false)
         {
             string name = CreateNameFromTypeSymbolHelper.CreateName(typeSymbol);
@@ -302,11 +261,10 @@ namespace Roslynator
             return name;
         }
 
-        internal static string CreateUniqueLocalName(
+        internal string CreateUniqueLocalName(
             ITypeSymbol typeSymbol,
             SemanticModel semanticModel,
             int position,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -315,18 +273,17 @@ namespace Roslynator
                 string name = CreateName(typeSymbol, firstCharToLower: true);
 
                 if (name != null)
-                    return EnsureUniqueLocalName(name, semanticModel, position, uniqueNameProvider, isCaseSensitive, cancellationToken);
+                    return EnsureUniqueLocalName(name, semanticModel, position, isCaseSensitive, cancellationToken);
             }
 
             return null;
         }
 
-        internal static string CreateUniqueLocalName(
+        internal string CreateUniqueLocalName(
             ITypeSymbol typeSymbol,
             string oldName,
             SemanticModel semanticModel,
             int position,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -335,7 +292,7 @@ namespace Roslynator
             if (newName != null
                 && !string.Equals(oldName, newName, StringComparison.Ordinal))
             {
-                string uniqueName = EnsureUniqueLocalName(newName, semanticModel, position, uniqueNameProvider, isCaseSensitive, cancellationToken);
+                string uniqueName = EnsureUniqueLocalName(newName, semanticModel, position, isCaseSensitive, cancellationToken);
 
                 if (!IsChangeOnlyInSuffix(oldName, newName, uniqueName))
                     return uniqueName;
@@ -344,11 +301,10 @@ namespace Roslynator
             return null;
         }
 
-        internal static string CreateUniqueParameterName(
+        internal string CreateUniqueParameterName(
             string oldName,
             IParameterSymbol parameterSymbol,
             SemanticModel semanticModel,
-            UniqueNameProvider uniqueNameProvider = null,
             bool isCaseSensitive = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -357,7 +313,7 @@ namespace Roslynator
             if (newName != null
                 && !string.Equals(oldName, newName, StringComparison.Ordinal))
             {
-                string uniqueName = EnsureUniqueParameterName(newName, parameterSymbol.ContainingSymbol, semanticModel, uniqueNameProvider, isCaseSensitive, cancellationToken);
+                string uniqueName = EnsureUniqueParameterName(newName, parameterSymbol.ContainingSymbol, semanticModel, isCaseSensitive, cancellationToken);
 
                 if (!IsChangeOnlyInSuffix(oldName, newName, uniqueName))
                     return uniqueName;

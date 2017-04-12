@@ -40,7 +40,7 @@ namespace Roslynator.CSharp.CodeFixProviders
             string oldName = declarator.Identifier.ValueText;
             string newName = StringUtility.ToCamelCase(oldName, prefixWithUnderscore: true);
 
-            newName = NameGenerator.EnsureUniqueMemberName(
+            newName = NameGenerator.Default.EnsureUniqueMemberName(
                 newName,
                 semanticModel,
                 declarator.Identifier.SpanStart,

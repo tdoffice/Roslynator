@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Roslynator
 {
-    internal class UnderscoreSuffixUniqueNameProvider : UniqueNameProvider
+    internal class UnderscoreSuffixNameGenerator : NameGenerator
     {
         public override string EnsureUniqueName(string baseName, HashSet<string> reservedNames)
         {
@@ -14,7 +14,7 @@ namespace Roslynator
 
             string name = baseName;
 
-            while (!NameGenerator.IsUniqueName(name, reservedNames))
+            while (!IsUniqueName(name, reservedNames))
             {
                 suffix += "_";
                 name = baseName + suffix;
@@ -29,7 +29,7 @@ namespace Roslynator
 
             string name = baseName;
 
-            while (!NameGenerator.IsUniqueName(name, symbols, isCaseSensitive))
+            while (!IsUniqueName(name, symbols, isCaseSensitive))
             {
                 suffix += "_";
                 name = baseName + suffix;

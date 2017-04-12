@@ -375,14 +375,14 @@ namespace Roslynator.CSharp.Refactorings
 
         private static string GetTypeParameterName(int position, SemanticModel semanticModel)
         {
-            return NameGenerator.EnsureUniqueName(
+            return NameGenerator.Default.EnsureUniqueName(
                 DefaultNames.TypeParameter,
                 semanticModel.LookupSymbols(position));
         }
 
         private static string GetMethodTypeParameterName(SemanticModel semanticModel, int position, CancellationToken cancellationToken)
         {
-            return NameGenerator.EnsureUniqueLocalName(
+            return NameGenerator.Default.EnsureUniqueLocalName(
                 DefaultNames.TypeParameter,
                 semanticModel,
                 position,

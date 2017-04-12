@@ -147,7 +147,7 @@ namespace Roslynator.CSharp.Refactorings.InlineMethod
 
                         foreach (ISymbol symbol in symbols)
                         {
-                            string newName = NameGenerator.EnsureUniqueName(symbol.Name, reservedNames);
+                            string newName = NameGenerator.Default.EnsureUniqueName(symbol.Name, reservedNames);
 
                             symbolMap.Add(symbol, newName);
 

@@ -138,7 +138,7 @@ namespace Roslynator.CSharp.Refactorings
                     }
                 case SyntaxKind.ForEachStatement:
                     {
-                        string name = NameGenerator.EnsureUniqueLocalName(
+                        string name = NameGenerator.Default.EnsureUniqueLocalName(
                             DefaultNames.ForEachVariable,
                             semanticModel,
                             returnStatement.SpanStart,

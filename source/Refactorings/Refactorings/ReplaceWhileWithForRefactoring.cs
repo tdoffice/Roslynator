@@ -164,11 +164,11 @@ namespace Roslynator.CSharp.Refactorings
                     .Select(f => f.Declaration)
                     .Where(f => f != null);
 
-                TypeSyntax type = declarations.First().Type.Trim();
+                TypeSyntax type = declarations.First().Type.TrimTrivia();
 
                 IEnumerable<VariableDeclaratorSyntax> variables = declarations
                     .SelectMany(f => f.Variables)
-                    .Select(f => f.Trim());
+                    .Select(f => f.TrimTrivia());
 
                 declaration = VariableDeclaration(type, SeparatedList(variables));
 
@@ -182,7 +182,7 @@ namespace Roslynator.CSharp.Refactorings
                     ForStatementSyntax forStatement = CreateForStatement(whileStatement, declaration, initializers, incrementors);
 
                     forStatement = forStatement
-                        .TrimStart()
+                        .TrimLeadingTrivia()
                         .PrependToLeadingTrivia(localDeclarations[0].GetLeadingTrivia());
 
                     IEnumerable<StatementSyntax> newStatements = statements.Take(index)

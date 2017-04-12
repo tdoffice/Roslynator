@@ -73,7 +73,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             StatementSyntax statement = block
                 .Statements[0]
-                .TrimStart()
+                .TrimLeadingTrivia()
                 .WithFormatterAnnotation();
 
             return document.ReplaceNodeAsync(block, statement, cancellationToken);

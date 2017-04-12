@@ -2649,7 +2649,7 @@ namespace Roslynator.CSharp.Extensions
             return end;
         }
 
-        public static TNode TrimStart<TNode>(this TNode node) where TNode : SyntaxNode
+        public static TNode TrimLeadingTrivia<TNode>(this TNode node) where TNode : SyntaxNode
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -2668,7 +2668,7 @@ namespace Roslynator.CSharp.Extensions
             }
         }
 
-        public static TNode TrimEnd<TNode>(this TNode node) where TNode : SyntaxNode
+        public static TNode TrimTrailingTrivia<TNode>(this TNode node) where TNode : SyntaxNode
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -2687,14 +2687,14 @@ namespace Roslynator.CSharp.Extensions
             }
         }
 
-        public static TNode Trim<TNode>(this TNode node) where TNode : SyntaxNode
+        public static TNode TrimTrivia<TNode>(this TNode node) where TNode : SyntaxNode
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
             return node
-                .TrimStart()
-                .TrimEnd();
+                .TrimLeadingTrivia()
+                .TrimTrailingTrivia();
         }
 
         internal static TextSpan TrimmedSpan(this SyntaxNode node)
@@ -2925,7 +2925,7 @@ namespace Roslynator.CSharp.Extensions
                 || kind == kind6;
         }
 
-        public static SyntaxToken TrimStart(this SyntaxToken token)
+        public static SyntaxToken TrimLeadingTrivia(this SyntaxToken token)
         {
             SyntaxTriviaList leadingTrivia = token.LeadingTrivia;
             SyntaxTriviaList newLeadingTrivia = leadingTrivia.TrimStart();
@@ -2940,7 +2940,7 @@ namespace Roslynator.CSharp.Extensions
             }
         }
 
-        public static SyntaxToken TrimEnd(this SyntaxToken token)
+        public static SyntaxToken TrimTrailingTrivia(this SyntaxToken token)
         {
             SyntaxTriviaList trailingTrivia = token.TrailingTrivia;
             SyntaxTriviaList newTrailingTrivia = trailingTrivia.TrimEnd();
@@ -2993,11 +2993,11 @@ namespace Roslynator.CSharp.Extensions
             return false;
         }
 
-        public static SyntaxToken Trim(this SyntaxToken token)
+        public static SyntaxToken TrimTrivia(this SyntaxToken token)
         {
             return token
-                .TrimStart()
-                .TrimEnd();
+                .TrimLeadingTrivia()
+                .TrimTrailingTrivia();
         }
 
         public static bool IsParentKind(this SyntaxToken token, SyntaxKind kind)
@@ -3220,7 +3220,7 @@ namespace Roslynator.CSharp.Extensions
         }
 
         //TODO: Trim
-        public static SyntaxTriviaList Trim(this SyntaxTriviaList triviaList)
+        public static SyntaxTriviaList TrimTrivia(this SyntaxTriviaList triviaList)
         {
             int startIndex = 0;
             for (int i = 0; i < triviaList.Count; i++)

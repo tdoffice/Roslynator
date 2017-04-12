@@ -56,7 +56,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 string oldName = parameter.Identifier.ValueText;
 
-                string newName = NameGenerator.CreateUniqueParameterName(
+                string newName = NameGenerator.Default.CreateUniqueParameterName(
                     oldName,
                     parameterSymbol,
                     semanticModel,

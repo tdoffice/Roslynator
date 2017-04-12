@@ -85,7 +85,7 @@ namespace Roslynator.CSharp.Refactorings
                 document.Project.Solution,
                 cancellationToken).ConfigureAwait(false);
 
-            string name = NameGenerator.EnsureUniqueLocalName(
+            string name = NameGenerator.Default.EnsureUniqueLocalName(
                 DefaultNames.ForVariable,
                 semanticModel,
                 forEachStatement.Statement.SpanStart,

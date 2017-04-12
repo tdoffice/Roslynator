@@ -15,13 +15,6 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Roslynator.Metadata
 {
-    public class ClassName
-    {
-        public void MethodName()
-        {
-        }
-    }
-
     public class AnalyzerDescriptor
     {
         public AnalyzerDescriptor(

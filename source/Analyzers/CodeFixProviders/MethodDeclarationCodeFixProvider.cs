@@ -3,16 +3,15 @@
 using System.Collections.Immutable;
 using System.Composition;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.Rename;
-using Roslynator.CSharp.Refactorings;
 using Roslynator.CodeFixes.Extensions;
+using Roslynator.CSharp.Refactorings;
+using Roslynator.Rename;
 
 namespace Roslynator.CSharp.CodeFixProviders
 {
@@ -60,7 +59,7 @@ namespace Roslynator.CSharp.CodeFixProviders
                             {
                                 string oldName = methodDeclaration.Identifier.ValueText;
 
-                                string newName = await NameGenerator.EnsureUniqueAsyncMethodNameAsync(
+                                string newName = await NameGenerators.AsyncMethod.EnsureUniqueAsyncMethodNameAsync(
                                     oldName,
                                     methodSymbol,
                                     context.Solution(),
@@ -89,7 +88,7 @@ namespace Roslynator.CSharp.CodeFixProviders
                                 string name = methodDeclaration.Identifier.ValueText;
                                 string newName = name.Remove(name.Length - AsyncSuffix.Length);
 
-                                newName = await NameGenerator.EnsureUniqueMemberNameAsync(
+                                newName = await NameGenerator.Default.EnsureUniqueMemberNameAsync(
                                     newName,
                                     methodSymbol,
                                     context.Solution(),
