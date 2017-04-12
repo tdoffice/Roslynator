@@ -331,7 +331,7 @@ namespace Roslynator.CSharp.Refactorings
 
             int fieldIndex = members.IndexOf((FieldDeclarationSyntax)variableDeclaration.Parent);
 
-            ImmutableArray<SyntaxNode> oldNodes = await SymbolFinder.FindNodesAsync(fieldSymbol, document, cancellationToken).ConfigureAwait(false);
+            ImmutableArray<SyntaxNode> oldNodes = await document.FindNodesAsync(fieldSymbol, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             IdentifierNameSyntax newNode = IdentifierName(property.Identifier);
 
@@ -358,7 +358,7 @@ namespace Roslynator.CSharp.Refactorings
 
                 members = members.Replace(field, newField.WithFormatterAnnotation());
 
-                newParentMember = newParentMember.SetMembers(members);
+                newParentMember = newParentMember.WithMembers(members);
             }
 
             members = newParentMember.GetMembers();
@@ -369,7 +369,7 @@ namespace Roslynator.CSharp.Refactorings
 
             members = members.Replace(property, newProperty);
 
-            newParentMember = newParentMember.SetMembers(members);
+            newParentMember = newParentMember.WithMembers(members);
 
             return await document.ReplaceNodeAsync(parentMember, newParentMember, cancellationToken).ConfigureAwait(false);
         }

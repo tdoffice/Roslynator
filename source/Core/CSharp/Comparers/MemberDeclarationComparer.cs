@@ -88,9 +88,9 @@ namespace Roslynator.CSharp.Comparers
             return GetInsertIndex(members, GetOrderIndex(member));
         }
 
-        public int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, SyntaxKind kind)
+        public int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, SyntaxKind memberKind)
         {
-            return GetInsertIndex(members, GetOrderIndex(kind));
+            return GetInsertIndex(members, GetOrderIndex(memberKind));
         }
 
         public int GetFieldInsertIndex(SyntaxList<MemberDeclarationSyntax> members, bool isConst)

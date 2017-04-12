@@ -120,7 +120,7 @@ namespace Roslynator.CSharp.Refactorings
             StatementContainerSlice slice,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            IStatementContainer container = slice.Container;
+            StatementContainer container = slice.Container;
 
             ExpressionStatementSyntax[] expressionStatements = slice
                 .Skip(1)

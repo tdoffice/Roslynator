@@ -109,7 +109,7 @@ namespace Roslynator.CSharp.Refactorings.SortMemberDeclarations
                 .Concat(members.Skip(slice.EndIndex + 1))
                 .ToSyntaxList();
 
-            MemberDeclarationSyntax newNode = containingMember.SetMembers(newMembers);
+            MemberDeclarationSyntax newNode = containingMember.WithMembers(newMembers);
 
             return document.ReplaceNodeAsync(containingMember, newNode, cancellationToken);
         }

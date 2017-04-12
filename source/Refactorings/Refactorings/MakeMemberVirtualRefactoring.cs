@@ -109,7 +109,7 @@ namespace Roslynator.CSharp.Refactorings
 
             accessorList = accessorList
                 .RemoveWhitespaceOrEndOfLineTrivia()
-                .WithCloseBraceToken(accessorList.CloseBraceToken.WithLeadingTrivia(NewLineTrivia()));
+                .WithCloseBraceToken(accessorList.CloseBraceToken.WithLeadingTrivia(NewLine()));
 
             return indexerDeclaration
                 .WithSemicolonToken(default(SyntaxToken))

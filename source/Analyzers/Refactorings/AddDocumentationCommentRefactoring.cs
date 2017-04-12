@@ -125,10 +125,10 @@ namespace Roslynator.CSharp.Refactorings
             {
                 SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-                BaseDocumentationCommentInfo info = DocumentationCommentGenerator.GenerateFromBase(memberDeclaration, semanticModel, cancellationToken);
+                BaseDocumentationCommentData data = DocumentationCommentGenerator.GenerateFromBase(memberDeclaration, semanticModel, cancellationToken);
 
-                if (info.Success)
-                    newNode = memberDeclaration.WithDocumentationComment(info.Trivia, indent: true);
+                if (data.Success)
+                    newNode = memberDeclaration.WithDocumentationComment(data.Comment, indent: true);
             }
 
             newNode = newNode ?? memberDeclaration.WithNewSingleLineDocumentationComment();

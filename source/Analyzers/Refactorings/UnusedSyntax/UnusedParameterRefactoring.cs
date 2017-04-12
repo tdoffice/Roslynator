@@ -82,7 +82,7 @@ namespace Roslynator.CSharp.Refactorings.UnusedSyntax
             ParameterSyntax parameter,
             CancellationToken cancellationToken)
         {
-            SyntaxRemoveOptions options = Remover.DefaultRemoveOptions;
+            SyntaxRemoveOptions options = RemoveHelper.DefaultRemoveOptions;
 
             if (parameter.GetLeadingTrivia().All(f => f.IsWhitespaceTrivia()))
                 options &= ~SyntaxRemoveOptions.KeepLeadingTrivia;

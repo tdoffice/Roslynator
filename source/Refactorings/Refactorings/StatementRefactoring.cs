@@ -203,7 +203,7 @@ namespace Roslynator.CSharp.Refactorings
             if (index == 0
                 && block.OpenBraceToken.GetFullSpanEndLine() == statement.GetFullSpanStartLine())
             {
-                statement = statement.WithLeadingTrivia(statement.GetLeadingTrivia().Insert(0, CSharpFactory.NewLineTrivia()));
+                statement = statement.WithLeadingTrivia(statement.GetLeadingTrivia().Insert(0, CSharpFactory.NewLine()));
             }
 
             BlockSyntax newBlock = block.WithStatements(block.Statements.Insert(index + 1, statement));
@@ -213,7 +213,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static SyntaxRemoveOptions GetRemoveOptions(StatementSyntax statement)
         {
-            SyntaxRemoveOptions removeOptions = Remover.DefaultRemoveOptions;
+            SyntaxRemoveOptions removeOptions = RemoveHelper.DefaultRemoveOptions;
 
             if (statement.GetLeadingTrivia().All(f => f.IsWhitespaceOrEndOfLineTrivia()))
                 removeOptions &= ~SyntaxRemoveOptions.KeepLeadingTrivia;

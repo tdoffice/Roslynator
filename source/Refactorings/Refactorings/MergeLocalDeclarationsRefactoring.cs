@@ -73,7 +73,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static Task<Document> RefactorAsync(
             Document document,
-            IStatementContainer container,
+            StatementContainer container,
             LocalDeclarationStatementSyntax[] localDeclarations,
             CancellationToken cancellationToken = default(CancellationToken))
         {

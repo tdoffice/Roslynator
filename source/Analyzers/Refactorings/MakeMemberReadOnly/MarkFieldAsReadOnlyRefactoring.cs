@@ -86,7 +86,7 @@ namespace Roslynator.CSharp.Refactorings.MakeMemberReadOnly
             FieldDeclarationSyntax fieldDeclaration,
             CancellationToken cancellationToken)
         {
-            FieldDeclarationSyntax newNode = fieldDeclaration.WithModifier(SyntaxKind.ReadOnlyKeyword, ModifierComparer.Instance);
+            FieldDeclarationSyntax newNode = fieldDeclaration.InsertModifier(SyntaxKind.ReadOnlyKeyword, ModifierComparer.Instance);
 
             return document.ReplaceNodeAsync(fieldDeclaration, newNode, cancellationToken);
         }

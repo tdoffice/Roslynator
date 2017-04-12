@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,47 +42,9 @@ namespace Roslynator.CSharp.Refactorings
             for (int i = 0; i < modifiers.Count; i++)
                 newModifiers[i] = newModifiers[i].WithTriviaFrom(modifiers[i]);
 
-            SyntaxNode newDeclaration = SetModifiers(declaration, SyntaxFactory.TokenList(newModifiers));
+            SyntaxNode newDeclaration = declaration.WithModifiers(SyntaxFactory.TokenList(newModifiers));
 
             return document.ReplaceNodeAsync(declaration, newDeclaration, cancellationToken);
-        }
-
-        private static SyntaxNode SetModifiers(SyntaxNode declaration, SyntaxTokenList modifiers)
-        {
-            switch (declaration.Kind())
-            {
-                case SyntaxKind.ClassDeclaration:
-                    return ((ClassDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.ConstructorDeclaration:
-                    return ((ConstructorDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.ConversionOperatorDeclaration:
-                    return ((ConversionOperatorDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.DelegateDeclaration:
-                    return ((DelegateDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.EnumDeclaration:
-                    return ((EnumDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.EventDeclaration:
-                    return ((EventDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.EventFieldDeclaration:
-                    return ((EventFieldDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.FieldDeclaration:
-                    return ((FieldDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.IndexerDeclaration:
-                    return ((IndexerDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.InterfaceDeclaration:
-                    return ((InterfaceDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.MethodDeclaration:
-                    return ((MethodDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.OperatorDeclaration:
-                    return ((OperatorDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.PropertyDeclaration:
-                    return ((PropertyDeclarationSyntax)declaration).WithModifiers(modifiers);
-                case SyntaxKind.StructDeclaration:
-                    return ((StructDeclarationSyntax)declaration).WithModifiers(modifiers);
-            }
-
-            Debug.Assert(false, declaration.Kind().ToString());
-            return declaration;
         }
     }
 }

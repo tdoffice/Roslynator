@@ -31,7 +31,7 @@ namespace CodeGenerator
                     UsingDirective(ParseName("Roslynator.CSharp.Refactorings")),
                     UsingDirective(ParseName("Roslynator.VisualStudio.TypeConverters"))}))
                 .WithMembers(
-                    NamespaceDeclaration(DefaultNamespace)
+                    NamespaceDeclaration(IdentifierName(DefaultNamespace))
                         .WithMembers(
                             ClassDeclaration("RefactoringsOptionsPage")
                                 .WithModifiers(Modifiers.PublicPartial())
@@ -101,9 +101,9 @@ namespace CodeGenerator
             {
                 yield return PropertyDeclaration(BoolType(), info.Identifier)
                    .WithAttributeLists(
-                       AttributeList(Attribute(IdentifierName("Browsable"), FalseLiteralExpression())),
-                       AttributeList(Attribute(IdentifierName("Category"), IdentifierName("RefactoringCategory"))),
-                       AttributeList(Attribute(IdentifierName("TypeConverter"), TypeOfExpression(IdentifierName("EnabledDisabledConverter")))))
+                       AttributeList(Attribute(IdentifierName("Browsable"), AttributeArgument(FalseLiteralExpression()))),
+                       AttributeList(Attribute(IdentifierName("Category"), AttributeArgument(IdentifierName("RefactoringCategory")))),
+                       AttributeList(Attribute(IdentifierName("TypeConverter"), AttributeArgument(TypeOfExpression(IdentifierName("EnabledDisabledConverter"))))))
                    .WithModifiers(Modifiers.Public())
                    .WithAccessorList(
                        AccessorList(

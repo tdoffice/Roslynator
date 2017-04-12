@@ -90,7 +90,7 @@ namespace Roslynator.CSharp.Refactorings
                 Identifier(name).WithRenameAnnotation(),
                 NumericLiteralExpression(0));
 
-            enumMember = enumMember.WithTrailingTrivia(NewLineTrivia());
+            enumMember = enumMember.WithTrailingTrivia(NewLine());
 
             EnumDeclarationSyntax newNode = enumDeclaration.WithMembers(enumDeclaration.Members.Insert(0, enumMember));
 

@@ -212,7 +212,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (!modifiers.Contains(SyntaxKind.StaticKeyword))
             {
-                return fieldDeclaration.WithModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
+                return fieldDeclaration.InsertModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
             }
             else
             {
@@ -229,7 +229,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (!modifiers.Contains(SyntaxKind.StaticKeyword))
             {
-                return methodDeclaration.WithModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
+                return methodDeclaration.InsertModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
             }
             else
             {
@@ -246,7 +246,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (!modifiers.Contains(SyntaxKind.StaticKeyword))
             {
-                return propertyDeclaration.WithModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
+                return propertyDeclaration.InsertModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
             }
             else
             {
@@ -263,7 +263,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (!modifiers.Contains(SyntaxKind.StaticKeyword))
             {
-                return eventDeclaration.WithModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
+                return eventDeclaration.InsertModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
             }
             else
             {
@@ -280,7 +280,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (!modifiers.Contains(SyntaxKind.StaticKeyword))
             {
-                return eventFieldDeclaration.WithModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
+                return eventFieldDeclaration.InsertModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
             }
             else
             {

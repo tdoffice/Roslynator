@@ -81,7 +81,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         values.Add(optional.Value);
 
-                        EqualsValueClauseSyntax equalsValue = EqualsValueClause(CSharpFactory.ConstantExpression(optional.Value));
+                        EqualsValueClauseSyntax equalsValue = EqualsValueClause(CSharpFactory.LiteralExpression(optional.Value));
 
                         EnumMemberDeclarationSyntax newMember = members[i]
                             .WithEqualsValue(equalsValue)

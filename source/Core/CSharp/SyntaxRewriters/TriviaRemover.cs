@@ -39,7 +39,7 @@ namespace Roslynator.CSharp.SyntaxRewriters
         {
             if (_span == null || _span.Value.Contains(trivia.Span))
             {
-                return CSharpFactory.EmptyWhitespaceTrivia();
+                return CSharpFactory.EmptyWhitespace();
             }
             else
             {

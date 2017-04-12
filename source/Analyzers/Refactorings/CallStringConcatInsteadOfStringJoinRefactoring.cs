@@ -60,8 +60,7 @@ namespace Roslynator.CSharp.Refactorings
                                 {
                                     IParameterSymbol parameter = parameters[1];
 
-                                    if (parameter.IsParamsOf(SpecialType.System_String)
-                                        || parameter.IsParamsOf(SpecialType.System_Object)
+                                    if (parameter.IsParamsOf(SpecialType.System_String, SpecialType.System_Object)
                                         || parameter.Type.IsConstructedFromIEnumerableOfT())
                                     {
                                         ArgumentSyntax firstArgument = arguments.First();
@@ -98,7 +97,7 @@ namespace Roslynator.CSharp.Refactorings
 
             ArgumentListSyntax newArgumentList = argumentList
                 .WithArguments(arguments.RemoveAt(0))
-                .WithOpenParenToken(argumentList.OpenParenToken.AppendToTrailingTrivia(arguments[0].GetLeadingTrailingTrivia()));
+                .WithOpenParenToken(argumentList.OpenParenToken.AppendToTrailingTrivia(arguments[0].GetLeadingAndTrailingTrivia()));
 
             InvocationExpressionSyntax newInvocation = invocation
                 .WithExpression(newMemberAccess)

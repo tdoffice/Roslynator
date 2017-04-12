@@ -120,7 +120,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (statement.Parent.IsKind(SyntaxKind.ElseClause))
             {
-                list = new List<SyntaxTrivia>() { CSharpFactory.NewLineTrivia() };
+                list = new List<SyntaxTrivia>() { CSharpFactory.NewLine() };
             }
             else
             {

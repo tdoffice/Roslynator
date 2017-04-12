@@ -48,7 +48,7 @@ namespace Roslynator.CSharp.Refactorings
                         if (index == 0
                             && parent.OpenBraceToken.GetFullSpanEndLine() == member.GetFullSpanStartLine())
                         {
-                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLineTrivia()));
+                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLine()));
                         }
 
                         return parent.WithMembers(members.Insert(index + 1, member));
@@ -62,7 +62,7 @@ namespace Roslynator.CSharp.Refactorings
                         if (index == 0
                             && parent.OpenBraceToken.GetFullSpanEndLine() == member.GetFullSpanStartLine())
                         {
-                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLineTrivia()));
+                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLine()));
                         }
 
                         return parent.WithMembers(members.Insert(index + 1, member));
@@ -76,7 +76,7 @@ namespace Roslynator.CSharp.Refactorings
                         if (index == 0
                             && parent.OpenBraceToken.GetFullSpanEndLine() == member.GetFullSpanStartLine())
                         {
-                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLineTrivia()));
+                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLine()));
                         }
 
                         return parent.WithMembers(members.Insert(index + 1, member));
@@ -90,7 +90,7 @@ namespace Roslynator.CSharp.Refactorings
                         if (index == 0
                             && parent.OpenBraceToken.GetFullSpanEndLine() == member.GetFullSpanStartLine())
                         {
-                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLineTrivia()));
+                            member = member.WithLeadingTrivia(member.GetLeadingTrivia().Insert(0, NewLine()));
                         }
 
                         return parent.WithMembers(members.Insert(index + 1, member));

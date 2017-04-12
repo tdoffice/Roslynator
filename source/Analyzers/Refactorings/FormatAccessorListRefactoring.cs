@@ -219,7 +219,7 @@ namespace Roslynator.CSharp.Refactorings
                 SyntaxTriviaList trailingTrivia = accessor.GetTrailingTrivia();
 
                 if (accessorList.SyntaxTree.IsSingleLineSpan(trailingTrivia.Span, cancellationToken))
-                    return newAccessorList.ReplaceNode(accessor, accessor.AppendToTrailingTrivia(NewLineTrivia()));
+                    return newAccessorList.ReplaceNode(accessor, accessor.AppendToTrailingTrivia(NewLine()));
             }
 
             return newAccessorList;
@@ -232,7 +232,7 @@ namespace Roslynator.CSharp.Refactorings
                 SyntaxTriviaList triviaList = accessorList
                     .CloseBraceToken
                     .LeadingTrivia
-                    .Add(NewLineTrivia());
+                    .Add(NewLine());
 
                 return accessorList
                     .RemoveWhitespaceOrEndOfLineTrivia()

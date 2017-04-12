@@ -129,7 +129,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         var declaration = (NamespaceDeclarationSyntax)memberDeclaration;
                         return declaration
-                            .WithSemicolonToken(NoneToken())
+                            .WithSemicolonToken(default(SyntaxToken))
                             .WithCloseBraceToken(declaration.CloseBraceToken
                                 .WithTrailingTrivia(GetNewTrailingTrivia(declaration.CloseBraceToken, declaration.SemicolonToken)));
                     }
@@ -137,7 +137,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         var declaration = (ClassDeclarationSyntax)memberDeclaration;
                         return declaration
-                            .WithSemicolonToken(NoneToken())
+                            .WithSemicolonToken(default(SyntaxToken))
                             .WithCloseBraceToken(declaration.CloseBraceToken
                                 .WithTrailingTrivia(GetNewTrailingTrivia(declaration.CloseBraceToken, declaration.SemicolonToken)));
                     }
@@ -145,7 +145,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         var declaration = (InterfaceDeclarationSyntax)memberDeclaration;
                         return declaration
-                            .WithSemicolonToken(NoneToken())
+                            .WithSemicolonToken(default(SyntaxToken))
                             .WithCloseBraceToken(declaration.CloseBraceToken
                                 .WithTrailingTrivia(GetNewTrailingTrivia(declaration.CloseBraceToken, declaration.SemicolonToken)));
                     }
@@ -153,7 +153,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         var declaration = (StructDeclarationSyntax)memberDeclaration;
                         return declaration
-                            .WithSemicolonToken(NoneToken())
+                            .WithSemicolonToken(default(SyntaxToken))
                             .WithCloseBraceToken(declaration.CloseBraceToken
                                 .WithTrailingTrivia(GetNewTrailingTrivia(declaration.CloseBraceToken, declaration.SemicolonToken)));
                     }
@@ -161,7 +161,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         var declaration = (EnumDeclarationSyntax)memberDeclaration;
                         return declaration
-                            .WithSemicolonToken(NoneToken())
+                            .WithSemicolonToken(default(SyntaxToken))
                             .WithCloseBraceToken(declaration.CloseBraceToken
                                 .WithTrailingTrivia(GetNewTrailingTrivia(declaration.CloseBraceToken, declaration.SemicolonToken)));
                     }

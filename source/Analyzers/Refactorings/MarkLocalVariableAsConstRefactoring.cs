@@ -29,7 +29,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (!localDeclaration.IsConst)
             {
-                IStatementContainer container;
+                StatementContainer container;
                 if (StatementContainer.TryCreate(localDeclaration, out container))
                 {
                     SyntaxList<StatementSyntax> statements = container.Statements;

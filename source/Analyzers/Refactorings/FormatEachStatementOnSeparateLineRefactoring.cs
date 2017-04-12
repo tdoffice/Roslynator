@@ -51,7 +51,7 @@ namespace Roslynator.CSharp.Refactorings
             CancellationToken cancellationToken)
         {
             StatementSyntax newStatement = statement
-                .WithLeadingTrivia(statement.GetLeadingTrivia().Insert(0, CSharpFactory.NewLineTrivia()))
+                .WithLeadingTrivia(statement.GetLeadingTrivia().Insert(0, CSharpFactory.NewLine()))
                 .WithFormatterAnnotation();
 
             if (statement.IsParentKind(SyntaxKind.Block))
@@ -61,7 +61,7 @@ namespace Roslynator.CSharp.Refactorings
                 if (block.IsSingleLine(includeExteriorTrivia: false))
                 {
                     SyntaxTriviaList triviaList = block.CloseBraceToken.LeadingTrivia
-                        .Add(CSharpFactory.NewLineTrivia());
+                        .Add(CSharpFactory.NewLine());
 
                     BlockSyntax newBlock = block
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingTrivia(triviaList))

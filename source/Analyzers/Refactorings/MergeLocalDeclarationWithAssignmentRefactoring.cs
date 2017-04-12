@@ -151,7 +151,7 @@ namespace Roslynator.CSharp.Refactorings
 
             var localDeclaration = (LocalDeclarationStatementSyntax)declaration.Parent;
 
-            IStatementContainer container = StatementContainer.Create(localDeclaration);
+            StatementContainer container = StatementContainer.Create(localDeclaration);
 
             SyntaxList<StatementSyntax> statements = container.Statements;
 

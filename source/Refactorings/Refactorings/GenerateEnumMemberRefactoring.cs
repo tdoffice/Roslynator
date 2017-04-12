@@ -88,7 +88,7 @@ namespace Roslynator.CSharp.Refactorings
             EqualsValueClauseSyntax equalsValue = null;
 
             if (value != null)
-                equalsValue = SyntaxFactory.EqualsValueClause(CSharpFactory.ConstantExpression(value));
+                equalsValue = SyntaxFactory.EqualsValueClause(CSharpFactory.LiteralExpression(value));
 
             name = NameGenerator.EnsureUniqueEnumMemberName(name, enumSymbol);
 

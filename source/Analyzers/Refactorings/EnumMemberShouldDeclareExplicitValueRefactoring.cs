@@ -44,7 +44,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (value != null)
             {
-                EqualsValueClauseSyntax equalsValue = EqualsValueClause(ConstantExpression(value));
+                EqualsValueClauseSyntax equalsValue = EqualsValueClause(LiteralExpression(value));
 
                 EnumMemberDeclarationSyntax newNode = enumMember.WithEqualsValue(equalsValue);
 

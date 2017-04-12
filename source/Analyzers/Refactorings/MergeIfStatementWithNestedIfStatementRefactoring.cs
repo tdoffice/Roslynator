@@ -67,8 +67,8 @@ namespace Roslynator.CSharp.Refactorings
                 {
                     var block = (BlockSyntax)nestedIf.Statement;
 
-                    return block.OpenBraceToken.GetLeadingTrailingTrivia().All(f => f.IsWhitespaceOrEndOfLineTrivia())
-                        && block.CloseBraceToken.GetLeadingTrailingTrivia().All(f => f.IsWhitespaceOrEndOfLineTrivia());
+                    return block.OpenBraceToken.GetLeadingAndTrailingTrivia().All(f => f.IsWhitespaceOrEndOfLineTrivia())
+                        && block.CloseBraceToken.GetLeadingAndTrailingTrivia().All(f => f.IsWhitespaceOrEndOfLineTrivia());
                 }
 
                 return true;

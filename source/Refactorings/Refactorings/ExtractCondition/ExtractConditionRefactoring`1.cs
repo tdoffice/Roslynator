@@ -43,7 +43,7 @@ namespace Roslynator.CSharp.Refactorings.ExtractCondition
             else
             {
                 return (binaryExpression == condition)
-                    ? left.TrimTrailingTrivia()
+                    ? left.TrimEnd()
                     : left;
             }
         }
@@ -57,7 +57,7 @@ namespace Roslynator.CSharp.Refactorings.ExtractCondition
 
             return statement.ReplaceNode(
                 condition,
-                binaryExpression.Left.TrimTrailingTrivia());
+                binaryExpression.Left.TrimEnd());
         }
 
         protected TStatement AddNestedIf(

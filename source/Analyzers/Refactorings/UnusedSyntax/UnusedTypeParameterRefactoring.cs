@@ -49,7 +49,7 @@ namespace Roslynator.CSharp.Refactorings.UnusedSyntax
             if (typeParameterList.Parameters.Count == 1)
                 node = typeParameterList;
 
-            SyntaxRemoveOptions options = Remover.DefaultRemoveOptions;
+            SyntaxRemoveOptions options = RemoveHelper.DefaultRemoveOptions;
 
             if (node.GetLeadingTrivia().All(f => f.IsWhitespaceTrivia()))
                 options &= ~SyntaxRemoveOptions.KeepLeadingTrivia;

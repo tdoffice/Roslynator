@@ -250,7 +250,7 @@ namespace Roslynator.CSharp.Refactorings
 
             foreach (SwitchSectionSyntax section in switchStatement.Sections)
             {
-                if (section.IsDefault())
+                if (section.ContainsDefaultLabel())
                 {
                     if (containsDefaultSection)
                     {

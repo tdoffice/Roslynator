@@ -10,6 +10,6 @@ namespace Roslynator.CSharp
     {
         int GetInsertIndex(SyntaxTokenList modifiers, SyntaxToken modifier);
 
-        int GetInsertIndex(SyntaxTokenList modifiers, SyntaxKind kind);
+        int GetInsertIndex(SyntaxTokenList modifiers, SyntaxKind modifierKind);
     }
 }

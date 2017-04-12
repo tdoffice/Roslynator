@@ -388,7 +388,7 @@ namespace Roslynator
             return true;
         }
 
-        internal static StringComparison GetStringComparison(bool isCaseSensitive)
+        private static StringComparison GetStringComparison(bool isCaseSensitive)
         {
             if (isCaseSensitive)
             {

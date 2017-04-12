@@ -142,7 +142,7 @@ namespace Roslynator.CSharp.Refactorings
             StatementSyntax statement,
             CancellationToken cancellationToken)
         {
-            IStatementContainer container;
+            StatementContainer container;
             if (StatementContainer.TryCreate(statement, out container))
             {
                 SyntaxList<StatementSyntax> statements = container.Statements;
@@ -228,7 +228,7 @@ namespace Roslynator.CSharp.Refactorings
             StatementSyntax statement,
             IfStatementSyntax ifStatement,
             int statementIndex,
-            IStatementContainer container,
+            StatementContainer container,
             ExpressionSyntax expression,
             CancellationToken cancellationToken)
         {

@@ -203,7 +203,7 @@ namespace Roslynator.CSharp.Refactorings
             CancellationToken cancellationToken)
         {
             MemberDeclarationSyntax newNode = memberDeclaration
-                .WithTrailingTrivia(memberDeclaration.GetTrailingTrivia().Add(CSharpFactory.NewLineTrivia()));
+                .WithTrailingTrivia(memberDeclaration.GetTrailingTrivia().Add(CSharpFactory.NewLine()));
 
             return document.ReplaceNodeAsync(memberDeclaration, newNode, cancellationToken);
         }

@@ -69,7 +69,7 @@ namespace Roslynator.CSharp.Refactorings
 
                     newMembers = newMembers.InsertMember(field, MemberDeclarationComparer.ByKind);
 
-                    MemberDeclarationSyntax newNode = containingDeclaration.SetMembers(newMembers);
+                    MemberDeclarationSyntax newNode = containingDeclaration.WithMembers(newMembers);
 
                     return await document.ReplaceNodeAsync(containingDeclaration, newNode, cancellationToken).ConfigureAwait(false);
                 }

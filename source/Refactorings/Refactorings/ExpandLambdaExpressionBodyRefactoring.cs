@@ -46,7 +46,7 @@ namespace Roslynator.CSharp.Refactorings
             block = block
                 .WithCloseBraceToken(
                     block.CloseBraceToken
-                        .WithLeadingTrivia(TriviaList(CSharpFactory.NewLineTrivia())));
+                        .WithLeadingTrivia(TriviaList(CSharpFactory.NewLine())));
 
             switch (lambda.Kind())
             {

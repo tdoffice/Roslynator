@@ -296,7 +296,7 @@ namespace Roslynator.CSharp.Refactorings
                 CreateConstructor(GetConstructorIdentifierText(parentMember), assignableMembers),
                 MemberDeclarationComparer.ByKind);
 
-            MemberDeclarationSyntax newNode = parentMember.SetMembers(newMembers)
+            MemberDeclarationSyntax newNode = parentMember.WithMembers(newMembers)
                 .WithFormatterAnnotation();
 
             return document.ReplaceNodeAsync(parentMember, newNode, cancellationToken);

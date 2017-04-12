@@ -67,11 +67,11 @@ namespace Roslynator.CSharp.Helpers
                 {
                     TNode newNode = node.ReplaceToken(nextToken, nextToken.PrependToLeadingTrivia(trivia));
 
-                    return (TNode)newNode.SetModifiers(newModifiers);
+                    return (TNode)newNode.WithModifiers(newModifiers);
                 }
             }
 
-            return (TNode)node.SetModifiers(newModifiers);
+            return (TNode)node.WithModifiers(newModifiers);
         }
 
         private static SyntaxToken FindPreviousToken(SyntaxNode node, SyntaxToken token)

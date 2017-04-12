@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 SyntaxToken modifier = Token(modifierKind);
 
-                ClassDeclarationSyntax newClassDeclaration = classDeclaration.WithModifier(modifier, ModifierComparer.Instance);
+                ClassDeclarationSyntax newClassDeclaration = classDeclaration.InsertModifier(modifier, ModifierComparer.Instance);
 
                 return await document.ReplaceNodeAsync(classDeclaration, newClassDeclaration, cancellationToken).ConfigureAwait(false);
             }

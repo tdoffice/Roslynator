@@ -255,7 +255,7 @@ namespace Roslynator.CSharp.Documentation
             return Generate(typeParameters, parameters, generateReturns, settings);
         }
 
-        public static SyntaxTriviaList Generate(
+        private static SyntaxTriviaList Generate(
             SeparatedSyntaxList<TypeParameterSyntax> typeParameters = default(SeparatedSyntaxList<TypeParameterSyntax>),
             SeparatedSyntaxList<ParameterSyntax> parameters = default(SeparatedSyntaxList<ParameterSyntax>),
             bool generateReturns = false,
@@ -343,7 +343,7 @@ namespace Roslynator.CSharp.Documentation
             }
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(MemberDeclarationSyntax memberDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(MemberDeclarationSyntax memberDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             switch (memberDeclaration.Kind())
             {
@@ -364,7 +364,7 @@ namespace Roslynator.CSharp.Documentation
             }
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             IMethodSymbol methodSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration, cancellationToken);
 
@@ -375,57 +375,57 @@ namespace Roslynator.CSharp.Documentation
                 SyntaxTrivia trivia = GenerateFromOverriddenMethods(methodSymbol, semanticModel, position, cancellationToken);
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                    return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.BaseMember);
+                    return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.BaseMember);
 
                 trivia = GenerateFromInterfaceMember<IMethodSymbol>(methodSymbol, semanticModel, position, cancellationToken);
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                    return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.InterfaceMember);
+                    return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.InterfaceMember);
             }
 
-            return default(BaseDocumentationCommentInfo);
+            return default(BaseDocumentationCommentData);
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(PropertyDeclarationSyntax propertyDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(PropertyDeclarationSyntax propertyDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(propertyDeclaration, cancellationToken);
 
             return GenerateFromBase(propertySymbol, semanticModel, propertyDeclaration.SpanStart, cancellationToken);
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(IndexerDeclarationSyntax indexerDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(IndexerDeclarationSyntax indexerDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(indexerDeclaration, cancellationToken);
 
             return GenerateFromBase(propertySymbol, semanticModel, indexerDeclaration.SpanStart, cancellationToken);
         }
 
-        private static BaseDocumentationCommentInfo GenerateFromBase(IPropertySymbol propertySymbol, SemanticModel semanticModel, int position, CancellationToken cancellationToken)
+        private static BaseDocumentationCommentData GenerateFromBase(IPropertySymbol propertySymbol, SemanticModel semanticModel, int position, CancellationToken cancellationToken)
         {
             if (propertySymbol?.IsErrorType() == false)
             {
                 SyntaxTrivia trivia = GenerateFromOverriddenProperties(propertySymbol, semanticModel, position, cancellationToken);
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                    return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.BaseMember);
+                    return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.BaseMember);
 
                 trivia = GenerateFromInterfaceMember<IPropertySymbol>(propertySymbol, semanticModel, position, cancellationToken);
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                    return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.InterfaceMember);
+                    return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.InterfaceMember);
             }
 
-            return default(BaseDocumentationCommentInfo);
+            return default(BaseDocumentationCommentData);
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(EventDeclarationSyntax eventDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(EventDeclarationSyntax eventDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             IEventSymbol eventSymbol = semanticModel.GetDeclaredSymbol(eventDeclaration, cancellationToken);
 
             return GenerateFromBase(eventSymbol, semanticModel, eventDeclaration.SpanStart, cancellationToken);
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(EventFieldDeclarationSyntax eventFieldDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(EventFieldDeclarationSyntax eventFieldDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             VariableDeclaratorSyntax variableDeclarator = eventFieldDeclaration.Declaration?.Variables.FirstOrDefault();
 
@@ -436,28 +436,28 @@ namespace Roslynator.CSharp.Documentation
                 return GenerateFromBase(eventSymbol, semanticModel, eventFieldDeclaration.SpanStart, cancellationToken);
             }
 
-            return default(BaseDocumentationCommentInfo);
+            return default(BaseDocumentationCommentData);
         }
 
-        private static BaseDocumentationCommentInfo GenerateFromBase(IEventSymbol eventSymbol, SemanticModel semanticModel, int position, CancellationToken cancellationToken)
+        private static BaseDocumentationCommentData GenerateFromBase(IEventSymbol eventSymbol, SemanticModel semanticModel, int position, CancellationToken cancellationToken)
         {
             if (eventSymbol?.IsErrorType() == false)
             {
                 SyntaxTrivia trivia = GenerateFromOverriddenEvents(eventSymbol, semanticModel, position, cancellationToken);
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                    return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.BaseMember);
+                    return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.BaseMember);
 
                 trivia = GenerateFromInterfaceMember<IEventSymbol>(eventSymbol, semanticModel, position, cancellationToken);
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                    return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.InterfaceMember);
+                    return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.InterfaceMember);
             }
 
-            return default(BaseDocumentationCommentInfo);
+            return default(BaseDocumentationCommentData);
         }
 
-        public static BaseDocumentationCommentInfo GenerateFromBase(ConstructorDeclarationSyntax constructorDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
+        public static BaseDocumentationCommentData GenerateFromBase(ConstructorDeclarationSyntax constructorDeclaration, SemanticModel semanticModel, CancellationToken cancellationToken = default(CancellationToken))
         {
             ConstructorInitializerSyntax initializer = constructorDeclaration.Initializer;
 
@@ -470,11 +470,11 @@ namespace Roslynator.CSharp.Documentation
                     SyntaxTrivia trivia = GetDocumentationCommentTrivia(baseConstructor, semanticModel, constructorDeclaration.SpanStart, cancellationToken);
 
                     if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                        return new BaseDocumentationCommentInfo(trivia, BaseDocumentationCommentOrigin.BaseMember);
+                        return new BaseDocumentationCommentData(trivia, BaseDocumentationCommentOrigin.BaseMember);
                 }
             }
 
-            return default(BaseDocumentationCommentInfo);
+            return default(BaseDocumentationCommentData);
         }
 
         private static SyntaxTrivia GenerateFromOverriddenMethods(IMethodSymbol methodSymbol, SemanticModel semanticModel, int position, CancellationToken cancellationToken)

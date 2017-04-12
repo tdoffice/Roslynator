@@ -113,7 +113,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (supportsCSharp6)
             {
-                argumentExpression = NameOf(propertyName);
+                argumentExpression = NameOfExpression(propertyName);
             }
             else
             {

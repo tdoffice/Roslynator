@@ -111,7 +111,7 @@ namespace Roslynator.CSharp.Refactorings
 
             SyntaxList<MemberDeclarationSyntax> newMembers = members.InsertMember(method, MemberDeclarationComparer.ByKind);
 
-            return document.ReplaceNodeAsync(containingMember, containingMember.SetMembers(newMembers), cancellationToken);
+            return document.ReplaceNodeAsync(containingMember, containingMember.WithMembers(newMembers), cancellationToken);
         }
 
         private static MethodDeclarationSyntax CreateOnEventMethod(

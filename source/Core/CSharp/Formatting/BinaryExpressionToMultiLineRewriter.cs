@@ -24,7 +24,7 @@ namespace Roslynator.CSharp.Formatting
                 || (_previous.Equals(node.Parent) && node.IsKind(_previous.Kind())))
             {
                 node = node
-                    .WithLeft(node.Left?.TrimTrivia())
+                    .WithLeft(node.Left?.Trim())
                     .WithOperatorToken(node.OperatorToken.WithLeadingTrivia(_leadingTrivia));
 
                 _previous = node;

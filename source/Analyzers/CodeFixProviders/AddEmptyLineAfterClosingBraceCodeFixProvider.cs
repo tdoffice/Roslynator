@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.CodeFixProviders
             SyntaxToken token,
             CancellationToken cancellationToken)
         {
-            SyntaxToken newToken = token.AppendToTrailingTrivia(CSharpFactory.NewLineTrivia());
+            SyntaxToken newToken = token.AppendToTrailingTrivia(CSharpFactory.NewLine());
 
             return document.ReplaceTokenAsync(token, newToken, cancellationToken);
         }

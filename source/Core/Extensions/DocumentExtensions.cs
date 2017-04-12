@@ -2,12 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.Text;
-using Roslynator.CSharp.Documentation;
 
 namespace Roslynator.Extensions
 {
@@ -289,39 +291,52 @@ namespace Roslynator.Extensions
             return document.Project.Solution;
         }
 
-        internal static async Task<Document> AddNewDocumentationCommentsAsync(Document document, DocumentationCommentGeneratorSettings settings = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (document == null)
-                throw new ArgumentNullException(nameof(document));
-
-            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-
-            var rewriter = new AddNewDocumentationCommentRewriter(settings);
-
-            SyntaxNode newRoot = rewriter.Visit(root);
-
-            return document.WithSyntaxRoot(newRoot);
-        }
-
-        internal static async Task<Document> AddBaseOrNewDocumentationCommentsAsync(
-            Document document,
-            SemanticModel semanticModel,
-            DocumentationCommentGeneratorSettings settings = null,
+        internal static async Task<ImmutableArray<SyntaxNode>> FindNodesAsync(
+            this Document document,
+            ISymbol symbol,
+            bool allowCandidate = false,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (symbol == null)
+                throw new ArgumentNullException(nameof(symbol));
+
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
 
-            if (semanticModel == null)
-                throw new ArgumentNullException(nameof(semanticModel));
+            List<SyntaxNode> nodes = null;
 
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-            var rewriter = new AddBaseOrNewDocumentationCommentRewriter(settings, semanticModel, cancellationToken);
+            foreach (ReferencedSymbol referencedSymbol in await FindSymbols.SymbolFinder.FindReferencesAsync(symbol, document, cancellationToken).ConfigureAwait(false))
+            {
+                foreach (ReferenceLocation referenceLocation in referencedSymbol.Locations)
+                {
+                    if (!referenceLocation.IsImplicit
+                        && (allowCandidate || !referenceLocation.IsCandidateLocation))
+                    {
+                        Location location = referenceLocation.Location;
 
-            SyntaxNode newRoot = rewriter.Visit(root);
+                        if (location.IsInSource)
+                        {
+                            SyntaxNode node = root.FindNode(location.SourceSpan, findInsideTrivia: true, getInnermostNodeForTie: true);
 
-            return document.WithSyntaxRoot(newRoot);
+                            Debug.Assert(node != null);
+
+                            if (node != null)
+                                (nodes ?? (nodes = new List<SyntaxNode>())).Add(node);
+                        }
+                    }
+                }
+            }
+
+            if (nodes != null)
+            {
+                return ImmutableArray.CreateRange(nodes);
+            }
+            else
+            {
+                return ImmutableArray<SyntaxNode>.Empty;
+            }
         }
     }
 }

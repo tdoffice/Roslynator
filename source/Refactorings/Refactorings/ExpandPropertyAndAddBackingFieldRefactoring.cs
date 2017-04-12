@@ -55,7 +55,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(propertyDeclaration, cancellationToken);
 
-                ImmutableArray<SyntaxNode> oldNodes = await SymbolFinder.FindNodesAsync(propertySymbol, document, cancellationToken).ConfigureAwait(false);
+                ImmutableArray<SyntaxNode> oldNodes = await document.FindNodesAsync(propertySymbol, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 IdentifierNameSyntax newNode = IdentifierName(fieldName);
 
@@ -68,7 +68,7 @@ namespace Roslynator.CSharp.Refactorings
 
             newMembers = newMembers.InsertMember(fieldDeclaration, MemberDeclarationComparer.ByKind);
 
-            return await document.ReplaceNodeAsync(parentMember, parentMember.SetMembers(newMembers), cancellationToken).ConfigureAwait(false);
+            return await document.ReplaceNodeAsync(parentMember, parentMember.WithMembers(newMembers), cancellationToken).ConfigureAwait(false);
         }
 
         private static bool IsReadOnlyAutoProperty(PropertyDeclarationSyntax propertyDeclaration)
@@ -111,7 +111,7 @@ namespace Roslynator.CSharp.Refactorings
 
             AccessorListSyntax accessorList = propertyDeclaration.AccessorList
                 .RemoveWhitespaceOrEndOfLineTrivia()
-                .WithCloseBraceToken(propertyDeclaration.AccessorList.CloseBraceToken.WithLeadingTrivia(NewLineTrivia()));
+                .WithCloseBraceToken(propertyDeclaration.AccessorList.CloseBraceToken.WithLeadingTrivia(NewLine()));
 
             return propertyDeclaration
                 .WithAccessorList(accessorList);

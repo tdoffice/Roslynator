@@ -2,12 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Roslynator.CSharp.Documentation;
 using Roslynator.CSharp.Helpers;
 using Roslynator.CSharp.SyntaxRewriters;
 using Roslynator.Extensions;
@@ -45,12 +47,12 @@ namespace Roslynator.CSharp.Extensions
                 }
                 else
                 {
-                    return await document.RemoveNodeAsync(member, Remover.DefaultRemoveOptions, cancellationToken).ConfigureAwait(false);
+                    return await document.RemoveNodeAsync(member, RemoveHelper.DefaultRemoveOptions, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        public static Task<Document> RemoveStatementAsync(this Document document, StatementSyntax statement, CancellationToken cancellationToken = default(CancellationToken))
+        internal static Task<Document> RemoveStatementAsync(this Document document, StatementSyntax statement, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
@@ -58,7 +60,7 @@ namespace Roslynator.CSharp.Extensions
             if (statement == null)
                 throw new ArgumentNullException(nameof(statement));
 
-            return document.RemoveNodeAsync(statement, Remover.GetRemoveOptions(statement), cancellationToken);
+            return document.RemoveNodeAsync(statement, RemoveHelper.GetRemoveOptions(statement), cancellationToken);
         }
 
         public static Task<Document> RemoveCommentAsync(
@@ -121,6 +123,48 @@ namespace Roslynator.CSharp.Extensions
 
         public static async Task<Document> RemoveDirectivesAsync(
             this Document document,
+            DirectiveRemoveOptions removeOptions,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
+
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+
+            SourceText sourceText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
+
+            SourceText newSourceText = RemoveDirectives(sourceText, GetDirectives(root, removeOptions));
+
+            return document.WithText(newSourceText);
+        }
+
+        private static IEnumerable<DirectiveTriviaSyntax> GetDirectives(SyntaxNode root, DirectiveRemoveOptions removeOptions)
+        {
+            switch (removeOptions)
+            {
+                case DirectiveRemoveOptions.All:
+                    {
+                        return root.DescendantDirectives();
+                    }
+                case DirectiveRemoveOptions.AllExceptRegion:
+                    {
+                        return root
+                            .DescendantDirectives()
+                            .Where(f => !f.IsKind(SyntaxKind.RegionDirectiveTrivia, SyntaxKind.EndRegionDirectiveTrivia));
+                    }
+                case DirectiveRemoveOptions.Region:
+                    {
+                        return root.DescendantRegionDirectives();
+                    }
+                default:
+                    {
+                        throw new ArgumentException("", nameof(removeOptions));
+                    }
+            }
+        }
+
+        public static async Task<Document> RemoveDirectivesAsync(
+            this Document document,
             IEnumerable<DirectiveTriviaSyntax> directives,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -132,25 +176,27 @@ namespace Roslynator.CSharp.Extensions
 
             SourceText sourceText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
 
-            SourceText newSourceText = Remover.RemoveDirectives(sourceText, directives);
+            SourceText newSourceText = RemoveDirectives(sourceText, directives);
 
             return document.WithText(newSourceText);
         }
 
-        public static async Task<Document> RemoveDirectivesAsync(
-            this Document document,
-            CancellationToken cancellationToken = default(CancellationToken))
+        private static SourceText RemoveDirectives(
+            SourceText sourceText,
+            IEnumerable<DirectiveTriviaSyntax> directives)
         {
-            if (document == null)
-                throw new ArgumentNullException(nameof(document));
+            TextLineCollection lines = sourceText.Lines;
 
-            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            var changes = new List<TextChange>();
 
-            SourceText sourceText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
+            foreach (DirectiveTriviaSyntax directive in directives)
+            {
+                int startLine = directive.GetSpanStartLine();
 
-            SourceText newSourceText = Remover.RemoveDirectives(sourceText, root.DescendantDirectives());
+                changes.Add(new TextChange(lines[startLine].SpanIncludingLineBreak, string.Empty));
+            }
 
-            return document.WithText(newSourceText);
+            return sourceText.WithChanges(changes);
         }
 
         public static async Task<Document> RemoveRegionAsync(
@@ -221,16 +267,40 @@ namespace Roslynator.CSharp.Extensions
             return document.WithText(newSourceText);
         }
 
-        public static async Task<Document> RemoveRegionDirectivesAsync(
-            this Document document,
-            CancellationToken cancellationToken = default(CancellationToken))
+        internal static async Task<Document> AddNewDocumentationCommentsAsync(Document document, DocumentationCommentGeneratorSettings settings = null, bool skipNamespaceDeclaration = true, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
 
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-            return await RemoveDirectivesAsync(document, root.DescendantRegionDirectives(), cancellationToken).ConfigureAwait(false);
+            var rewriter = new AddNewDocumentationCommentRewriter(settings, skipNamespaceDeclaration);
+
+            SyntaxNode newRoot = rewriter.Visit(root);
+
+            return document.WithSyntaxRoot(newRoot);
+        }
+
+        internal static async Task<Document> AddBaseOrNewDocumentationCommentsAsync(
+            Document document,
+            SemanticModel semanticModel,
+            DocumentationCommentGeneratorSettings settings = null,
+            bool skipNamespaceDeclaration = true,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
+
+            if (semanticModel == null)
+                throw new ArgumentNullException(nameof(semanticModel));
+
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+
+            var rewriter = new AddBaseOrNewDocumentationCommentRewriter(semanticModel, settings, skipNamespaceDeclaration, cancellationToken);
+
+            SyntaxNode newRoot = rewriter.Visit(root);
+
+            return document.WithSyntaxRoot(newRoot);
         }
     }
 }

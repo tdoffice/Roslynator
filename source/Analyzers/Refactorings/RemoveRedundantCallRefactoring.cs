@@ -20,10 +20,10 @@ namespace Roslynator.CSharp.Refactorings
 
             ExpressionSyntax newExpression = memberAccess.Expression
                 .AppendToTrailingTrivia(
-                    memberAccess.OperatorToken.GetLeadingTrailingTrivia()
-                        .Concat(memberAccess.Name.GetLeadingTrailingTrivia())
-                        .Concat(invocation.ArgumentList.OpenParenToken.GetLeadingTrailingTrivia())
-                        .Concat(invocation.ArgumentList.CloseParenToken.GetLeadingTrailingTrivia()));
+                    memberAccess.OperatorToken.GetLeadingAndTrailingTrivia()
+                        .Concat(memberAccess.Name.GetLeadingAndTrailingTrivia())
+                        .Concat(invocation.ArgumentList.OpenParenToken.GetLeadingAndTrailingTrivia())
+                        .Concat(invocation.ArgumentList.CloseParenToken.GetLeadingAndTrailingTrivia()));
 
             newExpression = newExpression.WithFormatterAnnotation();
 

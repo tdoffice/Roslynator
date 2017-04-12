@@ -9,11 +9,13 @@ namespace Roslynator.CSharp.Documentation
 {
     internal class AddNewDocumentationCommentRewriter : CSharpSyntaxRewriter
     {
-        public AddNewDocumentationCommentRewriter(DocumentationCommentGeneratorSettings settings)
+        public AddNewDocumentationCommentRewriter(DocumentationCommentGeneratorSettings settings = null, bool skipNamespaceDeclaration = true)
         {
             Settings = settings ?? DocumentationCommentGeneratorSettings.Default;
+            SkipNamespaceDeclaration = skipNamespaceDeclaration;
         }
 
+        public bool SkipNamespaceDeclaration { get; }
         public DocumentationCommentGeneratorSettings Settings { get; }
 
         protected virtual MemberDeclarationSyntax AddDocumentationComment(MemberDeclarationSyntax memberDeclaration)
@@ -25,7 +27,7 @@ namespace Roslynator.CSharp.Documentation
         {
             node = (NamespaceDeclarationSyntax)base.VisitNamespaceDeclaration(node);
 
-            if (!Settings.SkipNamespaceDeclaration
+            if (!SkipNamespaceDeclaration
                 && !node.HasSingleLineDocumentationComment())
             {
                 return AddDocumentationComment(node);

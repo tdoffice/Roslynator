@@ -41,7 +41,7 @@ namespace Roslynator.CSharp.SyntaxRewriters
             if (trivia.IsWhitespaceOrEndOfLineTrivia()
                 && (_span == null || _span.Value.Contains(trivia.Span)))
             {
-                return CSharpFactory.EmptyWhitespaceTrivia();
+                return CSharpFactory.EmptyWhitespace();
             }
             else
             {

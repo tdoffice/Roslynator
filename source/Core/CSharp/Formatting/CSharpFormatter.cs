@@ -148,14 +148,14 @@ namespace Roslynator.CSharp.Formatting
 
                 while (en.MoveNext())
                 {
-                    nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLineTrivia()));
+                    nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLine()));
 
                     nodesAndTokens.Add(en.Current.WithLeadingTrivia(trivia));
                 }
             }
 
             return ParameterList(
-                OpenParenToken().WithTrailingTrivia(NewLineTrivia()),
+                OpenParenToken().WithTrailingTrivia(NewLine()),
                 SeparatedList<ParameterSyntax>(nodesAndTokens),
                 parameterList.CloseParenToken);
         }
@@ -181,7 +181,7 @@ namespace Roslynator.CSharp.Formatting
                 return initializer
                     .WithExpressions(
                         SeparatedList(
-                            initializer.Expressions.Select(expression => expression.WithLeadingTrivia(NewLineTrivia()))));
+                            initializer.Expressions.Select(expression => expression.WithLeadingTrivia(NewLine()))));
             }
             else
             {
@@ -222,21 +222,21 @@ namespace Roslynator.CSharp.Formatting
             if (en.MoveNext())
             {
                 nodesAndTokens.Add(en.Current
-                    .TrimTrailingTrivia()
+                    .TrimEnd()
                     .WithLeadingTrivia(leadingTrivia));
 
                 while (en.MoveNext())
                 {
-                    nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLineTrivia()));
+                    nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLine()));
 
                     nodesAndTokens.Add(en.Current
-                        .TrimTrailingTrivia()
+                        .TrimEnd()
                         .WithLeadingTrivia(leadingTrivia));
                 }
             }
 
             return ArgumentList(
-                OpenParenToken().WithTrailingTrivia(NewLineTrivia()),
+                OpenParenToken().WithTrailingTrivia(NewLine()),
                 SeparatedList<ArgumentSyntax>(nodesAndTokens),
                 argumentList.CloseParenToken.WithoutLeadingTrivia());
         }
@@ -294,21 +294,21 @@ namespace Roslynator.CSharp.Formatting
             if (en.MoveNext())
             {
                 nodesAndTokens.Add(en.Current
-                    .TrimTrailingTrivia()
+                    .TrimEnd()
                     .WithLeadingTrivia(leadingTrivia));
 
                 while (en.MoveNext())
                 {
-                    nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLineTrivia()));
+                    nodesAndTokens.Add(CommaToken().WithTrailingTrivia(NewLine()));
 
                     nodesAndTokens.Add(en.Current
-                        .TrimTrailingTrivia()
+                        .TrimEnd()
                         .WithLeadingTrivia(leadingTrivia));
                 }
             }
 
             return AttributeArgumentList(
-                OpenParenToken().WithTrailingTrivia(NewLineTrivia()),
+                OpenParenToken().WithTrailingTrivia(NewLine()),
                 SeparatedList<AttributeArgumentSyntax>(nodesAndTokens),
                 argumentList.CloseParenToken.WithoutLeadingTrivia());
         }
@@ -353,7 +353,7 @@ namespace Roslynator.CSharp.Formatting
                    .WithBody(
                        body.WithCloseBraceToken(
                            closeBrace.WithLeadingTrivia(
-                               closeBrace.LeadingTrivia.Add(NewLineTrivia()))));
+                               closeBrace.LeadingTrivia.Add(NewLine()))));
 
                     return newAccessor.WithFormatterAnnotation();
                 }

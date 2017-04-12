@@ -215,7 +215,7 @@ namespace Roslynator.CSharp.Refactorings
                 }
             }
 
-            return document.ReplaceNodeAsync(memberDeclaration, memberDeclaration.SetModifiers(newModifiers), cancellationToken);
+            return document.ReplaceNodeAsync(memberDeclaration, memberDeclaration.WithModifiers(newModifiers), cancellationToken);
         }
 
         private static SyntaxToken CreateAccessModifier(Accessibility accessibility)
@@ -231,7 +231,7 @@ namespace Roslynator.CSharp.Refactorings
                 case Accessibility.Public:
                     return PublicKeyword();
                 default:
-                    return NoneToken();
+                    return default(SyntaxToken);
             }
         }
 

@@ -95,7 +95,7 @@ namespace Roslynator.CSharp.Refactorings
             InitializerExpressionSyntax initializer,
             ExpressionSyntax expression)
         {
-            IStatementContainer container;
+            StatementContainer container;
             if (StatementContainer.TryCreate(statement, out container))
             {
                 context.RegisterRefactoring(
@@ -235,7 +235,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static Task<Document> RefactorAsync(
             Document document,
-            IStatementContainer statementContainer,
+            StatementContainer statementContainer,
             StatementSyntax statement,
             InitializerExpressionSyntax initializer,
             ExpressionSyntax expression,

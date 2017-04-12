@@ -33,9 +33,9 @@ namespace Roslynator.CSharp.Refactorings.IntroduceAndInitialize
         {
             AutoPropertyKind propertyKind = (SupportsCSharp6)
                 ? AutoPropertyKind.ReadOnly
-                : AutoPropertyKind.WithPrivateSet;
+                : AutoPropertyKind.PrivateSet;
 
-            return AutoPropertyDeclaration(propertyKind, Modifiers.Public(), Type, Name);
+            return AutoPropertyDeclaration(propertyKind, Modifiers.Public(), Type, SyntaxFactory.Identifier(Name));
         }
     }
 }

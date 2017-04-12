@@ -33,7 +33,7 @@ namespace Roslynator.CSharp.Refactorings
             object constantValue,
             CancellationToken cancellationToken)
         {
-            ExpressionSyntax newExpression = CSharpFactory.ConstantExpression(constantValue);
+            ExpressionSyntax newExpression = CSharpFactory.LiteralExpression(constantValue);
 
             return document.ReplaceNodeAsync(expression, newExpression.WithTriviaFrom(expression), cancellationToken);
         }

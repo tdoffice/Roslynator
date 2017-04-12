@@ -49,14 +49,15 @@
     <Compile Include="CSharp\Analysis\CSharpAnalysis.cs" />
     <Compile Include="CSharp\CSharpErrorCodes.cs" />
     <Compile Include="CSharp\Documentation\AddBaseOrNewDocumentationCommentRewriter.cs" />
-    <Compile Include="CSharp\Documentation\BaseDocumentationCommentInfo.cs" />
+    <Compile Include="CSharp\Documentation\BaseDocumentationCommentData.cs" />
     <Compile Include="CSharp\Documentation\DocumentationCommentInserter.cs" />
     <Compile Include="CSharp\Documentation\BaseDocumentationCommentOrigin.cs" />
     <Compile Include="CSharp\Extensions\DocumentExtensions.cs" />
-    <Compile Include="CSharp\IStatementContainer.cs" />
     <Compile Include="CSharp\Refactorings\UseElementAccessInsteadOfElementAtRefactoring.cs" />
     <Compile Include="CSharp\Refactorings\UseElementAccessInsteadOfFirstRefactoring.cs" />
     <Compile Include="CSharp\Refactorings\UseElementAccessInsteadOfLastRefactoring.cs" />
+    <Compile Include="CSharp\StatementContainer.cs" />
+    <Compile Include="DirectiveRemoveOptions.cs" />
     <Compile Include="CSharp\Syntax\EqualsToNullExpression.cs" />
     <Compile Include="CSharp\Formatting\CSharpFormatter.cs" />
     <Compile Include="CSharp\Documentation\DocumentationCommentGenerator.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="CSharp\Syntax\SimpleAssignmentStatement.cs" />
     <Compile Include="CSharp\Syntax\SimpleIfStatementWithSingleStatement.cs" />
     <Compile Include="CSharp\StringExpressionChain.cs" />
-    <Compile Include="CSharp\SwitchSectionStatementContainer.cs" />
     <Compile Include="CommentRemoveOptions.cs" />
     <Compile Include="CSharp\CSharpFactory.cs" />
     <Compile Include="CSharp\Helpers\DetermineParameterHelper.cs" />
@@ -152,6 +152,7 @@
     <Compile Include="ExtensionMethodKind.cs" />
     <Compile Include="Extensions\DiagnosticExtensions.cs" />
     <Compile Include="CodeFixes\Extensions\CodeFixContextExtensions.cs" />
+    <Compile Include="Extensions\DocumentExtensions2.cs" />
     <Compile Include="FindSymbols\SymbolFinder.cs" />
     <Compile Include="FlagsUtility.cs" />
     <Compile Include="Deferred`1.cs" />
@@ -163,12 +164,12 @@
     <Compile Include="CSharp\SyntaxRewriters\WhitespaceOrEndOfLineTriviaRemover.cs" />
     <Compile Include="CSharp\Analysis\TypeAnalysisFlags.cs" />
     <Compile Include="CSharp\Refactorings\ChangeTypeRefactoring.cs" />
-    <Compile Include="CSharp\Remover.cs" />
+    <Compile Include="CSharp\RemoveHelper.cs" />
     <Compile Include="CSharp\Comparers\MemberDeclarationComparer.cs" />
-    <Compile Include="UniqueNameProviders\AsyncMethodUniqueNameProvider.cs" />
-    <Compile Include="UniqueNameProviders\NumberSuffixUniqueNameProvider.cs" />
-    <Compile Include="UniqueNameProviders\UnderscoreSuffixUniqueNameProvider.cs" />
-    <Compile Include="UniqueNameProviders\UniqueNameProvider.cs" />
+    <Compile Include="AsyncMethodUniqueNameProvider.cs" />
+    <Compile Include="NumberSuffixUniqueNameProvider.cs" />
+    <Compile Include="UnderscoreSuffixUniqueNameProvider.cs" />
+    <Compile Include="UniqueNameProvider.cs" />
     <Compile Include="Diagnostics\AnalysisContextExtensions.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\FileLinePositionSpanExtensions.cs" />
@@ -182,8 +183,6 @@
     <Compile Include="Text\TextLineCollectionSlice.cs" />
     <Compile Include="CSharp\StatementContainerSlice.cs" />
     <Compile Include="ListSlice`1.cs" />
-    <Compile Include="CSharp\BlockStatementContainer.cs" />
-    <Compile Include="CSharp\StatementContainer.cs" />
     <Compile Include="Rename\SymbolRenamer.cs" />
     <Compile Include="CSharp\Comparers\ModifierComparer.cs" />
     <Compile Include="Extensions\SyntaxExtensions.cs" />
@@ -193,7 +192,7 @@
     <Compile Include="CSharp\SyntaxRewriters\TriviaRemover.cs" />
     <Compile Include="SymbolDisplay.cs" />
     <Compile Include="StringUtility.cs" />
-    <Compile Include="UniqueNameProviders\UniqueNameProviders.cs" />
+    <Compile Include="UniqueNameProviders.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

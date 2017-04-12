@@ -19,7 +19,7 @@ namespace Roslynator.CSharp.Refactorings.WrapStatements
             StatementContainerSlice slice,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            IStatementContainer container = slice.Container;
+            StatementContainer container = slice.Container;
 
             StatementSyntax[] statements = slice.ToArray();
 

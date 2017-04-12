@@ -11,7 +11,7 @@ namespace Roslynator.CSharp
     {
         int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member);
 
-        int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, SyntaxKind kind);
+        int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, SyntaxKind memberKind);
 
         int GetFieldInsertIndex(SyntaxList<MemberDeclarationSyntax> members, bool isConst);
     }

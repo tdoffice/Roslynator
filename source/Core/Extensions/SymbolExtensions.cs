@@ -607,37 +607,46 @@ namespace Roslynator.Extensions
 
             if (parameterSymbol.IsParams)
             {
-                ITypeSymbol type = parameterSymbol.Type;
+                var arrayType = parameterSymbol.Type as IArrayTypeSymbol;
 
-                if (type.IsArrayType())
-                {
-                    var arrayType = (IArrayTypeSymbol)type;
-
-                    return arrayType.ElementType.SpecialType == elementType;
-                }
+                return arrayType?.ElementType.SpecialType == elementType;
             }
 
             return false;
         }
 
-        public static bool IsParamsOf(this IParameterSymbol parameterSymbol, ITypeSymbol elementType)
+        public static bool IsParamsOf(
+            this IParameterSymbol parameterSymbol,
+            SpecialType elementType1,
+            SpecialType elementType2)
         {
             if (parameterSymbol == null)
                 throw new ArgumentNullException(nameof(parameterSymbol));
 
-            if (elementType == null)
-                throw new ArgumentNullException(nameof(elementType));
+            if (parameterSymbol.IsParams)
+            {
+                var arrayType = parameterSymbol.Type as IArrayTypeSymbol;
+
+                return arrayType?.ElementType.IsSpecialType(elementType1, elementType2) == true;
+            }
+
+            return false;
+        }
+
+        public static bool IsParamsOf(
+            this IParameterSymbol parameterSymbol,
+            SpecialType elementType1,
+            SpecialType elementType2,
+            SpecialType elementType3)
+        {
+            if (parameterSymbol == null)
+                throw new ArgumentNullException(nameof(parameterSymbol));
 
             if (parameterSymbol.IsParams)
             {
-                ITypeSymbol type = parameterSymbol.Type;
+                var arrayType = parameterSymbol.Type as IArrayTypeSymbol;
 
-                if (type.IsArrayType())
-                {
-                    var arrayType = (IArrayTypeSymbol)type;
-
-                    return arrayType.ElementType.Equals(elementType);
-                }
+                return arrayType?.ElementType.IsSpecialType(elementType1, elementType2, elementType3) == true;
             }
 
             return false;
@@ -732,7 +741,7 @@ namespace Roslynator.Extensions
                 && namedTypeSymbol.ConstructedFrom.Equals(symbol);
         }
 
-        public static bool IsConstructedFromImmutableArrayOfT(this INamedTypeSymbol namedTypeSymbol, SemanticModel semanticModel)
+        internal static bool IsConstructedFromImmutableArrayOfT(this INamedTypeSymbol namedTypeSymbol, SemanticModel semanticModel)
         {
             return IsConstructedFrom(namedTypeSymbol, MetadataNames.System_Collections_Immutable_ImmutableArray_T, semanticModel);
         }
@@ -761,6 +770,25 @@ namespace Roslynator.Extensions
         public static bool IsConstructedFromIEnumerableOfT(this INamedTypeSymbol namedTypeSymbol)
         {
             return IsConstructedFrom(namedTypeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
+        }
+
+        internal static bool IsConstructedFromTaskOfT(this INamedTypeSymbol namedTypeSymbol, SemanticModel semanticModel)
+        {
+            if (namedTypeSymbol == null)
+                throw new ArgumentNullException(nameof(namedTypeSymbol));
+
+            if (semanticModel == null)
+                throw new ArgumentNullException(nameof(semanticModel));
+
+            return namedTypeSymbol
+                .ConstructedFrom
+                .EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T));
+        }
+
+        public static bool IsIEnumerableOrConstructedFromIEnumerableOfT(this INamedTypeSymbol namedTypeSymbol)
+        {
+            return IsIEnumerable(namedTypeSymbol)
+                || IsConstructedFromIEnumerableOfT(namedTypeSymbol);
         }
         #endregion
 
@@ -992,7 +1020,7 @@ namespace Roslynator.Extensions
             return typeSymbol?.TypeKind == TypeKind.Enum;
         }
 
-        public static bool IsEnumWithFlagsAttribute(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
+        internal static bool IsEnumWithFlagsAttribute(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             if (semanticModel == null)
                 throw new ArgumentNullException(nameof(semanticModel));
@@ -1069,7 +1097,7 @@ namespace Roslynator.Extensions
             return false;
         }
 
-        public static bool IsPredefinedValueType(this ITypeSymbol typeSymbol)
+        internal static bool IsPredefinedValueType(this ITypeSymbol typeSymbol)
         {
             if (typeSymbol == null)
                 throw new ArgumentNullException(nameof(typeSymbol));
@@ -1176,6 +1204,34 @@ namespace Roslynator.Extensions
             return typeKind == typeKind1
                 || typeKind == typeKind2
                 || typeKind == typeKind3;
+        }
+
+        public static bool IsSpecialType(this ITypeSymbol typeSymbol, SpecialType specialType)
+        {
+            return typeSymbol?.SpecialType == specialType;
+        }
+
+        public static bool IsSpecialType(this ITypeSymbol typeSymbol, SpecialType specialType1, SpecialType specialType2)
+        {
+            if (typeSymbol == null)
+                return false;
+
+            SpecialType specialType = typeSymbol.SpecialType;
+
+            return specialType == specialType1
+                || specialType == specialType2;
+        }
+
+        public static bool IsSpecialType(this ITypeSymbol typeSymbol, SpecialType specialType1, SpecialType specialType2, SpecialType specialType3)
+        {
+            if (typeSymbol == null)
+                return false;
+
+            SpecialType specialType = typeSymbol.SpecialType;
+
+            return specialType == specialType1
+                || specialType == specialType2
+                || specialType == specialType3;
         }
 
         public static ISymbol FindMember(this ITypeSymbol typeSymbol, string name)
@@ -1318,84 +1374,60 @@ namespace Roslynator.Extensions
             return false;
         }
 
-        public static bool ExistsEvent(this ITypeSymbol typeSymbol)
+        public static bool ExistsEvent(this ITypeSymbol typeSymbol, Func<IEventSymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, f => f.IsEvent());
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, f => f.IsEvent() && predicate((IEventSymbol)f))
+                : ExistsMember(typeSymbol, f => f.IsEvent());
         }
 
-        public static bool ExistsEvent(this ITypeSymbol typeSymbol, string name)
+        public static bool ExistsEvent(this ITypeSymbol typeSymbol, string name, Func<IEventSymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, name, f => f.IsEvent());
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, name, f => f.IsEvent() && predicate((IEventSymbol)f))
+                : ExistsMember(typeSymbol, name, f => f.IsEvent());
         }
 
-        public static bool ExistsEvent(this ITypeSymbol typeSymbol, Func<IEventSymbol, bool> predicate)
+        public static bool ExistsField(this ITypeSymbol typeSymbol, Func<IFieldSymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, f => f.IsEvent() && predicate((IEventSymbol)f));
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, f => f.IsField() && predicate((IFieldSymbol)f))
+                : ExistsMember(typeSymbol, f => f.IsField());
         }
 
-        public static bool ExistsEvent(this ITypeSymbol typeSymbol, string name, Func<IEventSymbol, bool> predicate)
+        public static bool ExistsField(this ITypeSymbol typeSymbol, string name, Func<IFieldSymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, name, f => f.IsEvent() && predicate((IEventSymbol)f));
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, name, f => f.IsField() && predicate((IFieldSymbol)f))
+                : ExistsMember(typeSymbol, name, f => f.IsField());
         }
 
-        public static bool ExistsField(this ITypeSymbol typeSymbol)
+        public static bool ExistsMethod(this ITypeSymbol typeSymbol, Func<IMethodSymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, f => f.IsField());
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, f => f.IsMethod() && predicate((IMethodSymbol)f))
+                : ExistsMember(typeSymbol, f => f.IsMethod());
         }
 
-        public static bool ExistsField(this ITypeSymbol typeSymbol, string name)
+        public static bool ExistsMethod(this ITypeSymbol typeSymbol, string name, Func<IMethodSymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, name, f => f.IsField());
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, name, f => f.IsMethod() && predicate((IMethodSymbol)f))
+                : ExistsMember(typeSymbol, name, f => f.IsMethod());
         }
 
-        public static bool ExistsField(this ITypeSymbol typeSymbol, Func<IFieldSymbol, bool> predicate)
+        public static bool ExistsProperty(this ITypeSymbol typeSymbol, Func<IPropertySymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, f => f.IsField() && predicate((IFieldSymbol)f));
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, f => f.IsProperty() && predicate((IPropertySymbol)f))
+                : ExistsMember(typeSymbol, f => f.IsProperty());
         }
 
-        public static bool ExistsField(this ITypeSymbol typeSymbol, string name, Func<IFieldSymbol, bool> predicate)
+        public static bool ExistsProperty(this ITypeSymbol typeSymbol, string name, Func<IPropertySymbol, bool> predicate = null)
         {
-            return ExistsMember(typeSymbol, name, f => f.IsField() && predicate((IFieldSymbol)f));
-        }
-
-        public static bool ExistsMethod(this ITypeSymbol typeSymbol)
-        {
-            return ExistsMember(typeSymbol, f => f.IsMethod());
-        }
-
-        public static bool ExistsMethod(this ITypeSymbol typeSymbol, string name)
-        {
-            return ExistsMember(typeSymbol, name, f => f.IsMethod());
-        }
-
-        public static bool ExistsMethod(this ITypeSymbol typeSymbol, Func<IMethodSymbol, bool> predicate)
-        {
-            return ExistsMember(typeSymbol, f => f.IsMethod() && predicate((IMethodSymbol)f));
-        }
-
-        public static bool ExistsMethod(this ITypeSymbol typeSymbol, string name, Func<IMethodSymbol, bool> predicate)
-        {
-            return ExistsMember(typeSymbol, name, f => f.IsMethod() && predicate((IMethodSymbol)f));
-        }
-
-        public static bool ExistsProperty(this ITypeSymbol typeSymbol)
-        {
-            return ExistsMember(typeSymbol, f => f.IsProperty());
-        }
-
-        public static bool ExistsProperty(this ITypeSymbol typeSymbol, string name)
-        {
-            return ExistsMember(typeSymbol, name, f => f.IsProperty());
-        }
-
-        public static bool ExistsProperty(this ITypeSymbol typeSymbol, Func<IPropertySymbol, bool> predicate)
-        {
-            return ExistsMember(typeSymbol, f => f.IsProperty() && predicate((IPropertySymbol)f));
-        }
-
-        public static bool ExistsProperty(this ITypeSymbol typeSymbol, string name, Func<IPropertySymbol, bool> predicate)
-        {
-            return ExistsMember(typeSymbol, name, f => f.IsProperty() && predicate((IPropertySymbol)f));
+            return (predicate != null)
+                ? ExistsMember(typeSymbol, name, f => f.IsProperty() && predicate((IPropertySymbol)f))
+                : ExistsMember(typeSymbol, name, f => f.IsProperty());
         }
 
         internal static IFieldSymbol FindFieldWithConstantValue(this ITypeSymbol typeSymbol, int value)
@@ -1422,7 +1454,7 @@ namespace Roslynator.Extensions
             return null;
         }
 
-        public static bool IsTaskOrInheritsFromTask(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
+        internal static bool IsTaskOrInheritsFromTask(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             if (typeSymbol == null)
                 throw new ArgumentNullException(nameof(typeSymbol));
@@ -1435,7 +1467,7 @@ namespace Roslynator.Extensions
             return typeSymbol.EqualsOrInheritsFrom(taskSymbol);
         }
 
-        public static bool IsConstructedFromTaskOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
+        internal static bool IsConstructedFromTaskOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             if (typeSymbol == null)
                 throw new ArgumentNullException(nameof(typeSymbol));
@@ -1453,7 +1485,7 @@ namespace Roslynator.Extensions
             return false;
         }
 
-        public static bool IsConstructedFromImmutableArrayOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
+        internal static bool IsConstructedFromImmutableArrayOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             return IsConstructedFrom(typeSymbol, MetadataNames.System_Collections_Immutable_ImmutableArray_T, semanticModel);
         }

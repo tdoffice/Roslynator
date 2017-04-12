@@ -233,7 +233,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             if (!EmbeddedStatementHelper.IsEmbeddedStatement(statement))
             {
-                IStatementContainer container;
+                StatementContainer container;
                 if (StatementContainer.TryCreate(statement, out container))
                 {
                     SyntaxList<StatementSyntax> statements = container.Statements;
@@ -286,7 +286,7 @@ namespace Roslynator.CSharp.Refactorings
             }
             else
             {
-                IStatementContainer container;
+                StatementContainer container;
                 if (StatementContainer.TryCreate(statement, out container))
                 {
                     SyntaxList<StatementSyntax> statements = container.Statements;
@@ -326,7 +326,7 @@ namespace Roslynator.CSharp.Refactorings
             int statementCount,
             CancellationToken cancellationToken)
         {
-            IStatementContainer container;
+            StatementContainer container;
             if (StatementContainer.TryCreate(statement, out container))
             {
                 SyntaxList<StatementSyntax> statements = container.Statements;
@@ -350,7 +350,7 @@ namespace Roslynator.CSharp.Refactorings
             Document document,
             ExpressionSyntax expression,
             SyntaxList<StatementSyntax> statements,
-            IStatementContainer container,
+            StatementContainer container,
             int statementIndex,
             int lastStatementIndex,
             CancellationToken cancellationToken)
@@ -362,7 +362,7 @@ namespace Roslynator.CSharp.Refactorings
             IfStatementSyntax ifStatement = CreateNullCheck(expression, List(blockStatements));
 
             if (lastStatementIndex < statements.Count - 1)
-                ifStatement = ifStatement.AppendToTrailingTrivia(NewLineTrivia());
+                ifStatement = ifStatement.AppendToTrailingTrivia(NewLine());
 
             IEnumerable<StatementSyntax> newStatements = statements.Take(statementIndex + 1)
                 .Concat(new IfStatementSyntax[] { ifStatement })
@@ -375,18 +375,18 @@ namespace Roslynator.CSharp.Refactorings
         {
             SyntaxToken openBrace = (statements.Any())
                 ? OpenBraceToken()
-                : Token(default(SyntaxTriviaList), SyntaxKind.OpenBraceToken, TriviaList(NewLineTrivia()));
+                : Token(default(SyntaxTriviaList), SyntaxKind.OpenBraceToken, TriviaList(NewLine()));
 
             SyntaxToken closeBrace = (statements.Any())
                 ? CloseBraceToken()
-                : Token(TriviaList(NewLineTrivia()), SyntaxKind.CloseBraceToken, default(SyntaxTriviaList));
+                : Token(TriviaList(NewLine()), SyntaxKind.CloseBraceToken, default(SyntaxTriviaList));
 
             IfStatementSyntax ifStatement = IfStatement(
                 NotEqualsExpression(expression.WithoutTrivia(), NullLiteralExpression()),
                 Block(openBrace, statements, closeBrace));
 
             return ifStatement
-                .WithLeadingTrivia(NewLineTrivia())
+                .WithLeadingTrivia(NewLine())
                 .WithFormatterAnnotation();
         }
 

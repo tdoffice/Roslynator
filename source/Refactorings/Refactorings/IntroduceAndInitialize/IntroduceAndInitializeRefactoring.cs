@@ -130,7 +130,7 @@ namespace Roslynator.CSharp.Refactorings.IntroduceAndInitialize
 
             return await document.ReplaceNodeAsync(
                 containingMember,
-                containingMember.SetMembers(newMembers),
+                containingMember.WithMembers(newMembers),
                 cancellationToken).ConfigureAwait(false);
         }
 

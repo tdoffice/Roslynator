@@ -82,7 +82,7 @@ namespace Roslynator.CSharp.Refactorings
             CancellationToken cancellationToken = default(CancellationToken))
         {
             MemberDeclarationSyntax newNode = member
-                .SetMembers(default(SyntaxList<MemberDeclarationSyntax>))
+                .WithMembers(default(SyntaxList<MemberDeclarationSyntax>))
                 .WithFormatterAnnotation();
 
             return document.ReplaceNodeAsync(member, newNode, cancellationToken);

@@ -41,7 +41,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             BlockSyntax newBlock = block
                 .WithOpenBraceToken(block.OpenBraceToken.WithoutTrailingTrivia())
-                .WithCloseBraceToken(block.CloseBraceToken.WithLeadingTrivia(CSharpFactory.NewLineTrivia()))
+                .WithCloseBraceToken(block.CloseBraceToken.WithLeadingTrivia(CSharpFactory.NewLine()))
                 .WithFormatterAnnotation();
 
             return document.ReplaceNodeAsync(block, newBlock, cancellationToken);

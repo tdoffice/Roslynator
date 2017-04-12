@@ -36,8 +36,8 @@ namespace Roslynator.CSharp.Refactorings.ExtractCondition
                                 }
                                 else if (kind == SyntaxKind.LogicalOrExpression)
                                 {
-                                    IStatementContainer container = GetStatementContainer((StatementSyntax)parent);
-                                    if (container != null)
+                                    StatementContainer container;
+                                    if (StatementContainer.TryCreate((StatementSyntax)parent, out container))
                                     {
                                         var refactoring = new ExtractConditionFromIfToIfRefactoring();
                                         context.RegisterRefactoring(
@@ -95,8 +95,8 @@ namespace Roslynator.CSharp.Refactorings.ExtractCondition
                                     }
                                     else if (kind == SyntaxKind.LogicalOrExpression)
                                     {
-                                        IStatementContainer container = GetStatementContainer((StatementSyntax)parent);
-                                        if (container != null)
+                                        StatementContainer container;
+                                        if (StatementContainer.TryCreate((StatementSyntax)parent, out container))
                                         {
                                             var refactoring = new ExtractConditionFromIfToIfRefactoring();
                                             context.RegisterRefactoring(
@@ -111,8 +111,8 @@ namespace Roslynator.CSharp.Refactorings.ExtractCondition
                                 {
                                     if (kind == SyntaxKind.LogicalAndExpression)
                                     {
-                                        IStatementContainer container = GetStatementContainer((StatementSyntax)parent);
-                                        if (container != null)
+                                        StatementContainer container;
+                                        if (StatementContainer.TryCreate((StatementSyntax)parent, out container))
                                         {
                                             var refactoring = new ExtractConditionFromWhileToNestedIfRefactoring();
                                             context.RegisterRefactoring(
@@ -127,15 +127,6 @@ namespace Roslynator.CSharp.Refactorings.ExtractCondition
                     }
                 }
             }
-        }
-
-        private static IStatementContainer GetStatementContainer(StatementSyntax statement)
-        {
-            IStatementContainer container;
-            if (StatementContainer.TryCreate(statement, out container))
-                return container;
-
-            return null;
         }
 
         private static BinaryExpressionSyntax GetCondition(BinaryExpressionSyntax binaryExpression)

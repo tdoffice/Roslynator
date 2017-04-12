@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis;
@@ -15,8 +14,100 @@ namespace Roslynator.Extensions
 {
     public static class SyntaxExtensions
     {
+        #region SeparatedSyntaxList<T>
+        public static SeparatedSyntaxList<TNode> ReplaceAt<TNode>(this SeparatedSyntaxList<TNode> list, int index, TNode newNode) where TNode : SyntaxNode
+        {
+            return list.Replace(list[index], newNode);
+        }
+
+        public static bool IsFirst<TNode>(this SeparatedSyntaxList<TNode> list, TNode node) where TNode : SyntaxNode
+        {
+            return list.IndexOf(node) == 0;
+        }
+
+        public static bool IsLast<TNode>(this SeparatedSyntaxList<TNode> list, TNode node) where TNode : SyntaxNode
+        {
+            return list.Any()
+                && list.IndexOf(node) == list.Count - 1;
+        }
+
+        public static bool Any<TNode>(this SeparatedSyntaxList<TNode> list, Func<TNode, bool> predicate) where TNode : SyntaxNode
+        {
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            foreach (TNode node in list)
+            {
+                if (predicate(node))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool All<TNode>(this SeparatedSyntaxList<TNode> list, Func<TNode, bool> predicate) where TNode : SyntaxNode
+        {
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            foreach (TNode node in list)
+            {
+                if (!predicate(node))
+                    return false;
+            }
+
+            return true;
+        }
+        #endregion
+
+        #region SyntaxList<T>
+        public static SyntaxList<TNode> ReplaceAt<TNode>(this SyntaxList<TNode> list, int index, TNode newNode) where TNode : SyntaxNode
+        {
+            return list.Replace(list[index], newNode);
+        }
+
+        public static bool IsFirst<TNode>(this SyntaxList<TNode> list, TNode node) where TNode : SyntaxNode
+        {
+            return list.IndexOf(node) == 0;
+        }
+
+        public static bool IsLast<TNode>(this SyntaxList<TNode> list, TNode node) where TNode : SyntaxNode
+        {
+            return list.Any()
+                && list.IndexOf(node) == list.Count - 1;
+        }
+
+        public static bool Any<TNode>(this SyntaxList<TNode> list, Func<TNode, bool> predicate) where TNode : SyntaxNode
+        {
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            foreach (TNode node in list)
+            {
+                if (predicate(node))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool All<TNode>(this SyntaxList<TNode> list, Func<TNode, bool> predicate) where TNode : SyntaxNode
+        {
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            foreach (TNode node in list)
+            {
+                if (!predicate(node))
+                    return false;
+            }
+
+            return true;
+        }
+        #endregion
+
         #region SyntaxNode
-        public static IEnumerable<SyntaxTrivia> GetLeadingTrailingTrivia(this SyntaxNode node)
+        public static IEnumerable<SyntaxTrivia> GetLeadingAndTrailingTrivia(this SyntaxNode node)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -92,6 +183,9 @@ namespace Roslynator.Extensions
 
         public static bool ContainsDirectives(this SyntaxNode node, TextSpan span)
         {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
             return node.ContainsDirectives
                 && node.DescendantTrivia(span).Any(f => f.IsDirective);
         }
@@ -266,7 +360,7 @@ namespace Roslynator.Extensions
             return token.WithTrailingTrivia(token.TrailingTrivia.Add(trivia));
         }
 
-        public static IEnumerable<SyntaxTrivia> GetLeadingTrailingTrivia(this SyntaxToken token)
+        public static IEnumerable<SyntaxTrivia> GetLeadingAndTrailingTrivia(this SyntaxToken token)
         {
             return token.LeadingTrivia.Concat(token.TrailingTrivia);
         }
@@ -343,6 +437,16 @@ namespace Roslynator.Extensions
         {
             return token.WithAdditionalAnnotations(RenameAnnotation.Create());
         }
+
+        public static SyntaxToken WithTriviaFrom(this SyntaxToken token, SyntaxNode node)
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+            return token
+                .WithLeadingTrivia(node.GetLeadingTrivia())
+                .WithTrailingTrivia(node.GetTrailingTrivia());
+        }
         #endregion
 
         #region SyntaxTokenList
@@ -352,8 +456,8 @@ namespace Roslynator.Extensions
         }
         #endregion
 
-        #region SyntaxTriviaList
-        public static SyntaxTriviaList GetContainingList(this SyntaxTrivia trivia)
+        #region SyntaxTrivia
+        public static bool TryGetContainingList(this SyntaxTrivia trivia, out SyntaxTriviaList triviaList)
         {
             SyntaxToken token = trivia.Token;
 
@@ -362,18 +466,23 @@ namespace Roslynator.Extensions
             int index = leadingTrivia.IndexOf(trivia);
 
             if (index != -1)
-                return token.LeadingTrivia;
+            {
+                triviaList = leadingTrivia;
+                return true;
+            }
 
             SyntaxTriviaList trailingTrivia = token.TrailingTrivia;
 
             index = trailingTrivia.IndexOf(trivia);
 
             if (index != -1)
-                return token.TrailingTrivia;
+            {
+                triviaList = trailingTrivia;
+                return true;
+            }
 
-            Debug.Assert(false, "containing trivia list not found");
-
-            return default(SyntaxTriviaList);
+            triviaList = default(SyntaxTriviaList);
+            return false;
         }
 
         public static int GetSpanStartLine(this SyntaxTrivia trivia, CancellationToken cancellationToken = default(CancellationToken))
@@ -422,6 +531,13 @@ namespace Roslynator.Extensions
             {
                 return -1;
             }
+        }
+        #endregion
+
+        #region SyntaxTriviaList
+        public static SyntaxTriviaList ReplaceAt(this SyntaxTriviaList triviaList, int index, SyntaxTrivia newTrivia)
+        {
+            return triviaList.Replace(triviaList[index], newTrivia);
         }
         #endregion
     }

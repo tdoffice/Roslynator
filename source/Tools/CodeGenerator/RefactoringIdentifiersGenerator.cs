@@ -22,7 +22,7 @@ namespace CodeGenerator
             return CompilationUnit()
                 .WithUsings(List(new UsingDirectiveSyntax[] { }))
                 .WithMembers(
-                    NamespaceDeclaration(DefaultNamespace)
+                    NamespaceDeclaration(IdentifierName(DefaultNamespace))
                         .WithMembers(
                             ClassDeclaration("RefactoringIdentifiers")
                                 .WithModifiers(Modifiers.PublicStaticPartial())

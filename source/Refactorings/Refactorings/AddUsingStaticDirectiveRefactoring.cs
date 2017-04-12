@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.Refactorings
 
             SyntaxNode newRoot = oldRoot.ReplaceNode(memberAccess, newNode);
 
-            newRoot = ((CompilationUnitSyntax)newRoot).AddUsings(CSharpFactory.UsingStaticDirective(name));
+            newRoot = ((CompilationUnitSyntax)newRoot).AddUsings(CSharpFactory.UsingStaticDirective(SyntaxFactory.ParseName(name)));
 
             return document.WithSyntaxRoot(newRoot);
         }

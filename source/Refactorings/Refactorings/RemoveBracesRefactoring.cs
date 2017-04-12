@@ -153,7 +153,7 @@ namespace Roslynator.CSharp.Refactorings
             }
             else
             {
-                StatementSyntax newNode = statement.TrimLeadingTrivia()
+                StatementSyntax newNode = statement.TrimStart()
                     .WithFormatterAnnotation();
 
                 return document.ReplaceNodeAsync(block, newNode, cancellationToken);

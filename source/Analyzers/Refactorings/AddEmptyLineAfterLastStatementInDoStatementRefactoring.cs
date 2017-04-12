@@ -72,7 +72,7 @@ namespace Roslynator.CSharp.Refactorings
 
             int index = trailingTrivia.IndexOf(SyntaxKind.EndOfLineTrivia);
 
-            SyntaxTriviaList newTrailingTrivia = trailingTrivia.Insert(index, CSharpFactory.NewLineTrivia());
+            SyntaxTriviaList newTrailingTrivia = trailingTrivia.Insert(index, CSharpFactory.NewLine());
 
             StatementSyntax newStatement = statement.WithTrailingTrivia(newTrailingTrivia);
 

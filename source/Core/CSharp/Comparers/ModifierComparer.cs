@@ -30,9 +30,9 @@ namespace Roslynator.CSharp.Comparers
             return GetInsertIndex(modifiers, GetOrderIndex(modifier));
         }
 
-        public int GetInsertIndex(SyntaxTokenList modifiers, SyntaxKind kind)
+        public int GetInsertIndex(SyntaxTokenList modifiers, SyntaxKind modifierKind)
         {
-            return GetInsertIndex(modifiers, GetOrderIndex(kind));
+            return GetInsertIndex(modifiers, GetOrderIndex(modifierKind));
         }
 
         private int GetInsertIndex(SyntaxTokenList modifiers, int orderIndex)

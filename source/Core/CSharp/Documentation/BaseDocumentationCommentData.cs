@@ -7,20 +7,20 @@ using Roslynator.Extensions;
 
 namespace Roslynator.CSharp.Documentation
 {
-    public struct BaseDocumentationCommentInfo
+    public struct BaseDocumentationCommentData
     {
-        internal BaseDocumentationCommentInfo(SyntaxTrivia trivia, BaseDocumentationCommentOrigin origin)
+        internal BaseDocumentationCommentData(SyntaxTrivia comment, BaseDocumentationCommentOrigin origin)
         {
-            Trivia = trivia;
+            Comment = comment;
             Origin = origin;
         }
 
-        public SyntaxTrivia Trivia { get; }
+        public SyntaxTrivia Comment { get; }
         public BaseDocumentationCommentOrigin Origin { get; }
 
         public bool Success
         {
-            get { return Trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia); }
+            get { return Comment.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia); }
         }
     }
 }

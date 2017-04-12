@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.Refactorings
 
         public static Task<Document> RefactorAsync(
             Document document,
-            IStatementContainer container,
+            StatementContainer container,
             ImmutableArray<IfStatementSyntax> ifStatements,
             CancellationToken cancellationToken = default(CancellationToken))
         {

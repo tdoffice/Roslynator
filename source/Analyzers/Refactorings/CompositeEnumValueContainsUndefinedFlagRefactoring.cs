@@ -260,7 +260,7 @@ namespace Roslynator.CSharp.Refactorings
                 Identifier(name).WithRenameAnnotation(),
                 ParseExpression(value));
 
-            enumMember = enumMember.WithTrailingTrivia(NewLineTrivia());
+            enumMember = enumMember.WithTrailingTrivia(NewLine());
 
             EnumDeclarationSyntax newNode = enumDeclaration.WithMembers(enumDeclaration.Members.Add(enumMember));
 

@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             PropertyDeclarationSyntax newNode = propertyDeclaration
                 .WithInitializer(null)
-                .WithSemicolonToken(NoneToken())
+                .WithSemicolonToken(default(SyntaxToken))
                 .WithTriviaFrom(propertyDeclaration)
                 .WithFormatterAnnotation();
 

@@ -68,8 +68,8 @@ namespace Roslynator.CSharp.Refactorings.ReplaceMethodWithProperty
             if (argumentList != null)
             {
                 node = node.AppendToTrailingTrivia(
-                    argumentList.OpenParenToken.GetLeadingTrailingTrivia()
-                        .Concat(argumentList.CloseParenToken.GetLeadingTrailingTrivia()));
+                    argumentList.OpenParenToken.GetLeadingAndTrailingTrivia()
+                        .Concat(argumentList.CloseParenToken.GetLeadingAndTrailingTrivia()));
             }
 
             return node;
@@ -99,8 +99,8 @@ namespace Roslynator.CSharp.Refactorings.ReplaceMethodWithProperty
             if (parameterList?.IsMissing == false)
             {
                 identifier = identifier.AppendToTrailingTrivia(
-                    parameterList.OpenParenToken.GetLeadingTrailingTrivia().Concat(
-                        parameterList.CloseParenToken.GetLeadingTrailingTrivia()));
+                    parameterList.OpenParenToken.GetLeadingAndTrailingTrivia().Concat(
+                        parameterList.CloseParenToken.GetLeadingAndTrailingTrivia()));
             }
 
             if (methodDeclaration.ExpressionBody != null)

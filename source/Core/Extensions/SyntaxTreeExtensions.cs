@@ -9,7 +9,7 @@ namespace Roslynator.Extensions
 {
     public static class SyntaxTreeExtensions
     {
-        public static int GetSpanStartLine(
+        public static int GetStartLine(
             this SyntaxTree syntaxTree,
             TextSpan span,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -20,7 +20,7 @@ namespace Roslynator.Extensions
             return syntaxTree.GetLineSpan(span, cancellationToken).StartLine();
         }
 
-        public static int GetSpanEndLine(
+        public static int GetEndLine(
             this SyntaxTree syntaxTree,
             TextSpan span,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -53,7 +53,7 @@ namespace Roslynator.Extensions
             return syntaxTree.GetLineSpan(span, cancellationToken).IsSingleLine();
         }
 
-        public static int GetLineCount(
+        internal static int GetLineCount(
             this SyntaxTree syntaxTree,
             TextSpan span,
             CancellationToken cancellationToken = default(CancellationToken))

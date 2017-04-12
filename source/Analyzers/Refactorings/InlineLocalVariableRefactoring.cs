@@ -224,7 +224,7 @@ namespace Roslynator.CSharp.Refactorings
             LocalDeclarationStatementSyntax localDeclaration,
             CancellationToken cancellationToken)
         {
-            IStatementContainer container;
+            StatementContainer container;
             if (StatementContainer.TryCreate(localDeclaration, out container))
             {
                 SyntaxList<StatementSyntax> statements = container.Statements;

@@ -221,7 +221,7 @@ namespace Roslynator.CSharp.Refactorings
 
             SyntaxTokenList newModifiers = GetNewModifiers(modifiers, accessibility);
 
-            MemberDeclarationSyntax newNode = memberDeclaration.SetModifiers(newModifiers);
+            MemberDeclarationSyntax newNode = memberDeclaration.WithModifiers(newModifiers);
 
             return document.ReplaceNodeAsync(memberDeclaration, newNode, cancellationToken);
         }

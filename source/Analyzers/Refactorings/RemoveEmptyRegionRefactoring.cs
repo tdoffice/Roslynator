@@ -33,9 +33,8 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         SyntaxTrivia trivia = region.ParentTrivia;
 
-                        SyntaxTriviaList list = trivia.GetContainingList();
-
-                        if (list.Any())
+                        SyntaxTriviaList list;
+                        if (trivia.TryGetContainingList(out list))
                         {
                             EndRegionDirectiveTriviaSyntax endRegion2 = FindEndRegion(list, list.IndexOf(trivia));
 

@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Roslynator
 {
+    //TODO: přejmenovat UniqueNameProvider
     public abstract class UniqueNameProvider
     {
         public abstract string EnsureUniqueName(string baseName, HashSet<string> reservedNames);

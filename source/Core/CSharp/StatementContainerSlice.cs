@@ -8,7 +8,7 @@ namespace Roslynator.CSharp
 {
     public class StatementContainerSlice : ListSlice<StatementSyntax>
     {
-        private StatementContainerSlice(IStatementContainer container, TextSpan span)
+        private StatementContainerSlice(StatementContainer container, TextSpan span)
              : base(container.Statements, span)
         {
             Container = container;
@@ -19,7 +19,7 @@ namespace Roslynator.CSharp
             if (block == null)
                 throw new ArgumentNullException(nameof(block));
 
-            var container = new BlockStatementContainer(block);
+            var container = new StatementContainer(block);
 
             return new StatementContainerSlice(container, span);
         }
@@ -29,11 +29,11 @@ namespace Roslynator.CSharp
             if (switchSection == null)
                 throw new ArgumentNullException(nameof(switchSection));
 
-            var container = new SwitchSectionStatementContainer(switchSection);
+            var container = new StatementContainer(switchSection);
 
             return new StatementContainerSlice(container, span);
         }
 
-        public IStatementContainer Container { get; }
+        public StatementContainer Container { get; }
     }
 }

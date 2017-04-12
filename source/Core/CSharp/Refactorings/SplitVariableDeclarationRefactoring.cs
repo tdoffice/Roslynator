@@ -102,7 +102,7 @@ namespace Roslynator.CSharp.Refactorings
                 declaration,
                 SplitFieldDeclaration(declaration));
 
-            MemberDeclarationSyntax newNode = containingMember.SetMembers(newMembers);
+            MemberDeclarationSyntax newNode = containingMember.WithMembers(newMembers);
 
             return document.ReplaceNodeAsync(containingMember, newNode, cancellationToken);
         }
@@ -120,7 +120,7 @@ namespace Roslynator.CSharp.Refactorings
                 declaration,
                 SplitEventFieldDeclaration(declaration));
 
-            MemberDeclarationSyntax newNode = containingMember.SetMembers(newMembers);
+            MemberDeclarationSyntax newNode = containingMember.WithMembers(newMembers);
 
             return document.ReplaceNodeAsync(containingMember, newNode, cancellationToken);
         }
