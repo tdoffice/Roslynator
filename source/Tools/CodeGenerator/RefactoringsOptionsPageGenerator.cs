@@ -8,6 +8,7 @@ using Roslynator;
 using Roslynator.CSharp;
 using Roslynator.CSharp.Extensions;
 using Roslynator.Metadata;
+using Roslynator.Utilities;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Roslynator.CSharp.CSharpFactory;
 

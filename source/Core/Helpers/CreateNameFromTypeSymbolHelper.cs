@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Roslynator.CSharp.Extensions;
 using Roslynator.Extensions;
+using Roslynator.Utilities;
 
 namespace Roslynator.Helpers
 {

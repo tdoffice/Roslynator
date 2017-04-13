@@ -12,6 +12,7 @@ using Roslynator.CSharp.Comparers;
 using Roslynator.CSharp.Extensions;
 using Roslynator.Diagnostics.Extensions;
 using Roslynator.Extensions;
+using Roslynator.Utilities;
 
 namespace Roslynator.CSharp.Refactorings.MakeMemberReadOnly
 {

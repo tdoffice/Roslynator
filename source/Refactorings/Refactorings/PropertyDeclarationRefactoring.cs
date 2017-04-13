@@ -10,6 +10,7 @@ using Roslynator.CSharp.Refactorings.ReplacePropertyWithMethod;
 using Roslynator.Extensions;
 using Roslynator.Rename;
 using Roslynator.Text.Extensions;
+using Roslynator.Utilities;
 
 namespace Roslynator.CSharp.Refactorings
 {

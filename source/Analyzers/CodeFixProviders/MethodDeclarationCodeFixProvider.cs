@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.CodeFixProviders
                             {
                                 string oldName = methodDeclaration.Identifier.ValueText;
 
-                                string newName = await NameGenerators.AsyncMethod.EnsureUniqueAsyncMethodNameAsync(
+                                string newName = await NameGenerators.AsyncMethod.EnsureUniqueMemberNameAsync(
                                     oldName,
                                     methodSymbol,
                                     context.Solution(),

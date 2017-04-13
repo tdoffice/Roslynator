@@ -3219,7 +3219,6 @@ namespace Roslynator.CSharp.Extensions
             return SyntaxTriviaList.Empty;
         }
 
-        //TODO: Trim
         public static SyntaxTriviaList TrimTrivia(this SyntaxTriviaList triviaList)
         {
             int startIndex = 0;

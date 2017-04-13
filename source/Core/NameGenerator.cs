@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
 using Roslynator.Extensions;
 using Roslynator.Helpers;
+using Roslynator.Utilities;
 
 namespace Roslynator
 {
@@ -106,7 +107,7 @@ namespace Roslynator
             return EnsureUniqueName(baseName, symbols, isCaseSensitive);
         }
 
-        internal async Task<string> EnsureUniqueMemberNameAsync(
+        internal virtual async Task<string> EnsureUniqueMemberNameAsync(
             string baseName,
             ISymbol memberSymbol,
             Solution solution,
@@ -135,7 +136,7 @@ namespace Roslynator
             return EnsureUniqueName(baseName, enumSymbol.GetMembers(), isCaseSensitive);
         }
 
-        public static bool IsUniqueMemberName(
+        internal static bool IsUniqueMemberName(
             string name,
             SemanticModel semanticModel,
             int position,
@@ -247,7 +248,6 @@ namespace Roslynator
             return !reservedNames.Contains(name);
         }
 
-        //TODO: CreateName
         public static string CreateName(ITypeSymbol typeSymbol, bool firstCharToLower = false)
         {
             string name = CreateNameFromTypeSymbolHelper.CreateName(typeSymbol);

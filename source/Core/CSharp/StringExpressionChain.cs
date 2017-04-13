@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Roslynator.CSharp.Extensions;
 using Roslynator.Extensions;
-using static Roslynator.StringUtility;
+using Roslynator.Utilities;
 
 namespace Roslynator.CSharp
 {
@@ -226,14 +226,14 @@ namespace Roslynator.CSharp
                         && literal.IsVerbatimStringLiteral())
                     {
                         string s = literal.Token.ValueText;
-                        s = EscapeQuote(s);
-                        s = DoubleBraces(s);
+                        s = StringUtility.EscapeQuote(s);
+                        s = StringUtility.DoubleBraces(s);
                         sb.Append(s);
                     }
                     else
                     {
                         string s = GetInnerText(literal.Token.Text);
-                        s = DoubleBraces(s);
+                        s = StringUtility.DoubleBraces(s);
                         sb.Append(s);
                     }
                 }
@@ -257,7 +257,7 @@ namespace Roslynator.CSharp
                                 && isVerbatimInterpolatedString)
                             {
                                 string s = text.TextToken.ValueText;
-                                s = EscapeQuote(s);
+                                s = StringUtility.EscapeQuote(s);
                                 sb.Append(s);
                             }
                             else
@@ -305,7 +305,7 @@ namespace Roslynator.CSharp
                     if (ContainsVerbatimLiteral
                         && literal.IsVerbatimStringLiteral())
                     {
-                        sb.Append(EscapeQuote(literal.Token.ValueText));
+                        sb.Append(StringUtility.EscapeQuote(literal.Token.ValueText));
                     }
                     else
                     {
@@ -335,7 +335,7 @@ namespace Roslynator.CSharp
                 {
                     var literal = (LiteralExpressionSyntax)Expressions[i];
 
-                    string s = DoubleQuote(literal.Token.ValueText);
+                    string s = StringUtility.DoubleQuote(literal.Token.ValueText);
 
                     int charCount = 0;
 

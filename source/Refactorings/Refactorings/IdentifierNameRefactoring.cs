@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Extensions;
 using Roslynator.Extensions;
 using Roslynator.Rename;
+using Roslynator.Utilities;
 
 namespace Roslynator.CSharp.Refactorings
 {

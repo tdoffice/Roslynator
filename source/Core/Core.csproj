@@ -152,13 +152,11 @@
     <Compile Include="ExtensionMethodKind.cs" />
     <Compile Include="Extensions\DiagnosticExtensions.cs" />
     <Compile Include="CodeFixes\Extensions\CodeFixContextExtensions.cs" />
-    <Compile Include="Extensions\DocumentExtensions2.cs" />
     <Compile Include="FindSymbols\SymbolFinder.cs" />
-    <Compile Include="FlagsUtility.cs" />
-    <Compile Include="Deferred`1.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Utilities\FlagsUtility.cs" />
+    <Compile Include="Utilities\Deferred`1.cs" />
     <Compile Include="MethodInfo.cs" />
-    <Compile Include="SymbolUtility.cs" />
+    <Compile Include="Utilities\SymbolUtility.cs" />
     <Compile Include="CSharp\SyntaxRewriters\CommentRemover.cs" />
     <Compile Include="CSharp\Refactorings\InlineAliasExpressionRefactoring.cs" />
     <Compile Include="CSharp\SyntaxRewriters\WhitespaceOrEndOfLineTriviaRemover.cs" />
@@ -190,7 +188,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CSharp\SyntaxRewriters\TriviaRemover.cs" />
     <Compile Include="SymbolDisplay.cs" />
-    <Compile Include="StringUtility.cs" />
+    <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="NameGenerators.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Roslynator
+namespace Roslynator.Utilities
 {
     internal struct Deferred<T> : IEquatable<Deferred<T>>
     {

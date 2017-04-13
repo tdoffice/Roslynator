@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Roslynator.Extensions;
 
-namespace Roslynator
+namespace Roslynator.Utilities
 {
     internal static class SymbolUtility
     {
