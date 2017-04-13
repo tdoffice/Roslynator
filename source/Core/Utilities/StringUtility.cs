@@ -288,6 +288,25 @@ namespace Roslynator.Utilities
             }
         }
 
+        public static bool TryRemovePrefix(string value, string prefix, out string result)
+        {
+            return TryRemovePrefix(value, prefix, StringComparison.Ordinal, out result);
+        }
+
+        public static bool TryRemovePrefix(string value, string prefix, StringComparison comparison, out string result)
+        {
+            if (HasPrefix(value, prefix, comparison))
+            {
+                result = value.Substring(prefix.Length);
+                return true;
+            }
+            else
+            {
+                result = value;
+                return false;
+            }
+        }
+
         public static string RemoveSuffix(string value, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
             if (HasSuffix(value, suffix, comparison))
@@ -297,6 +316,25 @@ namespace Roslynator.Utilities
             else
             {
                 return value;
+            }
+        }
+
+        public static bool TryRemoveSuffix(string value, string suffix, out string result)
+        {
+            return TryRemoveSuffix(value, suffix, StringComparison.Ordinal, out result);
+        }
+
+        public static bool TryRemoveSuffix(string value, string suffix, StringComparison comparison, out string result)
+        {
+            if (HasSuffix(value, suffix, comparison))
+            {
+                result = value.Remove(value.Length - suffix.Length);
+                return true;
+            }
+            else
+            {
+                result = value;
+                return false;
             }
         }
     }

@@ -39,7 +39,8 @@ namespace Roslynator.Helpers
             if (name.Length > 1
                 && UsePlural(typeSymbol2))
             {
-                name = StringUtility.RemoveSuffix(name, "Collection");
+                if (!StringUtility.TryRemoveSuffix(name, "Collection", out name))
+                    StringUtility.TryRemoveSuffix(name, "List", out name);
 
                 if (name.EndsWith("s", StringComparison.Ordinal) || name.EndsWith("x", StringComparison.Ordinal))
                 {
