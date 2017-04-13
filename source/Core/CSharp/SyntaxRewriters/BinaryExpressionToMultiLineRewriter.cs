@@ -3,9 +3,8 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CSharp.Extensions;
 
-namespace Roslynator.CSharp.Formatting
+namespace Roslynator.CSharp
 {
     internal class BinaryExpressionToMultiLineRewriter : CSharpSyntaxRewriter
     {

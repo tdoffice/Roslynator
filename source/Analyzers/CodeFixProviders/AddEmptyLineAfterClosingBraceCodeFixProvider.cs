@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Roslynator.CodeFixes.Extensions;
-using Roslynator.CSharp.Extensions;
-using Roslynator.Extensions;
+using Roslynator.CodeFixes;
 
 namespace Roslynator.CSharp.CodeFixProviders
 {

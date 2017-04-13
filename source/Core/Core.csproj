@@ -59,7 +59,7 @@
     <Compile Include="CSharp\StatementContainer.cs" />
     <Compile Include="DirectiveRemoveOptions.cs" />
     <Compile Include="CSharp\Syntax\EqualsToNullExpression.cs" />
-    <Compile Include="CSharp\Formatting\CSharpFormatter.cs" />
+    <Compile Include="CSharp\CSharpFormatter.cs" />
     <Compile Include="CSharp\Documentation\DocumentationCommentGenerator.cs" />
     <Compile Include="CSharp\Documentation\DocumentationCommentGeneratorSettings.cs" />
     <Compile Include="CSharp\EmbeddedStatementHelper.cs" />
@@ -69,11 +69,11 @@
     <Compile Include="CSharp\Extensions\CSharpExtensions.cs" />
     <Compile Include="CSharp\CSharpGeneratedCodeAnalyzer.cs" />
     <Compile Include="CSharp\Extensions\SymbolExtensions.cs" />
-    <Compile Include="CSharp\Formatting\BinaryExpressionToMultiLineRewriter.cs" />
+    <Compile Include="CSharp\SyntaxRewriters\BinaryExpressionToMultiLineRewriter.cs" />
     <Compile Include="CSharp\HexadecimalLiteralInfo.cs" />
     <Compile Include="CSharp\HexadecimalLiteralSuffixKind.cs" />
     <Compile Include="CSharp\Syntax\IfStatement.cs" />
-    <Compile Include="CSharp\Syntax\IfStatementOrElseClause.cs" />
+    <Compile Include="CSharp\IfStatementOrElseClause.cs" />
     <Compile Include="CSharp\Comparers\MemberDeclarationSortMode.cs" />
     <Compile Include="CSharp\Helpers\RemoveModifierHelper.cs" />
     <Compile Include="CSharp\Negator.cs" />
@@ -151,7 +151,7 @@
     <Compile Include="ExtensionMethodInfo.cs" />
     <Compile Include="ExtensionMethodKind.cs" />
     <Compile Include="Extensions\DiagnosticExtensions.cs" />
-    <Compile Include="CodeFixes\Extensions\CodeFixContextExtensions.cs" />
+    <Compile Include="CodeFixes\CodeFixContextExtensions.cs" />
     <Compile Include="FindSymbols\SymbolFinder.cs" />
     <Compile Include="Utilities\FlagsUtility.cs" />
     <Compile Include="Utilities\Deferred`1.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="Extensions\FileLinePositionSpanExtensions.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Extensions\SemanticModelExtensions.cs" />
-    <Compile Include="Text\Extensions\TextSpanExtensions.cs" />
+    <Compile Include="Text\TextSpanExtensions.cs" />
     <Compile Include="Helpers\CreateNameFromTypeSymbolHelper.cs" />
     <Compile Include="MetadataNames.cs" />
     <Compile Include="CSharp\Modifiers.cs" />
@@ -197,7 +197,9 @@
     <None Include="Roslynator.Core.snk" />
     <None Include="Roslynator.Core.nuspec" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Text\Extensions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">
     <GetAssemblyIdentity AssemblyFiles="$(OutDir)\$(AssemblyName).dll">

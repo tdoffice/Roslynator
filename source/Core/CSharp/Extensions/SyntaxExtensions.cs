@@ -14,10 +14,9 @@ using Roslynator.CSharp.Documentation;
 using Roslynator.CSharp.Helpers;
 using Roslynator.CSharp.Syntax;
 using Roslynator.CSharp.SyntaxRewriters;
-using Roslynator.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Roslynator.CSharp.Extensions
+namespace Roslynator.CSharp
 {
     public static class SyntaxExtensions
     {

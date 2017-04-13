@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CodeFixes.Extensions;
+using Roslynator.CodeFixes;
 using Roslynator.CSharp.Refactorings.DocumentationComment;
 
 namespace Roslynator.CSharp.CodeFixProviders

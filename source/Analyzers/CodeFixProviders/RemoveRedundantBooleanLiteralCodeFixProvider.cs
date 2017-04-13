@@ -12,10 +12,8 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using Roslynator.CodeFixes.Extensions;
-using Roslynator.CSharp.Extensions;
+using Roslynator.CodeFixes;
 using Roslynator.CSharp.Refactorings;
-using Roslynator.Extensions;
 
 namespace Roslynator.CSharp.CodeFixProviders
 {

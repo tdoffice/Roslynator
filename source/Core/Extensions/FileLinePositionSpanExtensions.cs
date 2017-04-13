@@ -2,7 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 
-namespace Roslynator.Extensions
+namespace Roslynator
 {
     public static class FileLinePositionSpanExtensions
     {

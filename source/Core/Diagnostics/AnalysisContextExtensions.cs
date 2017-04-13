@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Roslynator.Diagnostics.Extensions
+namespace Roslynator.Diagnostics
 {
     [DebuggerStepThrough]
     public static class AnalysisContextExtensions

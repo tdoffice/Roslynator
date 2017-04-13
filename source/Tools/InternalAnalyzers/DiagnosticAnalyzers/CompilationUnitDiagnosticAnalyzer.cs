@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using Roslynator.CSharp.Refactoring;
-using Roslynator.Diagnostics.Extensions;
+using Roslynator.Diagnostics;
 
 namespace Roslynator.CSharp.Internal.DiagnosticAnalyzers
 {
@@ -16,7 +16,9 @@ namespace Roslynator.CSharp.Internal.DiagnosticAnalyzers
     public class CompilationUnitDiagnosticAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-            => ImmutableArray.Create(DiagnosticDescriptors.AddCodeFileHeader);
+        {
+            get { return ImmutableArray.Create(DiagnosticDescriptors.AddCodeFileHeader); }
+        }
 
         public override void Initialize(AnalysisContext context)
         {

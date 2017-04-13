@@ -4,12 +4,10 @@ using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CSharp.Extensions;
-using Roslynator.Extensions;
 
 namespace Roslynator.CSharp.Syntax
 {
-    public struct EqualsToNullExpression : IEquatable<EqualsToNullExpression>
+    internal struct EqualsToNullExpression : IEquatable<EqualsToNullExpression>
     {
         private EqualsToNullExpression(ExpressionSyntax left, ExpressionSyntax right)
         {

@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CSharp.Extensions;
 using Roslynator.CSharp.Refactorings.ReplacePropertyWithMethod;
-using Roslynator.Extensions;
 using Roslynator.Rename;
-using Roslynator.Text.Extensions;
+using Roslynator.Text;
 using Roslynator.Utilities;
 
 namespace Roslynator.CSharp.Refactorings

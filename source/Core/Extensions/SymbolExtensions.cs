@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 
-namespace Roslynator.Extensions
+namespace Roslynator
 {
     public static class SymbolExtensions
     {

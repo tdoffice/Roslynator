@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 
-namespace Roslynator.CodeFixes.Extensions
+namespace Roslynator.CodeFixes
 {
     internal static class CodeFixContextExtensions
     {

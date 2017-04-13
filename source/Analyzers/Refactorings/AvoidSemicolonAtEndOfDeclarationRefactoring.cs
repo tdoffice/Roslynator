@@ -7,10 +7,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.CSharp.Extensions;
-using Roslynator.Diagnostics.Extensions;
-using Roslynator.Extensions;
-using static Roslynator.CSharp.CSharpFactory;
+using Roslynator.CSharp;
+using Roslynator.Diagnostics;
 
 namespace Roslynator.CSharp.Refactorings
 {

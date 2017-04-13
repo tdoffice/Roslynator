@@ -5,7 +5,7 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Roslynator.Extensions
+namespace Roslynator
 {
     public static class SyntaxTreeExtensions
     {

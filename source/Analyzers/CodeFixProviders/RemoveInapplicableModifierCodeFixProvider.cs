@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CSharp.Refactorings;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
 using System.Threading;
-using Roslynator.Extensions;
-using Roslynator.CodeFixes.Extensions;
-using Roslynator.CSharp.Extensions;
+using Roslynator.CodeFixes;
+using Roslynator.CSharp;
 
 namespace Roslynator.CSharp.CodeFixProviders
 {

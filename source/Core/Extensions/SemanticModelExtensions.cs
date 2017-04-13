@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Collections.Generic;
 
-namespace Roslynator.Extensions
+namespace Roslynator
 {
     public static class SemanticModelExtensions
     {

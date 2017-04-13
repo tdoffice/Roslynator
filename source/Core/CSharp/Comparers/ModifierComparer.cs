@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Roslynator.CSharp.Extensions;
 
 namespace Roslynator.CSharp.Comparers
 {

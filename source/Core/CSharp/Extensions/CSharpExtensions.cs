@@ -6,9 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Helpers;
-using Roslynator.Extensions;
 
-namespace Roslynator.CSharp.Extensions
+namespace Roslynator.CSharp
 {
     public static class CSharpExtensions
     {

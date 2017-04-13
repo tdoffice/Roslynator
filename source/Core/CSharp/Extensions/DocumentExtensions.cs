@@ -12,9 +12,8 @@ using Microsoft.CodeAnalysis.Text;
 using Roslynator.CSharp.Documentation;
 using Roslynator.CSharp.Helpers;
 using Roslynator.CSharp.SyntaxRewriters;
-using Roslynator.Extensions;
 
-namespace Roslynator.CSharp.Extensions
+namespace Roslynator.CSharp
 {
     public static class DocumentExtensions
     {

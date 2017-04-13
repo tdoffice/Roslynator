@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Roslynator.Extensions
+namespace Roslynator
 {
     public static class SyntaxExtensions
     {
