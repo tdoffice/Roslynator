@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Roslynator.CSharp.Comparers;
-using Roslynator.Diagnostics;
 using Roslynator.Utilities;
 
 namespace Roslynator.CSharp.Refactorings.MakeMemberReadOnly

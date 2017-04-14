@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Rename;
 using Roslynator.CSharp.Refactorings.ReplaceMethodWithProperty;
-using Roslynator.Rename;
-using Roslynator.Text;
 
 namespace Roslynator.CSharp.Refactorings
 {
@@ -125,7 +125,7 @@ namespace Roslynator.CSharp.Refactorings
                             {
                                 context.RegisterRefactoring(
                                    $"Rename '{oldName}' to '{newName}'",
-                                   cancellationToken => Renamer.RenameSymbolAsync(context.Document, methodSymbol, newName, cancellationToken));
+                                   cancellationToken => Renamer.RenameSymbolAsync(context.Solution, methodSymbol, newName, default(OptionSet), cancellationToken));
                             }
                         }
                     }

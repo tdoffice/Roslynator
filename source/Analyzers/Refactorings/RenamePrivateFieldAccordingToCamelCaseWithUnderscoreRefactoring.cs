@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.Diagnostics;
-using Roslynator.Rename;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Rename;
 using Roslynator.Utilities;
 
 namespace Roslynator.CSharp.Refactorings
@@ -34,7 +34,12 @@ namespace Roslynator.CSharp.Refactorings
             string newName,
             CancellationToken cancellationToken)
         {
-            return Renamer.RenameSymbolAsync(document, symbol, newName, cancellationToken);
+            return Renamer.RenameSymbolAsync(
+                document.Project.Solution,
+                symbol,
+                newName,
+                default(OptionSet),
+                cancellationToken);
         }
     }
 }

@@ -11,7 +11,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Roslynator.CSharp;
 using static Roslynator.CSharp.CSharpFactory;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using Roslynator.Diagnostics;
 
 namespace Roslynator.CSharp.Refactorings
 {

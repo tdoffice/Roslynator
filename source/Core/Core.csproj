@@ -151,8 +151,7 @@
     <Compile Include="ExtensionMethodInfo.cs" />
     <Compile Include="ExtensionMethodKind.cs" />
     <Compile Include="Extensions\DiagnosticExtensions.cs" />
-    <Compile Include="CodeFixes\CodeFixContextExtensions.cs" />
-    <Compile Include="FindSymbols\SymbolFinder.cs" />
+    <Compile Include="Extensions\CodeFixContextExtensions.cs" />
     <Compile Include="Utilities\FlagsUtility.cs" />
     <Compile Include="Utilities\Deferred`1.cs" />
     <Compile Include="MethodInfo.cs" />
@@ -167,12 +166,12 @@
     <Compile Include="AsyncMethodNameGenerator.cs" />
     <Compile Include="NumberSuffixNameGenerator.cs" />
     <Compile Include="UnderscoreSuffixNameGenerator.cs" />
-    <Compile Include="Diagnostics\AnalysisContextExtensions.cs" />
+    <Compile Include="Extensions\AnalysisContextExtensions.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\FileLinePositionSpanExtensions.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Extensions\SemanticModelExtensions.cs" />
-    <Compile Include="Text\TextSpanExtensions.cs" />
+    <Compile Include="Extensions\TextSpanExtensions.cs" />
     <Compile Include="Helpers\CreateNameFromTypeSymbolHelper.cs" />
     <Compile Include="MetadataNames.cs" />
     <Compile Include="CSharp\Modifiers.cs" />
@@ -180,7 +179,6 @@
     <Compile Include="Text\TextLineCollectionSlice.cs" />
     <Compile Include="CSharp\StatementContainerSlice.cs" />
     <Compile Include="ListSlice`1.cs" />
-    <Compile Include="Rename\SymbolRenamer.cs" />
     <Compile Include="CSharp\Comparers\ModifierComparer.cs" />
     <Compile Include="Extensions\SyntaxExtensions.cs" />
     <Compile Include="Extensions\SyntaxTreeExtensions.cs" />
@@ -197,9 +195,7 @@
     <None Include="Roslynator.Core.snk" />
     <None Include="Roslynator.Core.nuspec" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Text\Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">
     <GetAssemblyIdentity AssemblyFiles="$(OutDir)\$(AssemblyName).dll">

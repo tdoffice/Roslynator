@@ -4,7 +4,7 @@ using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Roslynator.Text
+namespace Roslynator
 {
     internal static class TextSpanExtensions
     {

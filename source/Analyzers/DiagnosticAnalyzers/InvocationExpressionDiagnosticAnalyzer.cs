@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Roslynator.CSharp;
 using Roslynator.CSharp.Refactorings;
 using Roslynator.CSharp.Refactorings.UseInsteadOfCountMethod;
-using Roslynator.Diagnostics;
 
 namespace Roslynator.CSharp.DiagnosticAnalyzers
 {

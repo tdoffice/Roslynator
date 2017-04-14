@@ -12,7 +12,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Roslynator.CSharp.Comparers;
 using Roslynator.CSharp;
-using Roslynator.Diagnostics;
 
 namespace Roslynator.CSharp.Refactorings
 {

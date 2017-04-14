@@ -9,9 +9,9 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CodeFixes;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.Rename;
 using Roslynator.CSharp.Refactorings;
-using Roslynator.Rename;
 
 namespace Roslynator.CSharp.CodeFixProviders
 {
@@ -67,7 +67,7 @@ namespace Roslynator.CSharp.CodeFixProviders
 
                                 CodeAction codeAction = CodeAction.Create(
                                     $"Rename '{oldName}' to '{newName}'",
-                                    c => Renamer.RenameSymbolAsync(context.Document, methodSymbol, newName, c),
+                                    c => Renamer.RenameSymbolAsync(context.Solution(), methodSymbol, newName, default(OptionSet), c),
                                     diagnostic.Id + EquivalenceKeySuffix);
 
                                 context.RegisterCodeFix(codeAction, diagnostic);
@@ -96,7 +96,7 @@ namespace Roslynator.CSharp.CodeFixProviders
 
                                 CodeAction codeAction = CodeAction.Create(
                                     $"Rename '{name}' to '{newName}'",
-                                    c => Renamer.RenameSymbolAsync(context.Document, methodSymbol, newName, c),
+                                    c => Renamer.RenameSymbolAsync(context.Solution(), methodSymbol, newName, default(OptionSet), c),
                                     diagnostic.Id + EquivalenceKeySuffix);
 
                                 context.RegisterCodeFix(codeAction, diagnostic);

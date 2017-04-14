@@ -3,7 +3,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.Diagnostics;
 using System.Collections.Immutable;
 
 namespace Roslynator.CSharp.Refactorings.DocumentationComment

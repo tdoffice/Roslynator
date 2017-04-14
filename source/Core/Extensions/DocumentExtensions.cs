@@ -307,7 +307,11 @@ namespace Roslynator
 
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-            foreach (ReferencedSymbol referencedSymbol in await FindSymbols.SymbolFinder.FindReferencesAsync(symbol, document, cancellationToken).ConfigureAwait(false))
+            foreach (ReferencedSymbol referencedSymbol in await SymbolFinder.FindReferencesAsync(
+                symbol,
+                document.Solution(),
+                ImmutableHashSet.Create(document),
+                cancellationToken).ConfigureAwait(false))
             {
                 foreach (ReferenceLocation referenceLocation in referencedSymbol.Locations)
                 {
