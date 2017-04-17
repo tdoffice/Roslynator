@@ -9,9 +9,10 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Roslynator.CSharp
 {
-    internal struct BinaryExpressionSlice
+    // BinaryExpressionSelection
+    internal struct BinaryExpressionSelection
     {
-        private BinaryExpressionSlice(BinaryExpressionSyntax binaryExpression, ImmutableArray<ExpressionSyntax> expressions, TextSpan span)
+        private BinaryExpressionSelection(BinaryExpressionSyntax binaryExpression, ImmutableArray<ExpressionSyntax> expressions, TextSpan span)
         {
             BinaryExpression = binaryExpression;
             Expressions = expressions;
@@ -29,14 +30,14 @@ namespace Roslynator.CSharp
                 .Substring(Span.Start - BinaryExpression.FullSpan.Start, Span.Length);
         }
 
-        public static BinaryExpressionSlice Create(BinaryExpressionSyntax binaryExpression, TextSpan span)
+        public static BinaryExpressionSelection Create(BinaryExpressionSyntax binaryExpression, TextSpan span)
         {
             if (binaryExpression == null)
                 throw new ArgumentNullException(nameof(binaryExpression));
 
             List<ExpressionSyntax> expressions = GetExpressions(binaryExpression, span);
 
-            return new BinaryExpressionSlice(
+            return new BinaryExpressionSelection(
                 binaryExpression,
                 (expressions != null) ? ImmutableArray.CreateRange(expressions) : ImmutableArray<ExpressionSyntax>.Empty,
                 span);

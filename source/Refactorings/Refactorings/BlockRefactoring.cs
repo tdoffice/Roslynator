@@ -11,8 +11,9 @@ namespace Roslynator.CSharp.Refactorings
         {
             if (SelectedStatementsRefactoring.IsAnyRefactoringEnabled(context))
             {
-                StatementContainerSlice slice = StatementContainerSlice.Create(block, context.Span);
-                await SelectedStatementsRefactoring.ComputeRefactoringAsync(context, slice).ConfigureAwait(false);
+                StatementContainerSelection selectedStatements;
+                if (StatementContainerSelection.TryCreate(block, context.Span, out selectedStatements))
+                    await SelectedStatementsRefactoring.ComputeRefactoringAsync(context, selectedStatements).ConfigureAwait(false);
             }
         }
     }

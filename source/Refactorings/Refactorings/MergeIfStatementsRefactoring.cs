@@ -15,9 +15,9 @@ namespace Roslynator.CSharp.Refactorings
 {
     internal static class MergeIfStatementsRefactoring
     {
-        public static void ComputeRefactorings(RefactoringContext context, StatementContainerSlice slice)
+        public static void ComputeRefactorings(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            List<IfStatementSyntax> ifStatements = GetIfStatements(slice);
+            List<IfStatementSyntax> ifStatements = GetIfStatements(selectedStatements);
 
             if (ifStatements?.Count > 1)
             {
@@ -27,7 +27,7 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         return RefactorAsync(
                             context.Document,
-                            slice.Container,
+                            selectedStatements.Container,
                             ifStatements.ToImmutableArray(),
                             cancellationToken);
                     });

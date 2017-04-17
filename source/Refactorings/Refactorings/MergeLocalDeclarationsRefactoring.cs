@@ -12,13 +12,13 @@ namespace Roslynator.CSharp.Refactorings
 {
     internal static class MergeLocalDeclarationsRefactoring
     {
-        public static async Task ComputeRefactoringsAsync(RefactoringContext context, StatementContainerSlice slice)
+        public static async Task ComputeRefactoringsAsync(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            if (slice.Count > 1)
+            if (selectedStatements.Count > 1)
             {
                 SemanticModel semanticModel = await context.GetSemanticModelAsync().ConfigureAwait(false);
 
-                if (AreLocalDeclarations(slice, semanticModel, context.CancellationToken))
+                if (AreLocalDeclarations(selectedStatements, semanticModel, context.CancellationToken))
                 {
                     context.RegisterRefactoring(
                         "Merge local declarations",
@@ -26,8 +26,8 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             return RefactorAsync(
                                 context.Document,
-                                slice.Container,
-                                slice.Cast<LocalDeclarationStatementSyntax>().ToArray(),
+                                selectedStatements.Container,
+                                selectedStatements.Cast<LocalDeclarationStatementSyntax>().ToArray(),
                                 cancellationToken);
                         });
                 }

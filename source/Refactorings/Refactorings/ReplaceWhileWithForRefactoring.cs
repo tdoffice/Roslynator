@@ -23,16 +23,16 @@ namespace Roslynator.CSharp.Refactorings
                 cancellationToken => RefactorAsync(context.Document, null, null, whileStatement, cancellationToken));
         }
 
-        public static async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSlice slice)
+        public static async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            if (slice.Count > 1)
+            if (selectedStatements.Count > 1)
             {
-                StatementSyntax lastStatement = slice.Last();
+                StatementSyntax lastStatement = selectedStatements.Last();
 
                 if (lastStatement.IsKind(SyntaxKind.WhileStatement))
                 {
-                    IEnumerable<StatementSyntax> statements = slice
-                        .Take(slice.EndIndex - slice.StartIndex);
+                    IEnumerable<StatementSyntax> statements = selectedStatements
+                        .Take(selectedStatements.EndIndex - selectedStatements.StartIndex);
 
                     SemanticModel semanticModel = await context.GetSemanticModelAsync().ConfigureAwait(false);
 
@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             var localDeclaration = (LocalDeclarationStatementSyntax)statement;
 
-                            if (!IsAnySymbolReferenced(localDeclaration, slice.ToImmutableArray(), slice.EndIndex + 1, semanticModel, context.CancellationToken))
+                            if (!IsAnySymbolReferenced(localDeclaration, selectedStatements.ToImmutableArray(), selectedStatements.EndIndex + 1, semanticModel, context.CancellationToken))
                             {
                                 (localDeclarations ?? (localDeclarations = new List<LocalDeclarationStatementSyntax>())).Add(localDeclaration);
                             }

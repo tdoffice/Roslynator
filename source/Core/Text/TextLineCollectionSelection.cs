@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Roslynator.Text
 {
-    public class TextLineCollectionSlice : IEnumerable, IEnumerable<TextLine>
+    public class TextLineCollectionSelection : IEnumerable, IEnumerable<TextLine>
     {
-        public TextLineCollectionSlice(TextLineCollection lines, TextSpan span)
+        public TextLineCollectionSelection(TextLineCollection lines, TextSpan span)
         {
             if (lines == null)
                 throw new ArgumentNullException(nameof(lines));

@@ -121,8 +121,8 @@
     <Compile Include="CSharp\Refactorings\MergeInterpolationIntoInterpolatedStringRefactoring.cs" />
     <Compile Include="CSharp\Helpers\RemoveCommentHelper.cs" />
     <Compile Include="CSharp\Refactorings\UseBitwiseOperationInsteadOfCallingHasFlagRefactoring.cs" />
-    <Compile Include="CSharp\BinaryExpressionSlice.cs" />
-    <Compile Include="CSharp\MemberDeclarationSlice.cs" />
+    <Compile Include="CSharp\BinaryExpressionSelection.cs" />
+    <Compile Include="CSharp\MemberDeclarationSelection.cs" />
     <Compile Include="CSharp\Syntax\SimpleAssignmentStatement.cs" />
     <Compile Include="CSharp\Syntax\SimpleIfStatementWithSingleStatement.cs" />
     <Compile Include="CSharp\StringExpressionChain.cs" />
@@ -176,9 +176,9 @@
     <Compile Include="MetadataNames.cs" />
     <Compile Include="CSharp\Modifiers.cs" />
     <Compile Include="NameGenerator.cs" />
-    <Compile Include="Text\TextLineCollectionSlice.cs" />
-    <Compile Include="CSharp\StatementContainerSlice.cs" />
-    <Compile Include="ListSlice`1.cs" />
+    <Compile Include="Text\TextLineCollectionSelection.cs" />
+    <Compile Include="CSharp\StatementContainerSelection.cs" />
+    <Compile Include="SyntaxListSelection`1.cs" />
     <Compile Include="CSharp\Comparers\ModifierComparer.cs" />
     <Compile Include="Extensions\SyntaxExtensions.cs" />
     <Compile Include="Extensions\SyntaxTreeExtensions.cs" />

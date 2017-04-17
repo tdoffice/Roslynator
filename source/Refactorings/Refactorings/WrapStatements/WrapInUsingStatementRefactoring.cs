@@ -13,9 +13,9 @@ namespace Roslynator.CSharp.Refactorings.WrapStatements
 {
     internal class WrapInUsingStatementRefactoring : WrapStatementsRefactoring<UsingStatementSyntax>
     {
-        public async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSlice slice)
+        public async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            StatementSyntax statement = slice.FirstOrDefault();
+            StatementSyntax statement = selectedStatements.FirstOrDefault();
 
             if (statement?.IsKind(SyntaxKind.LocalDeclarationStatement) == true)
             {
@@ -38,7 +38,7 @@ namespace Roslynator.CSharp.Refactorings.WrapStatements
                         {
                             context.RegisterRefactoring(
                                 $"Using '{variable.Identifier.ValueText}'",
-                                cancellationToken => RefactorAsync(context.Document, slice, cancellationToken));
+                                cancellationToken => RefactorAsync(context.Document, selectedStatements, cancellationToken));
                         }
                     }
                 }

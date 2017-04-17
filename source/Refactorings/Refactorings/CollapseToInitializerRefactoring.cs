@@ -11,11 +11,11 @@ namespace Roslynator.CSharp.Refactorings
 {
     internal static class CollapseToInitializerRefactoring
     {
-        public static async Task ComputeRefactoringsAsync(RefactoringContext context, StatementContainerSlice slice)
+        public static async Task ComputeRefactoringsAsync(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            if (slice.Count > 1)
+            if (selectedStatements.Count > 1)
             {
-                StatementSyntax firstStatement = slice.First();
+                StatementSyntax firstStatement = selectedStatements.First();
 
                 SemanticModel semanticModel = null;
                 ISymbol symbol = null;
@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.Refactorings
 
                 if (objectCreation != null
                     && symbol?.IsErrorType() == false
-                    && slice
+                    && selectedStatements
                         .Skip(1)
                         .All(f => IsValidAssignmentStatement(f, symbol, semanticModel, context.CancellationToken)))
                 {
@@ -70,7 +70,7 @@ namespace Roslynator.CSharp.Refactorings
                             return RefactorAsync(
                                 context.Document,
                                 objectCreation,
-                                slice,
+                                selectedStatements,
                                 cancellationToken);
                         });
                 }
@@ -115,17 +115,17 @@ namespace Roslynator.CSharp.Refactorings
         public static Task<Document> RefactorAsync(
             Document document,
             ObjectCreationExpressionSyntax objectCreation,
-            StatementContainerSlice slice,
+            StatementContainerSelection selectedStatements,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            StatementContainer container = slice.Container;
+            StatementContainer container = selectedStatements.Container;
 
-            ExpressionStatementSyntax[] expressionStatements = slice
+            ExpressionStatementSyntax[] expressionStatements = selectedStatements
                 .Skip(1)
                 .Cast<ExpressionStatementSyntax>()
                 .ToArray();
 
-            StatementSyntax firstStatement = slice.First();
+            StatementSyntax firstStatement = selectedStatements.First();
 
             SyntaxList<StatementSyntax> newStatements = container.Statements.Replace(
                 firstStatement,
@@ -134,7 +134,7 @@ namespace Roslynator.CSharp.Refactorings
                     objectCreation.WithInitializer(CreateInitializer(objectCreation, expressionStatements))));
 
             int count = expressionStatements.Length;
-            int index = slice.StartIndex + 1;
+            int index = selectedStatements.StartIndex + 1;
 
             while (count > 0)
             {

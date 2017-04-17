@@ -24,21 +24,21 @@ namespace Roslynator.CSharp.Refactorings
                 || context.IsRefactoringEnabled(RefactoringIdentifiers.ReplaceWhileWithFor);
         }
 
-        public static async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSlice slice)
+        public static async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            if (slice.Any())
+            if (selectedStatements.Any())
             {
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.WrapInUsingStatement))
                 {
                     var refactoring = new WrapInUsingStatementRefactoring();
-                    await refactoring.ComputeRefactoringAsync(context, slice).ConfigureAwait(false);
+                    await refactoring.ComputeRefactoringAsync(context, selectedStatements).ConfigureAwait(false);
                 }
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.CollapseToInitializer))
-                    await CollapseToInitializerRefactoring.ComputeRefactoringsAsync(context, slice).ConfigureAwait(false);
+                    await CollapseToInitializerRefactoring.ComputeRefactoringsAsync(context, selectedStatements).ConfigureAwait(false);
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.MergeIfStatements))
-                    MergeIfStatementsRefactoring.ComputeRefactorings(context, slice);
+                    MergeIfStatementsRefactoring.ComputeRefactorings(context, selectedStatements);
 
                 if (context.IsAnyRefactoringEnabled(
                     RefactoringIdentifiers.UseCoalesceExpressionInsteadOfIf,
@@ -52,7 +52,7 @@ namespace Roslynator.CSharp.Refactorings
                         useConditionalExpression: context.IsRefactoringEnabled(RefactoringIdentifiers.UseConditionalExpressionInsteadOfIf),
                         useBooleanExpression: context.IsRefactoringEnabled(RefactoringIdentifiers.SimplifyIf));
 
-                    foreach (IfRefactoring refactoring in IfRefactoring.Analyze(slice, options, semanticModel, context.CancellationToken))
+                    foreach (IfRefactoring refactoring in IfRefactoring.Analyze(selectedStatements, options, semanticModel, context.CancellationToken))
                     {
                         context.RegisterRefactoring(
                             refactoring.Title,
@@ -61,16 +61,16 @@ namespace Roslynator.CSharp.Refactorings
                 }
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.MergeLocalDeclarations))
-                    await MergeLocalDeclarationsRefactoring.ComputeRefactoringsAsync(context, slice).ConfigureAwait(false);
+                    await MergeLocalDeclarationsRefactoring.ComputeRefactoringsAsync(context, selectedStatements).ConfigureAwait(false);
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.MergeAssignmentExpressionWithReturnStatement))
-                    MergeAssignmentExpressionWithReturnStatementRefactoring.ComputeRefactorings(context, slice);
+                    MergeAssignmentExpressionWithReturnStatementRefactoring.ComputeRefactorings(context, selectedStatements);
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.CheckExpressionForNull))
-                    await CheckExpressionForNullRefactoring.ComputeRefactoringAsync(context, slice).ConfigureAwait(false);
+                    await CheckExpressionForNullRefactoring.ComputeRefactoringAsync(context, selectedStatements).ConfigureAwait(false);
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.ReplaceWhileWithFor))
-                    await ReplaceWhileWithForRefactoring.ComputeRefactoringAsync(context, slice).ConfigureAwait(false);
+                    await ReplaceWhileWithForRefactoring.ComputeRefactoringAsync(context, selectedStatements).ConfigureAwait(false);
 
                 if (context.IsRefactoringEnabled(RefactoringIdentifiers.WrapInCondition))
                 {
@@ -79,7 +79,7 @@ namespace Roslynator.CSharp.Refactorings
                         cancellationToken =>
                         {
                             var refactoring = new WrapInIfStatementRefactoring();
-                            return refactoring.RefactorAsync(context.Document, slice, cancellationToken);
+                            return refactoring.RefactorAsync(context.Document, selectedStatements, cancellationToken);
                         });
                 }
 
@@ -90,7 +90,7 @@ namespace Roslynator.CSharp.Refactorings
                         cancellationToken =>
                         {
                             var refactoring = new WrapInTryCatchRefactoring();
-                            return refactoring.RefactorAsync(context.Document, slice, cancellationToken);
+                            return refactoring.RefactorAsync(context.Document, selectedStatements, cancellationToken);
                         });
                 }
             }

@@ -44,6 +44,34 @@ namespace Roslynator.CSharp
             get { return SwitchSection != null; }
         }
 
+        internal static bool TryCreate(BlockSyntax block, out StatementContainer container)
+        {
+            if (block != null)
+            {
+                container = new StatementContainer(block);
+                return true;
+            }
+            else
+            {
+                container = default(StatementContainer);
+                return false;
+            }
+        }
+
+        internal static bool TryCreate(SwitchSectionSyntax switchSection, out StatementContainer container)
+        {
+            if (switchSection != null)
+            {
+                container = new StatementContainer(switchSection);
+                return true;
+            }
+            else
+            {
+                container = default(StatementContainer);
+                return false;
+            }
+        }
+
         public static bool TryCreate(StatementSyntax statement, out StatementContainer container)
         {
             SyntaxNode parent = statement?.Parent;

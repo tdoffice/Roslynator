@@ -96,21 +96,21 @@ namespace Roslynator.CSharp.Refactorings
             }
         }
 
-        internal static async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSlice slice)
+        internal static async Task ComputeRefactoringAsync(RefactoringContext context, StatementContainerSelection selectedStatements)
         {
-            if (slice.Count > 1)
+            if (selectedStatements.Count > 1)
             {
-                StatementSyntax statement = slice.First();
+                StatementSyntax statement = selectedStatements.First();
 
                 SyntaxKind kind = statement.Kind();
 
                 if (kind == SyntaxKind.LocalDeclarationStatement)
                 {
-                    await ComputeRefactoringAsync(context, (LocalDeclarationStatementSyntax)statement, slice).ConfigureAwait(false);
+                    await ComputeRefactoringAsync(context, (LocalDeclarationStatementSyntax)statement, selectedStatements).ConfigureAwait(false);
                 }
                 else if (kind == SyntaxKind.ExpressionStatement)
                 {
-                    await ComputeRefactoringAsync(context, (ExpressionStatementSyntax)statement, slice).ConfigureAwait(false);
+                    await ComputeRefactoringAsync(context, (ExpressionStatementSyntax)statement, selectedStatements).ConfigureAwait(false);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace Roslynator.CSharp.Refactorings
         private static async Task ComputeRefactoringAsync(
             RefactoringContext context,
             LocalDeclarationStatementSyntax localDeclaration,
-            StatementContainerSlice slice)
+            StatementContainerSelection selectedStatements)
         {
             VariableDeclarationSyntax variableDeclaration = localDeclaration.Declaration;
 
@@ -147,7 +147,7 @@ namespace Roslynator.CSharp.Refactorings
                                 .GetTypeSymbol(type, context.CancellationToken)?
                                 .IsReferenceType == true)
                             {
-                                RegisterRefactoring(context, identifierName, localDeclaration, slice.Count - 1);
+                                RegisterRefactoring(context, identifierName, localDeclaration, selectedStatements.Count - 1);
                             }
                         }
                     }
@@ -158,7 +158,7 @@ namespace Roslynator.CSharp.Refactorings
         private static async Task ComputeRefactoringAsync(
             RefactoringContext context,
             ExpressionStatementSyntax expressionStatement,
-            StatementContainerSlice slice)
+            StatementContainerSelection selectedStatements)
         {
             ExpressionSyntax expression = expressionStatement.Expression;
 
@@ -181,7 +181,7 @@ namespace Roslynator.CSharp.Refactorings
                             .GetTypeSymbol(left, context.CancellationToken)?
                             .IsReferenceType == true)
                         {
-                            RegisterRefactoring(context, left, expressionStatement, slice.Count - 1);
+                            RegisterRefactoring(context, left, expressionStatement, selectedStatements.Count - 1);
                         }
                     }
                 }

@@ -21,14 +21,11 @@ namespace Roslynator.CSharp.Refactorings
                     RefactoringIdentifiers.MergeAttributes)
                 && !member.IsKind(SyntaxKind.NamespaceDeclaration))
             {
-                SyntaxList<AttributeListSyntax> lists = member.GetAttributeLists();
-
-                if (lists.Any())
+                SyntaxListSelection<AttributeListSyntax> selectedAttributeLists;
+                if (SyntaxListSelection<AttributeListSyntax>.TryCreate(member.GetAttributeLists(), context.Span, out selectedAttributeLists))
                 {
-                    var slice = new ListSlice<AttributeListSyntax>(lists, context.Span);
-
                     if (context.IsRefactoringEnabled(RefactoringIdentifiers.SplitAttributes)
-                        && slice.Any(f => f.Attributes.Count > 1))
+                        && selectedAttributeLists.Any(f => f.Attributes.Count > 1))
                     {
                         context.RegisterRefactoring(
                             "Split attributes",
@@ -37,13 +34,13 @@ namespace Roslynator.CSharp.Refactorings
                                 return SplitAsync(
                                     context.Document,
                                     member,
-                                    slice.ToArray(),
+                                    selectedAttributeLists.ToArray(),
                                     cancellationToken);
                             });
                     }
 
                     if (context.IsRefactoringEnabled(RefactoringIdentifiers.MergeAttributes)
-                        && slice.Count > 1)
+                        && selectedAttributeLists.Count > 1)
                     {
                         context.RegisterRefactoring(
                             "Merge attributes",
@@ -52,7 +49,7 @@ namespace Roslynator.CSharp.Refactorings
                                 return MergeAsync(
                                     context.Document,
                                     member,
-                                    slice.ToArray(),
+                                    selectedAttributeLists.ToArray(),
                                     cancellationToken);
                             });
                     }

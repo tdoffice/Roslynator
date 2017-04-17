@@ -8,44 +8,78 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Roslynator
 {
-    public class ListSlice<TNode> : IEnumerable, IEnumerable<TNode> where TNode : SyntaxNode
+    public class SyntaxListSelection<TNode> : IEnumerable, IEnumerable<TNode> where TNode : SyntaxNode
     {
-        public ListSlice(SyntaxList<TNode> list, TextSpan span)
+        public SyntaxListSelection(SyntaxList<TNode> list, TextSpan span)
         {
             UnderlyingList = list;
             Span = span;
 
-            SyntaxList<TNode>.Enumerator en = UnderlyingList.GetEnumerator();
+            IndexPair indexes = GetIndexes(list, span);
+
+            StartIndex = indexes.StartIndex;
+            EndIndex = indexes.EndIndex;
+        }
+
+        protected SyntaxListSelection(SyntaxList<TNode> list, TextSpan span, int startIndex, int endIndex)
+        {
+            UnderlyingList = list;
+            Span = span;
+            StartIndex = startIndex;
+            EndIndex = endIndex;
+        }
+
+        protected static IndexPair GetIndexes(SyntaxList<TNode> list, TextSpan span)
+        {
+            SyntaxList<TNode>.Enumerator en = list.GetEnumerator();
 
             if (en.MoveNext())
             {
                 int i = 0;
 
-                while (Span.Start >= en.Current.FullSpan.End
+                while (span.Start >= en.Current.FullSpan.End
                     && en.MoveNext())
                 {
                     i++;
                 }
 
-                if (Span.Start >= en.Current.FullSpan.Start
-                    && Span.Start <= en.Current.Span.Start)
+                if (span.Start >= en.Current.FullSpan.Start
+                    && span.Start <= en.Current.Span.Start)
                 {
                     int j = i;
 
-                    while (Span.End > en.Current.FullSpan.End
+                    while (span.End > en.Current.FullSpan.End
                         && en.MoveNext())
                     {
                         j++;
                     }
 
-                    if (Span.End >= en.Current.Span.End
-                        && Span.End <= en.Current.FullSpan.End)
+                    if (span.End >= en.Current.Span.End
+                        && span.End <= en.Current.FullSpan.End)
                     {
-                        StartIndex = i;
-                        EndIndex = j;
+                        return new IndexPair(i, j);
                     }
                 }
             }
+
+            return new IndexPair(-1, -1);
+        }
+
+        public static bool TryCreate(SyntaxList<TNode> list, TextSpan span, out SyntaxListSelection<TNode> selectedNodes)
+        {
+            if (list.Any())
+            {
+                IndexPair indexes = GetIndexes(list, span);
+
+                if (indexes.IsValid)
+                {
+                    selectedNodes = new SyntaxListSelection<TNode>(list, span, indexes.StartIndex, indexes.EndIndex);
+                    return true;
+                }
+            }
+
+            selectedNodes = null;
+            return false;
         }
 
         public TextSpan Span { get; }
@@ -145,6 +179,23 @@ namespace Roslynator
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        protected class IndexPair
+        {
+            public IndexPair(int startIndex, int endIndex)
+            {
+                StartIndex = startIndex;
+                EndIndex = endIndex;
+            }
+
+            public bool IsValid
+            {
+                get { return StartIndex != -1; }
+            }
+
+            public int StartIndex { get; }
+            public int EndIndex { get; }
         }
     }
 }

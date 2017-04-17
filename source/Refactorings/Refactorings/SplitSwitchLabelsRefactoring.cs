@@ -22,13 +22,12 @@ namespace Roslynator.CSharp.Refactorings
 
                 if (labels.Count > 1)
                 {
-                    var slice = new ListSlice<SwitchLabelSyntax>(labels, context.Span);
-
-                    if (slice.Any())
+                    SyntaxListSelection<SwitchLabelSyntax> selection;
+                    if (SyntaxListSelection<SwitchLabelSyntax>.TryCreate(labels, context.Span, out selection))
                     {
-                        if (slice.Count > 1 || (slice.First() != labels.Last()))
+                        if (selection.Count > 1 || (selection.First() != labels.Last()))
                         {
-                            SwitchLabelSyntax[] selectedLabels = slice.ToArray();
+                            SwitchLabelSyntax[] selectedLabels = selection.ToArray();
 
                             if (selectedLabels.Last() == labels.Last())
                                 selectedLabels = selectedLabels.Take(selectedLabels.Length - 1).ToArray();

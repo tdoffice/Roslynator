@@ -15,14 +15,14 @@ namespace Roslynator.CSharp.Refactorings.WrapStatements
 
         public Task<Document> RefactorAsync(
             Document document,
-            StatementContainerSlice slice,
+            StatementContainerSelection selectedStatements,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            StatementContainer container = slice.Container;
+            StatementContainer container = selectedStatements.Container;
 
-            StatementSyntax[] statements = slice.ToArray();
+            StatementSyntax[] statements = selectedStatements.ToArray();
 
-            int index = slice.StartIndex;
+            int index = selectedStatements.StartIndex;
 
             SyntaxTriviaList leadingTrivia = statements[0].GetLeadingTrivia();
             SyntaxTriviaList trailingTrivia = statements[statements.Length - 1].GetTrailingTrivia();

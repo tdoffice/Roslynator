@@ -15,7 +15,7 @@ namespace Roslynator.CSharp.Refactorings.WrapSelectedLines
     {
         public abstract ImmutableArray<TextChange> GetTextChanges(IEnumerable<TextLine> selectedLines);
 
-        public static async Task<TextLineCollectionSlice> GetSelectedLinesAsync(RefactoringContext context)
+        public static async Task<TextLineCollectionSelection> GetSelectedLinesAsync(RefactoringContext context)
         {
             TextSpan span = context.Span;
 
@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.Refactorings.WrapSelectedLines
             {
                 SourceText sourceText = await context.Document.GetTextAsync(context.CancellationToken).ConfigureAwait(false);
 
-                return new TextLineCollectionSlice(sourceText.Lines, span);
+                return new TextLineCollectionSelection(sourceText.Lines, span);
             }
 
             return null;
@@ -53,10 +53,10 @@ namespace Roslynator.CSharp.Refactorings.WrapSelectedLines
 
         public Task<Document> RefactorAsync(
             Document document,
-            TextLineCollectionSlice slice,
+            TextLineCollectionSelection selectedLines,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            ImmutableArray<TextChange> textChanges = GetTextChanges(slice);
+            ImmutableArray<TextChange> textChanges = GetTextChanges(selectedLines);
 
             return document.WithTextChangesAsync(textChanges, cancellationToken);
         }
