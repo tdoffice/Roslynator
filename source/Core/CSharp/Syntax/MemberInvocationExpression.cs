@@ -22,7 +22,7 @@ namespace Roslynator.CSharp.Syntax
 
         public InvocationExpressionSyntax InvocationExpression
         {
-            get { return (InvocationExpressionSyntax)Parent; }
+            get { return (InvocationExpressionSyntax)Node; }
         }
 
         public MemberAccessExpressionSyntax MemberAccessExpression
@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.Syntax
             get { return (MemberAccessExpressionSyntax)Expression?.Parent; }
         }
 
-        private SyntaxNode Parent
+        private SyntaxNode Node
         {
             get { return ArgumentList?.Parent; }
         }
@@ -94,9 +94,14 @@ namespace Roslynator.CSharp.Syntax
             return false;
         }
 
+        public override string ToString()
+        {
+            return Node?.ToString() ?? base.ToString();
+        }
+
         public bool Equals(MemberInvocationExpression other)
         {
-            return Parent == other.Parent;
+            return Node == other.Node;
         }
 
         public override bool Equals(object obj)
@@ -107,7 +112,7 @@ namespace Roslynator.CSharp.Syntax
 
         public override int GetHashCode()
         {
-            return Parent?.GetHashCode() ?? 0;
+            return Node?.GetHashCode() ?? 0;
         }
 
         public static bool operator ==(MemberInvocationExpression left, MemberInvocationExpression right)
